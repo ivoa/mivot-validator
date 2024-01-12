@@ -282,6 +282,7 @@ class Builder:
         if the multiplicity is one:one attribute is added, a COLLECTION otherwise
         :ele: ATTRIBUTE VODML element
         """
+        dmtype = None
         for tags in ele.getchildren():
             if tags.tag == "vodml-id":
                 vodml_id = tags.text
@@ -299,6 +300,10 @@ class Builder:
             elif tags.tag == "multiplicity":
                 max_occurs = int(tags.xpath(".//maxOccurs")[0].text)
 
+
+        if not dmtype:
+            return 
+        
         if dmtype.lower().endswith("string"):
             unit_att = ""
         else:
