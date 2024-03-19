@@ -121,6 +121,7 @@ class InstanceChecker:
             except:
                 print(f"-> download failed, try to copy from  {vodml_path}")
                 shutil.copy(os.path.join(vodml_path, vodml_filename), tmp_data_path)
+        print(f"Take model located in {output_path}")
         return output_path
 
     @staticmethod
@@ -152,6 +153,17 @@ class InstanceChecker:
                         graph[super_class].append(sub_class)
 
         for ele in vodml_tree.xpath("./objectType"):
+            for tags in ele.getchildren():
+                if tags.tag == "vodml-id":
+                    sub_class = model_name + ":" + tags.text
+                for ext in ele.xpath("./extends/vodml-ref"):
+                    super_class = ext.text
+                    if super_class not in graph:
+                        graph[super_class] = []
+                    if sub_class not in graph[super_class]:
+                        graph[super_class].append(sub_class)
+        #
+        for ele in vodml_tree.xpath(".//primitiveType"):
             for tags in ele.getchildren():
                 if tags.tag == "vodml-id":
                     sub_class = model_name + ":" + tags.text
@@ -195,7 +207,6 @@ class InstanceChecker:
             InstanceChecker.inheritence_tree["meas:Measure"].append(
                 "mango:extmeas.PhotometricMeasure"
             )
-
         return graph
 
     @staticmethod

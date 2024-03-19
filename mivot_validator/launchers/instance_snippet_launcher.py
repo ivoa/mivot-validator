@@ -95,10 +95,12 @@ def check_args(args, mode, parser=None):
         if not len(args.split(":")) == 2:
             print("Invalid format for class name")
             sys.exit(1)
+            
+        vodml_path = InstanceBuilder.get_model_xml_from_name(args.split(":")[0])
         generic = Builder(
             args.split(":")[0],
             args.split(":")[1],
-            InstanceBuilder.get_model_xml_from_name(args.split(":")[0]),
+            vodml_path,
             os.path.abspath("../tmp_snippets/"),
         )
         generic.build()

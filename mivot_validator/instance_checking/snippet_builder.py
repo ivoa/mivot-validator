@@ -96,6 +96,12 @@ class Builder:
                 if tags.tag == "vodml-id" and tags.text == self.class_name:
                     self.build_object(ele, "", True, True)
                     return
+                
+        for ele in self.vodml.xpath(".//primitiveType"):
+            for tags in ele.getchildren():
+                if tags.tag == "vodml-id" and tags.text == self.class_name:
+                    self.build_object(ele, "", True, True)
+                    return
 
         raise MappingException(f"Complex type {self.class_name} not found")
 
@@ -272,6 +278,7 @@ class Builder:
                 f'dmtype="ivoa:string" value="phot.mag;em.opt;stat.mean" />'
             )
         else:
+            print("@@@@@@@@cccccccc")
             self.get_object_by_ref(
                 reftype.replace(self.model_name + ":", ""), reftype, False, extend=True
             )
@@ -299,11 +306,11 @@ class Builder:
                     break
             elif tags.tag == "multiplicity":
                 max_occurs = int(tags.xpath(".//maxOccurs")[0].text)
-
-
+                
+        XmlUtils.pretty_print(ele)
         if not dmtype:
-            return 
-        
+            raise MappingException(f"Missing dmtype in {XmlUtils.pretty_print(ele)}")
+
         if dmtype.lower().endswith("string"):
             unit_att = ""
         else:
@@ -360,7 +367,6 @@ class Builder:
             for tags in list(ele):  # root is the ElementTree object
                 if tags.tag == "vodml-id" and tags.text == vodmlid:
                     print("  found in datatype")
-                    print(extend)
                     if (
                         extend is False
                         and abstract_att is not None
@@ -372,21 +378,20 @@ class Builder:
                     return
 
         for ele in self.vodml.xpath(".//primitiveType"):
-            found = False
-            description = ""
+            abstract_att = ele.get("abstract")
+
             for tags in list(ele):  # root is the ElementTree object
                 if tags.tag == "vodml-id" and tags.text == vodmlid:
-                    found = True
-                if tags.tag == "description":
-                    description = f"<!-- {tags.text} -->"
-            if found is True:
-                if description:
-                    self.write_out(description)
-                dmtype = self.get_vodmlid(vodmlid)
-                self.write_out(
-                    f'<ATTRIBUTE dmrole="{role}" dmtype="{dmtype}" ref="@@@@@" value=""/>'
-                )
-                return
+                    print("  found in datatype")
+                    if (
+                        extend is False
+                        and abstract_att is not None
+                        and abstract_att.lower() == "true"
+                    ):
+                        self.get_concrete_type_by_ref(vodmlid, role, aggregate, extend)
+                    else:
+                        self.build_object(ele, role, False, aggregate)
+                    return
 
         for ele in self.vodml.xpath(".//enumeration"):
             found = False
@@ -397,6 +402,7 @@ class Builder:
                 if tags.tag == "description":
                     description = f"<!-- {tags.text} -->"
             if found is True:
+                print("  found in enumeration")
                 values = ele.xpath(".//literal/name")
                 val_str = ""
                 for value in values:

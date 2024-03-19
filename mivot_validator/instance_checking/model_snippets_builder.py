@@ -54,6 +54,15 @@ class ModelBuilder(Builder):
                     continue
                 self.build_object(ele, "", True, True)
 
+        for ele in self.vodml.xpath(".//primitiveType"):
+            if ele.get("abstract") == "true":
+                continue
+            for tags in ele.getchildren():
+                self.class_name = tags.text
+                if tags.tag != "vodml-id":
+                    continue
+                self.build_object(ele, "", True, True)
+
         return True
 
     def build_object(self, ele, role, root, aggregate):

@@ -47,7 +47,6 @@ def setup_elements(graph, dmtype, abstract_list):
             if k != dmtype and v[i] in res:
                 res[res.index(v[i])] = [v[i], f"{k}/{v[i]}"]
 
-
     for el in res:
         if isinstance(el, list):
             if el[0] in abstract_list:
@@ -124,6 +123,7 @@ class InstanceBuilder:
         self.abstract_classes = []
         self.collections = []
         self.mapping_block = None
+        print("@@@@@@@ ")
 
     def build(self):
         """
@@ -550,6 +550,7 @@ class InstanceBuilder:
                             tags.tag == "vodml-id"
                             and tags.text not in self.abstract_classes
                         ):
+                            print(f"    add abstract class {model}:{tags.text}")
                             self.abstract_classes.append(f"{model}:{tags.text}")
                             continue
 

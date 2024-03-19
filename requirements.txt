@@ -6,3 +6,4 @@ astropy
 sphinx
 sphinx-autobuild
 sphinx-autosummary
+numpy
