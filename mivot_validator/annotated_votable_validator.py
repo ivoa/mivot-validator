@@ -5,6 +5,7 @@ Created on 2022/07/01
 """
 import os
 import ssl
+from lxml import etree
 from mivot_validator.xml_validator import XMLValidator
 from mivot_validator import logger
 
@@ -23,10 +24,10 @@ class AnnotatedVOTableValidator:
 
     # VOtable schema
     # MIVOT schema
-    votable_validator = XMLValidator("http://www.ivoa.net/xml/VOTable/v1.3")
+    votable_validator = None
+    defaut_votable_schema = "http://www.ivoa.net/xml/VOTable/v1.3"
     vodml_validator = XMLValidator(
-        "https://raw.githubusercontent.com/ivoa-std/"
-        "ModelInstanceInVot/master/schema/xsd/mivot-v1.0.xsd"
+        "https://ivoa.net/xml/MIVOT/mivot-v1.xsd"
     )
 
     def validate(self, data_path):
@@ -60,6 +61,25 @@ class AnnotatedVOTableValidator:
         # Process one single
         return self.__validate_file(data_path)
 
+    def _set_votable_validator(self, data_path):
+        """
+        Look for the schema URL within the XML header.
+        If not found take the 1.3 XSD (default)
+        Build the validator instance from the schema
+        """
+        XMLSchemaNamespace = '{http://www.w3.org/2001/XMLSchema-instance}'
+        document = etree.parse(data_path).getroot()
+        schemaLink = document.get(XMLSchemaNamespace + 'schemaLocation')
+        if schemaLink is None:
+            schemaLink = document.get(XMLSchemaNamespace + 'noNamespaceSchemaLocation')
+        if schemaLink:
+            self.defaut_votable_schema = schemaLink.split(" ")[-1]
+            logger.info(f"Schema located in the votable: validate against {schemaLink.split(' ')[-1]}")
+        else:
+            logger.info(f"Schema not located in the votable: validate against {self.defaut_votable_schema}")
+  
+        AnnotatedVOTableValidator.votable_validator = XMLValidator(self.defaut_votable_schema)
+
     def __validate_file(self, file_path):
         """
         Validate one XML file.
@@ -78,7 +98,7 @@ class AnnotatedVOTableValidator:
         # Get the filename for the log messages
         file_name = os.path.basename(file_path)
         logger.info(f"Validate file {file_name}")
-        logger.info("- Validate against VOTable/v1.3")
+        self._set_votable_validator(file_path)
         # Validate the VOTable
         if (
             AnnotatedVOTableValidator.votable_validator.validate_file(
