@@ -6,22 +6,22 @@
 Welcome to mivot-validator's documentation
 ==========================================
 
-mivot-validator
-===============
+Validators
+----------
 
-Python package for validating VOTables annotated with `MIVOT <https://ivoa.net/documents/MIVOT/20230620/index.html>`__
+Python scripts for validating VOTables annotated with `MIVOT <https://ivoa.net/documents/MIVOT/20230620/index.html>`__
 
-There are 2 levels of validation:
+There are 2 levels of validation
+
 - against the XML schemas (VOTable and MIVOT)
 - against the model itself as it is defined in VODML
 
-XML Schema Validator
---------------------
+XML Schema Validation
+~~~~~~~~~~~~~~~~~~~~~
 
-Validate an annotated VOTable against both VOTable and MIVOT schemas.
-     
-.. code::bash
-   :caption: Validate an annotated VOTable against both VOTable and MIVOT schemas
+Validation of an annotated VOTable against both VOTable and MIVOT schemas:
+
+.. code:: bash
 
    mivot-validate  PROJECT_DIR/tests/data/gaia_3mags_ok_1.xml 
      
@@ -31,11 +31,10 @@ Validate an annotated VOTable against both VOTable and MIVOT schemas.
                 all directory XML files are validated
                 exit status: 0 in case of success, 1 otherwise
 
-sqdsqdqsd
+Validation of an annotated VOTable against the MIVOT schema:
     
-.. code::bash
-   :caption: Validate an annotated VOTable against MIVOT schemas
-
+.. code:: bash
+ 
    mivot-validate  PROJECT_DIR/tests/data/gaia_3mags_ok_1.xml 
      
    USAGE: mivot-mapping-validate [path]
@@ -46,17 +45,17 @@ sqdsqdqsd
 
 
 Model Validation
-----------------
+~~~~~~~~~~~~~~~~
 
 This tool checks that mapped classes match the model they refer to. 
 
-- It requires as input an annotated VOTable. 
-- This VOTable is parsed with a model viewer issuing a model view on the first data row.
+- Requires an annotated VOTable as input. 
+- This VOTable is parsed with a model viewer issuing a model view of the first data row.
 - Each instance of that view is compared with the VODML class definition. 
-- This feature works with PhotDM, Meas, Coords and a MANGO draft. 
-  Any other model, but ``ivoa`` which is skipped, make the process failing.
+- This feature works with *PhotDM*, *Meas*, *Coords* and the *MANGO* draft. 
+  Any other model, but *ivoa* which is skipped, makes the process failing.
 
-.. code::bash
+.. code:: bash
 
     mivot-instance-validate <VOTABLE path>
     
@@ -66,22 +65,31 @@ This tool checks that mapped classes match the model they refer to.
            exit status: 0 in case of success, 1 otherwise
     
 
-The validation process follows these steps - INPUT: a VOTable annotated with the supported models. - The annotation must have at least one valid TEMPLATES - The current implementation works only with VOTables having one table. - Build a model view of the first data row (``mivot-validator/mivot_validator/instance_checking/xml_interpreter/model_viewer.py``). - All top level INSTANCEs of that model view will be checked one by one. - The XML blocks corresponding to these instances are extracted as etree objects - Get the ``dmtype`` on the instance to validate - build an XML snippets for that class from the VODML file (``mivot-validator/mivot_validator/instance_checking/snippet_builder.py``) - These snippets are stored in ``mivot-validator/mivot_validator/instance_checking/tmp_snippets`` (\*) - The validator checks any component of the mapped instance against the snippet. - if the component is an ATTRIBUTE, both dmtypes and roles are checked - if the component is a COLLECTION, dmrole as well as items dmtypes are checked - if the component is a REFERENCE, dmrole is checked - if the component is an INSTANCE, both dmtypes and roles are checked and the validation loop is run on its components
+The validation process follows these steps: 
+
+- INPUT: a VOTable annotated with the supported models. 
+- The annotation must have at least one valid TEMPLATES 
+- The current implementation works only with VOTables having one table. 
+- Build a model view of the first data row (``mivot_validator/instance_checking/xml_interpreter/model_viewer.py``). 
+- All top level INSTANCE of that model view are checked one by one. 
+- The XML blocks corresponding to these instances are extracted as *etree* objects 
+- Get the ``dmtype`` on the instance to validate 
+- build an XML snippets for that class from the VODML file (``mivot_validator/instance_checking/snippet_builder.py``) 
+- The validator checks all component of the mapped instance against the snippet. 
+- if the component is an ATTRIBUTE, both ``dmtypes`` and ``roles`` are checked 
+- if the component is a COLLECTION, ``dmrole`` as well as items ``dmtypes`` are checked 
+- if the component is a REFERENCE, ``dmrole`` is checked 
+- if the component is an INSTANCE, both ``dmtypes`` and roles are checked and the validation loop is run on its components
 
 The validator only checks the model elements that are mapped. It does not care about missing attributes or any other missing class components. MIVOT does not have requirements on the model elements that must be mapped.
 
-(\*) It is to be noted that those snippets can be used to build annotations. If you feed the validator with an empty INSTANCE with the searched dmtype:
-
-::
-
-    <INSTANCE dmtype="model:MyFavouriteType"\>
-
-you get an XML snippet named ``model.MyFavouriteType.xml`` that can be copied and tuned into your VOTable
 
 Types and Roles Checking
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-The validator has a new end point that can check that all ``dmtype`` and ``dmrole`` referenced in the mapping block are known by mapped models. It does not care of the class structures This checking only works with the Meas/Coord/ivoa models, other models are ignored.
+The validation tool can also check that all ``dmtype`` and ``dmrole`` referenced in the mapping block are known by mapped models. 
+In this case, it does not care of the class structures. 
+This checking only works with the *PhotDM/MANGO/Meas/Coord/ivoa* models, other models are ignored.
 
 .. code:: bash
 
@@ -94,46 +102,47 @@ The validator has a new end point that can check that all ``dmtype`` and ``dmrol
 
 
 Snippet Generation
-==================
+------------------
 
-To facilitate the production of a VODML file annotated with MIVOT, it can be interesting to work with 
-precomputed snippets that can be stacked to build full annotation blocks.
+To facilitate the MIVOT annotation of VODML files, it can be convenient to work with 
+pre-computed snippets that can be stacked to build full annotation blocks.
 
 - A snippet is a MIVOT fragment with not-set references and values that represents  a part of a model.
 - Snippets can easily be derived from the VODML representation of the model as long as there is no class polymorphism.
-  If there are, we provide a tool helping users to resolve abstract components.
+  If there is some, we provide a tool helping users to resolve abstract components.
 
 There are two types of snippet generators:
  
- - ``mivot-snippet-model``, which allows, for a given model, to generate all 
+- ``mivot-snippet-model``, which allows, for a given model, to generate all 
    non-abstract object and data types.
-   it provides a model view directly formatted as MIVOT components.
+   The script provides a model view directly formatted as MIVOT components.
 -  The ``mivot-snippet-instance``, which for a given concrete class name, will generate a 
-   snippet usable according to the concrete classes chosen when creating it  
+   usable snippet including the concrete classes given either as user input or as command line parameters. 
 
-.. code::bash
-   :caption: Build all MIVOT snippets for a model
+Build all MIVOT snippets for a model
+
+.. code:: bash
    
    mivot-snippet-model [VODML path or url]
     
    USAGE: mivot-snippet-model [path] [output_dir]
            Create MIVOT snippets from VODML files
            path: either a simple file to any VODML-Model or an ur
-           output_dir: (optional) path to the chosen output directory (session working directory by default)"
+           output_dir: (optional) path to the chosen output directory (session working directory by default)
            exit status: 0 in case of success, 1 otherwise
-    
 
- .. code::bash
-    :caption: Build a MIVOT snippet for one model class with resolving abstract types.
+Build a MIVOT snippet for one model class with resolving abstract types.
+
+.. code:: bash
  
-    $ mivot-snippet-instance coords:TimeSys `pwd`/coords.TimeSys.example \
-    -cc dmrole=coords:TimeFrame.refPosition,context=coords:TimeSys,dmtype=coords:RefLocation,class=coords:StdRefLocation\
-    -cc dmrole=coords:TimeFrame.refDirection,context=coords:TimeSys,dmtype=coords:RefLocation,class=coords:StdRefLocation
+   $ mivot-snippet-instance coords:TimeSys `pwd`/coords.TimeSys.example \
+   -cc dmrole=coords:TimeFrame.refPosition,context=coords:TimeSys,dmtype=coords:RefLocation,class=coords:StdRefLocation\
+   -cc dmrole=coords:TimeFrame.refDirection,context=coords:TimeSys,dmtype=coords:RefLocation,class=coords:StdRefLocation
     
-In this example the tool will generate on snippet for the object type `coords:TimeSys`.
+In this example the tool will generate one snippet for the object type `coords:TimeSys`.
 
 - The produced file will be located in ``CURRENT_FOLDER/coords.TimeSys.example.xml``.
-  If the output is not an absolute path, the output will be located in the session working directory.
+  If the output is not an absolute path, it will be located in the session working directory.
 - All MIVOT instances of (abstract) type ``coords:RefLocation`` playing the role ``coords:TimeFrame.refPosition``
   and hosted by a class playing the role ``coords:TimeSys``, will be replaced by instances of type ``coords:StdRefLocation``
 - All MIVOT instances of (abstract) type ``coords:RefLocation`` playing the role ``coords:TimeFrame.refDirection``
@@ -142,10 +151,9 @@ In this example the tool will generate on snippet for the object type `coords:Ti
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
-
+   
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
