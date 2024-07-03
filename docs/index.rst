@@ -17,127 +17,54 @@ Both must succeed for the file to be considered as valid
 
 The validator can process either individual files or directory contents (no recursivity)
 
-Installation
-------------
+XML Schema Validator
+--------------------
 
-The validator is distributed as a Python package. It won't be published in the PIP repo while MIVOT is not a standard.
-
+Validate an annotated VOTable against both VOTable and MIVOT schemas.
+     
 .. code:: bash
+   :caption: Validate an annotated VOTable against both VOTable and MIVOT schemas
 
-    BossMacBookPro$ pip3 install --force-reinstall git+https://github.com/ivoa/mivot-validator.git#egg=mivot-validator
-
-Usage
------
-
-Let's play with the unit-test sample
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+   mivot-validate  PROJECT_DIR/tests/data/gaia_3mags_ok_1.xml 
+     
+   USAGE: mivot-validate [path]
+          Validate against both VOTable and MIVOT schemas
+          path: either a simple file or a directory
+                all directory XML files are validated
+                exit status: 0 in case of success, 1 otherwise
+     
 .. code:: bash
+   :caption: Validate an annotated VOTable against MIVOT schemas
 
-    BossMacBookPro$ ls mivot-validator/tests/data/
-    test_instance_ko_1.xml  test_instance_ok_1.xml
-    cd mivot-validator/
-    pytest tests
+   mivot-validate  PROJECT_DIR/tests/data/gaia_3mags_ok_1.xml 
+     
+   USAGE: mivot-mapping-validate [path]
+          Validate XML files against  MIVOT schema
+          path: either a simple file or a directory
+                all directory XML files are validated
+                exit status: 0 in case of success, 1 otherwise
 
-Commands
-~~~~~~~~
 
-Validate an annotated VOTable
+Model Validation
+----------------
 
-.. code:: bash
+This tool checks that mapped classes match the model they refer to. 
 
-     mivot-votable-validate  <VOTable path>
-
-Validate an XML file containing just a MAPPING block
-
-.. code:: bash
-
-     mivot-mapping-validate  <XML path>
-
-Examples taken out the unit test suite
---------------------------------------
-
-Check the VOTable tagged as valid
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code:: bash
-
-    BossMacBookPro$ ls mivot-validator/tests/data/
-    test_instance_ko_1.xml  test_instance_ok_1.xml
-    BossMacBookPro$ mivot-votable-validate  mivot-validator/tests/data/test_instance_ok_1.xml 
-       INFO - [__init__.py:  7 -   <module>()] - mivot_validator package intialized
-       INFO - [schemas.py:1228 - include_schema()] - Resource 'XMLSchema.xsd' is already loaded
-       INFO - [xml_validator.py: 17 -   __init__()] - Using schema http://www.ivoa.net/xml/VOTable/v1.3
-       INFO - [xml_validator.py: 17 -   __init__()] - Using schema https://raw.githubusercontent.com/ivoa-std/ModelInstanceInVot/master/schema/xsd/mivot-v1.0.xsd
-       INFO - [annotated_votable_validator.py: 76 - __validate_file()] - Validate file test_instance_ok_1.xml
-       INFO - [annotated_votable_validator.py: 77 - __validate_file()] - - Validate against VOTable/v1.3
-       INFO - [annotated_votable_validator.py: 83 - __validate_file()] - - passed
-       INFO - [annotated_votable_validator.py: 85 - __validate_file()] - - Validate against MIVOT
-       INFO - [annotated_votable_validator.py: 90 - __validate_file()] - test_instance_ok_1.xml is a valid annotated VOTable
-
-Check the file tagged as not valid
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code:: bash
-
-    laurentmichel$ mivot-votable-validate  mivot-validator/tests/data/test_instance_ko_1.xml 
-       INFO - [__init__.py:  7 -   <module>()] - mivot_validator package intialized
-       INFO - [schemas.py:1228 - include_schema()] - Resource 'XMLSchema.xsd' is already loaded
-       INFO - [xml_validator.py: 17 -   __init__()] - Using schema http://www.ivoa.net/xml/VOTable/v1.3
-       INFO - [xml_validator.py: 17 -   __init__()] - Using schema https://raw.githubusercontent.com/ivoa-std/ModelInstanceInVot/master/schema/xsd/mivot-v1.0.xsd
-       INFO - [annotated_votable_validator.py: 76 - __validate_file()] - Validate file test_instance_ko_1.xml
-       INFO - [annotated_votable_validator.py: 77 - __validate_file()] - - Validate against VOTable/v1.3
-       INFO - [annotated_votable_validator.py: 83 - __validate_file()] - - passed
-       INFO - [annotated_votable_validator.py: 85 - __validate_file()] - - Validate against MIVOT
-      ERROR - [xml_validator.py: 30 - validate_file()] - validation failed failed validating <Element '{http://www.ivoa.net/xml/merged-syntax}GLOBALS' at 0x7fec18998630> with XsdAssert(test='count (dm-mapping:INSTANCE[@dmrole !=...'):
-
-    Reason: assertion test if false
-
-    Schema:
-
-      <xs:assert xmlns:xs="http://www.w3.org/2001/XMLSchema" test="count (dm-mapping:INSTANCE[@dmrole != '']) eq 0" />
-
-    Instance:
-
-      <default:GLOBALS xmlns:default="http://www.ivoa.net/xml/merged-syntax">
-          <default:INSTANCE dmid="SpaceFrame_ICRS" dmtype="coords:SpaceFrame">
-              <default:INSTANCE dmrole="coords:SpaceFrame.refPosition" dmtype="coords:StdRefLocation">
-                  <default:ATTRIBUTE_XXX dmrole="coords:StdRefLocation.position" dmtype="ivoa:string" value="NoSet" />
-              </default:INSTANCE>
-              <default:ATTRIBUTE dmrole="coords:SpaceFrame.spaceRefFrame" dmtype="ivoa:string" value="ICRS" />
-              <default:ATTRIBUTE dmrole="coords:SpaceFrame.equinox" dmtype="coords:Epoch" value="NoSet" />
-          </default:INSTANCE>
-
-          <default:INSTANCE dmrole="root" dmtype="test.model">
-              <default:INSTANCE dmrole="test.header" dmtype="test.Header">
-                  <default:REFERENCE dmrole="test.frame" dmref="SpaceFrame_ICRS" />
-                  <default:INSTANCE dmrole="test.owner" dmtype="test.Owner">
-                      <default:ATTRIBUTE dmrole="test.owner.name" dmtype="string" value="Michel" />
-                      <default:ATTRIBUTE dmrole="test.owner.firstname" dmtype="string" value="Laurent" />
-                      <default:ATTRIBUTE dmrole="test.title" dmtype="string" ref="_title" />
-                  </default:INSTANCE>
-                  <default:COLLECTION dmrole="test.points">
-                      <default:JOIN sourceref="Results" />
-                  </default:COLLECTION>
-          ...
-          ...
-      </default:GLOBALS>
-
-    Path: /VOTABLE/RESOURCE/RESOURCE[1]/default:VODML/default:GLOBALS
-
-      ERROR - [annotated_votable_validator.py: 88 - __validate_file()] - MIVOT annotations are not valid
-
-Advanced Features
-~~~~~~~~~~~~~~~~~
-
-Model Hierarchy Checking
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-This tool checks that mapped classes match the model they refer to. It requires as input an annotated VOTable. This VOTable is parsed with a model viewer issuing a model view on the first data row. Each instance of that view is compared with the VODML class definition. This beta feature works with PhotDM, Meas, Coords and a MANGO draft. Any other model, but ``ivoa`` which is skipped, make the process failing.
+- It requires as input an annotated VOTable. 
+- This VOTable is parsed with a model viewer issuing a model view on the first data row.
+- Each instance of that view is compared with the VODML class definition. 
+- This feature works with PhotDM, Meas, Coords and a MANGO draft. 
+  Any other model, but ``ivoa`` which is skipped, make the process failing.
 
 .. code:: bash
 
     mivot-instance-validate <VOTABLE path>
+    
+    USAGE: mivot-instance-validate [path]
+           Validate the mapped instances against the VODML definitions
+           path: path to the mapped VOTable to be checked
+           exit status: 0 in case of success, 1 otherwise
+    
 
 The validation process follows these steps - INPUT: a VOTable annotated with the supported models. - The annotation must have at least one valid TEMPLATES - The current implementation works only with VOTables having one table. - Build a model view of the first data row (``mivot-validator/mivot_validator/instance_checking/xml_interpreter/model_viewer.py``). - All top level INSTANCEs of that model view will be checked one by one. - The XML blocks corresponding to these instances are extracted as etree objects - Get the ``dmtype`` on the instance to validate - build an XML snippets for that class from the VODML file (``mivot-validator/mivot_validator/instance_checking/snippet_builder.py``) - These snippets are stored in ``mivot-validator/mivot_validator/instance_checking/tmp_snippets`` (\*) - The validator checks any component of the mapped instance against the snippet. - if the component is an ATTRIBUTE, both dmtypes and roles are checked - if the component is a COLLECTION, dmrole as well as items dmtypes are checked - if the component is a REFERENCE, dmrole is checked - if the component is an INSTANCE, both dmtypes and roles are checked and the validation loop is run on its components
 
@@ -151,19 +78,70 @@ The validator only checks the model elements that are mapped. It does not care a
 
 you get an XML snippet named ``model.MyFavouriteType.xml`` that can be copied and tuned into your VOTable
 
-Types and Roles Checking (obsoleted)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Types and Roles Checking
+------------------------
 
 The validator has a new end point that can check that all ``dmtype`` and ``dmrole`` referenced in the mapping block are known by mapped models. It does not care of the class structures This checking only works with the Meas/Coord/ivoa models, other models are ignored.
 
 .. code:: bash
 
     types-and-roles-validate <VOTABLE path>
+    
+    USAGE: types-and-roles-validate [path]
+           Validate all dmtypes and dmroles
+           exit status: 0 in case of success, 1 otherwise
+    
+
+
+Snippet Generation
+==================
+
+To facilitate the production of a VODML file annotated with MIVOT, it can be interesting to work with 
+precomputed snippets that can be stacked to build full annotation blocks.
+
+- A snippet is a MIVOT fragment with not-set references and values that represents  a part of a model.
+- Snippets can easily be derived from the VODML representation of the model as long as there is no class polymorphism.
+  If there are, we provide a tool helping users to resolve abstract components.
+
+There are two types of snippet generators:
+ 
+ - ``mivot-snippet-model``, which allows, for a given model, to generate all 
+   non-abstract object and data types.
+   it provides a model view directly formatted as MIVOT components.
+-  The ``mivot-snippet-instance``, which for a given concrete class name, will generate a 
+   snippet usable according to the concrete classes chosen when creating it  
+
+.. code::bash
+   :caption: Build all MIVOT snippets for a model
+   
+   mivot-snippet-model [VODML path or url]
+    
+   USAGE: mivot-snippet-model [path] [output_dir]
+           Create MIVOT snippets from VODML files
+           path: either a simple file to any VODML-Model or an ur
+           output_dir: (optional) path to the chosen output directory (session working directory by default)"
+           exit status: 0 in case of success, 1 otherwise
+    
+
+ .. code::bash
+    :caption: Build a MIVOT snippet for one model class with resolving abstract types.
+ 
+    $ mivot-snippet-instance coords:TimeSys `pwd`/coords.TimeSys.example \
+    -cc dmrole=coords:TimeFrame.refPosition,context=coords:TimeSys,dmtype=coords:RefLocation,class=coords:StdRefLocation\
+    -cc dmrole=coords:TimeFrame.refDirection,context=coords:TimeSys,dmtype=coords:RefLocation,class=coords:StdRefLocation
+    
+In this example the tool will generate on snippet for the object type `coords:TimeSys`.
+
+- The produced file will be located in ``CURRENT_FOLDER/coords.TimeSys.example.xml``.
+  If the output is not an absolute path, the output will be located in the session working directory.
+- All MIVOT instances of (abstract) type ``coords:RefLocation`` playing the role ``coords:TimeFrame.refPosition``
+  and hosted by a class playing the role ``coords:TimeSys``, will be replaced by instances of type ``coords:StdRefLocation``
+- All MIVOT instances of (abstract) type ``coords:RefLocation`` playing the role ``coords:TimeFrame.refDirection``
+  and hosted by a class playing the role ``coords:TimeSys``, will be replaced by instances of type ``coords:StdRefLocation``
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
 
 
 Indices and tables
