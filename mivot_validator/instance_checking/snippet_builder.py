@@ -168,8 +168,8 @@ class Builder:
             elif tags.tag == "description":
                 if aggregate is True:
                     self.write_out(f'<!-- {tags.text}" -->')
-            elif tags.tag == "multiplicity":
-                max_occurs = int(tags.xpath(".//maxOccurs")[0].text)
+            # elif tags.tag == "multiplicity":
+            #    max_occurs = int(tags.xpath(".//maxOccurs")[0].text)
 
         if aggregate is True:
             self.write_out("</INSTANCE>")
@@ -285,8 +285,8 @@ class Builder:
         # we need it
         if self.model_name != "meas" and reftype == "meas:Measure":
             self.write_out(
-                f'<ATTRIBUTE dmrole="meas:Measure.ucd" '
-                f'dmtype="ivoa:string" value="phot.mag;em.opt;stat.mean" />'
+                "<ATTRIBUTE dmrole='meas:Measure.ucd' "
+                "dmtype='ivoa:string' value='phot.mag;em.opt;stat.mean' />"
             )
         else:
             self.get_object_by_ref(

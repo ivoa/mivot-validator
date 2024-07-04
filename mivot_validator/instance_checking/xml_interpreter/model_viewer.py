@@ -8,30 +8,23 @@ import re
 from copy import deepcopy
 from lxml import etree
 from mivot_validator.instance_checking import logger
-from mivot_validator.instance_checking.xml_interpreter.exceptions import *
-from mivot_validator.instance_checking.xml_interpreter.annotation_seeker import (
-    AnnotationSeeker,
-)
-from mivot_validator.instance_checking.xml_interpreter.resource_seeker import (
-    ResourceSeeker,
-)
-from mivot_validator.instance_checking.xml_interpreter.table_iterator import (
-    TableIterator,
-)
-from mivot_validator.instance_checking.xml_interpreter.static_reference_resolver import (
-    StaticReferenceResolver,
-)
-from mivot_validator.instance_checking.xml_interpreter.dynamic_reference import (
-    DynamicReference,
-)
+from mivot_validator.instance_checking.xml_interpreter.exceptions import (
+    MappingException,
+    NotImplementedException
+    )
+from mivot_validator.instance_checking.\
+     xml_interpreter.annotation_seeker import AnnotationSeeker
+from mivot_validator.instance_checking.\
+     xml_interpreter.resource_seeker import ResourceSeeker
+from mivot_validator.instance_checking.\
+     xml_interpreter.table_iterator import TableIterator
+from mivot_validator.instance_checking.\
+     xml_interpreter.static_reference_resolver import StaticReferenceResolver
+from mivot_validator.instance_checking.\
+     xml_interpreter.dynamic_reference import DynamicReference
 
-# from .to_json_converter import ToJsonConverter
-# from .json_block_extractor import JsonBlockExtractor
-from mivot_validator.instance_checking.xml_interpreter.join_operator import JoinOperator
-
-# from mivot_validator.instance_checking.class_wrappers.stc_classes.measures import Position, Time, GenericMeasure
-# from mivot_validator.instance_checking.class_wrappers.astropy_wrapper.sky_coord import SkyCoord
-# from mivot_validator.instance_checking.class_wrappers.component_builder import ComponentBuilder
+from mivot_validator.instance_checking.xml_interpreter.join_operator import (
+    JoinOperator)
 from mivot_validator.utils.xml_utils import XmlUtils
 
 
@@ -70,7 +63,8 @@ class ModelViewer:
     def __init__(self, resource, votable_path=None):
         """
         Constructor
-        votable_path is a workaround allowing to extract the annotation block outside of astropy
+        votable_path is a workaround allowing to extract
+        the annotation block outside of astropy
 
         :param resource: VOTable resource
         :type resource: astropy.Resource
@@ -128,20 +122,27 @@ class ModelViewer:
         Collection types are GLOBALS/COLLECTION/INSTANCE@dmtype:
         used for collections of static objects
 
-        :return : The dmtypes of all the top level INSTANCE/COLLECTION of GLOBALS
+        :return : The dmtypes of all the top level INSTANCE/COLLECTION
+                  of GLOBALS
         :rtype:  {'COLLECTION': [dmtpyes], 'INSTANCE': [dmtypes]}
         """
         retour = {}
-        retour["COLLECTION"] = self._annotation_seeker.get_globals_collection_dmtypes()
-        retour["INSTANCE"] = self._annotation_seeker.get_globals_instance_dmtypes()
+        retour["COLLECTION"] = (
+            self._annotation_seeker.get_globals_collection_dmtypes()
+            )
+        retour["INSTANCE"] = (
+            self._annotation_seeker.get_globals_instance_dmtypes()
+            )
         return retour
 
     def get_templates_models(self):
         """
         COLLECTION not implemented yet
 
-        :return : The dmtypes (except ivoa:\*) of all INSTANCE/COLLECTION of all TEMPLATES
-        :rtype:  {'tableref: {'COLLECTIONS': [dmtpyes], 'INSTANCE': [dmtypes]}, ...}
+        :return : The dmtypes (except ivoa:ANY) of all INSTANCE/COLLECTION
+                  of all TEMPLATES
+        :rtype:  {'tableref: {'COLLECTIONS': [dmtpyes],
+                  'INSTANCE': [dmtypes]}, ...}
         """
         retour = {}
         gni = self._annotation_seeker.get_instance_dmtypes()["TEMPLATES"]
@@ -152,7 +153,8 @@ class ModelViewer:
 
     def get_globals_instance(self, dmtype, resolve_ref=True):
         """
-        The a model view on the GLOBALS object (INSTANCE or COLLECTION) with @dmtype=dmtype
+        The a model view on the GLOBALS object (INSTANCE or COLLECTION)
+        with @dmtype=dmtype
         """
         globals_models = self.get_globals_models()
         found = False
@@ -161,9 +163,10 @@ class ModelViewer:
             if globals_type == dmtype:
                 found = True
                 # We process only one instance for now
-                self._globals_instance = self.annotation_seeker.get_instance_by_dmtype(
+                global_type = self.annotation_seeker.get_instance_by_dmtype(
                     globals_type
-                )["GLOBALS"][0]
+                )
+                self._globals_instance = global_type["GLOBALS"][0]
                 self._squash_globals_join_and_references()
                 globals_instance_copy = deepcopy(self._globals_instance)
 
@@ -173,11 +176,14 @@ class ModelViewer:
                     )
                 for join_tag, join in self._joins.items():
                     logger.info("resolve join %s", join_tag)
-                    join_operator = JoinOperator(self, self._connected_tableref, join)
+                    join_operator = JoinOperator(self,
+                                                 self._connected_tableref,
+                                                 join)
                     join_operator._set_filter()
                     join_operator._set_foreign_instance()
                     join_operator.get_matching_data(None)
-                    ref_element = globals_instance_copy.xpath("//" + join_tag)[0]
+                    ref_element = globals_instance_copy.xpath(
+                        "//" + join_tag)[0]
                     ref_host = ref_element.getparent()
                     for cpart in join_operator.get_matching_model_view(
                         resolve_ref=resolve_ref
@@ -208,12 +214,14 @@ class ModelViewer:
             raise MappingException(f"Cannot find table {tableref} in VOTable")
         logger.debug("table %s found in VOTable", tableref)
 
-        self._templates = deepcopy(self.annotation_seeker.get_templates_block(tableref))
+        self._templates = deepcopy(
+            self.annotation_seeker.get_templates_block(tableref))
         if self._templates is None:
             raise MappingException(f"Cannot find TEMPLATES {tableref} ")
         logger.debug("TEMPLATES %s found ", tableref)
 
-        self.table_iterator = TableIterator(tableref, self.connected_table.to_table())
+        self.table_iterator = TableIterator(tableref,
+                                            self.connected_table.to_table())
         self._squash_join_and_references()
         self._set_column_indices()
         self._set_column_units()
@@ -242,7 +250,8 @@ class ModelViewer:
         if resolve_ref is True:
             while (
                 StaticReferenceResolver.resolve(
-                    self._annotation_seeker, self._connected_tableref, templates_copy
+                    self._annotation_seeker,
+                    self._connected_tableref, templates_copy
                 )
                 > 0
             ):
@@ -251,11 +260,13 @@ class ModelViewer:
             # references have both indexes and unit attribute
             XmlUtils.set_column_indices(
                 templates_copy,
-                self._resource_seeker.get_id_index_mapping(self._connected_tableref),
+                self._resource_seeker.get_id_index_mapping(
+                    self._connected_tableref),
             )
             XmlUtils.set_column_units(
                 templates_copy,
-                self._resource_seeker.get_id_unit_mapping(self._connected_tableref),
+                self._resource_seeker.get_id_unit_mapping(
+                    self._connected_tableref),
             )
         for ele in templates_copy.xpath("//ATTRIBUTE"):
             ref = ele.get("ref")
@@ -268,7 +279,8 @@ class ModelViewer:
                 self, dref_tag, self._connected_tableref, dref
             )
             dyn_resolver._set_mode()
-            ref_target = dyn_resolver.get_target_instance(self._current_data_row)
+            ref_target = dyn_resolver.get_target_instance(
+                self._current_data_row)
             ref_element = templates_copy.xpath("//" + dref_tag)[0]
             ref_host = ref_element.getparent()
             ref_target_copy = deepcopy(ref_target)
@@ -287,7 +299,8 @@ class ModelViewer:
             join_operator.get_matching_data(self._current_data_row)
             ref_element = templates_copy.xpath("//" + join_tag)[0]
             ref_host = ref_element.getparent()
-            for cpart in join_operator.get_matching_model_view(resolve_ref=resolve_ref):
+            for cpart in join_operator.get_matching_model_view(
+                                                resolve_ref=resolve_ref):
                 ref_host.append(deepcopy(cpart))
             # Drop the reference
             ref_host.remove(ref_element)
@@ -304,14 +317,15 @@ class ModelViewer:
         retour = []
         model_view = self.get_model_view(resolve_ref=True)
 
-        for ele in model_view.xpath(f'.//INSTANCE[@dmtype="{searched_dmtype}"]'):
+        for ele in model_view.xpath(
+                f'.//INSTANCE[@dmtype="{searched_dmtype}"]'):
             retour.append(deepcopy(ele))
         return retour
 
     def get_model_component_by_role(self, searched_dmrole):
         """
         return the list of the xml instances with
-        \@dmrole=searched_role from the model view
+        dmrole=searched_role from the model view
         of the current data row
         Return a [] if no matching dmrole was found
         """
@@ -319,7 +333,8 @@ class ModelViewer:
         retour = []
         model_view = self.get_model_view(resolve_ref=True)
 
-        for ele in model_view.xpath(f'.//INSTANCE[@dmrole="{searched_dmrole}"]'):
+        for ele in model_view.xpath(
+                f'.//INSTANCE[@dmrole="{searched_dmrole}"]'):
             retour.append(deepcopy(ele))
         return retour
 
@@ -339,7 +354,8 @@ class ModelViewer:
 
     def _extract_mapping_block(self, votable_path=None):
         """
-        String extraction must be replaced with astropy.Resource.model_mapping when available
+        String extraction must be replaced with astropy.Resource.model_mapping
+        when available
         """
         logger.info("extract vodml block from %s", votable_path)
         with open(votable_path, encoding="utf-8") as xml_file:
@@ -353,16 +369,22 @@ class ModelViewer:
             content = content[:stop]
 
             content = re.sub("xmlns=[\"'].*[\"']", "", content)
-            self._annotation_seeker = AnnotationSeeker(etree.fromstring(content))
+            self._annotation_seeker = AnnotationSeeker(
+                etree.fromstring(content)
+                )
 
         logger.info("VODML found")
 
     def _squash_join_and_references(self):
         """
-        Remove both JOINs and REFERENCEs from the templates and store them in to be resolved later on
-        This avoid to have the model view polluted with elements that are not in the model
+        Remove both JOINs and REFERENCEs from the templates and
+        store them in to be resolved later on
+        This avoid to have the model view polluted with elements
+        that are not in the model
         """
-        for ele in self._templates.xpath("//*[starts-with(name(), 'REFERENCE_')]"):
+        for ele in self._templates.xpath(
+                        "//*[starts-with(name(), 'REFERENCE_')]"
+                        ):
             if ele.get("sourceref") is not None:
                 self._dyn_references = {ele.tag: deepcopy(ele)}
                 for child in list(ele):
@@ -375,11 +397,14 @@ class ModelViewer:
 
     def _squash_globals_join_and_references(self):
         """
-        Remove both JOINs and REFERENCEs from the templates and store them in to be resolved later on
-        This avoid to have the model view polluted with elements that are not in the model
+        Remove both JOINs and REFERENCEs from the templates and store them
+        in to be resolved later on
+        This avoid to have the model view polluted with elements
+        that are not in the model
         TODO: merge with the former method
         """
-        for ele in self._globals_instance.xpath("//*[starts-with(name(), 'JOIN')]"):
+        for ele in self._globals_instance.xpath(
+                            "//*[starts-with(name(), 'JOIN')]"):
             self._joins = {ele.tag: deepcopy(ele)}
             for child in list(ele):
                 ele.remove(child)
@@ -387,9 +412,12 @@ class ModelViewer:
     def _set_column_indices(self):
         """
         add column ranks to attribute having a ref.
-        Using ranks allow to identify columns even numpy raw have been serialised as []
+        Using ranks allow to identify columns even numpy raw
+        have been serialised as []
         """
-        index_map = self._resource_seeker.get_id_index_mapping(self._connected_tableref)
+        index_map = self._resource_seeker.get_id_index_mapping(
+            self._connected_tableref
+            )
         XmlUtils.set_column_indices(self._templates, index_map)
 
     def _set_column_units(self):
@@ -397,5 +425,7 @@ class ModelViewer:
         add field unit to attribute having a ref.
         Used for performing unit conversions
         """
-        unit_map = self._resource_seeker.get_id_unit_mapping(self._connected_tableref)
+        unit_map = self._resource_seeker.get_id_unit_mapping(
+            self._connected_tableref
+            )
         XmlUtils.set_column_units(self._templates, unit_map)

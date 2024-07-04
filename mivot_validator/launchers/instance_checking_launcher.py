@@ -4,10 +4,13 @@ Created on 23 Jun 2022
 @author: laurentmichel
 """
 
-import sys, os
+import sys
+import os
 from astropy.io.votable import parse
 from mivot_validator.utils.session import Session
-from mivot_validator.instance_checking.xml_interpreter.model_viewer import ModelViewer
+from mivot_validator.instance_checking.xml_interpreter.model_viewer import (
+    ModelViewer
+    )
 from mivot_validator.instance_checking.instance_checker import InstanceChecker
 
 
@@ -48,7 +51,8 @@ def main():
         # Seek the first data row
         mviewer.get_next_row()
         # and get its model view
-        # The references are resolved in order to be able to check their counterparts
+        # The references are resolved in order to be able
+        # to check their counterparts
         model_view = mviewer.get_model_view(resolve_ref=True)
         # Validate all instances  on which the table data are mapped
         session = Session()

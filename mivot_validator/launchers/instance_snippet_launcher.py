@@ -27,7 +27,12 @@ def check_concrete_classes(args, parser=None):
 
     for my_dict in args:
         if not all(
-            x in my_dict.keys() for x in ["dmtype", "dmrole", "context", "class"]
+            x in my_dict.keys() for x in [
+                "dmtype",
+                "dmrole",
+                "context",
+                "class"
+                ]
         ):
             print("Invalid format for class name")
             if parser is not None:
@@ -69,7 +74,8 @@ def main():
         help="[OPTIONAL] list of classes to be included in the snippet, "
         "it will prevent the script to ask for the user input if given.\n"
         "Syntax is : dmrole=model:Type.role,"
-        "context=model:ParentType,dmtype=model:Type,context:model:hostClass,class=model:Type",
+        "context=model:ParentType,dmtype=model:Type,context:"
+        "model:hostClass,class=model:Type",
     )
 
     args = vars(parser.parse_args())

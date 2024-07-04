@@ -44,7 +44,7 @@ class TableIterator:
                         return row
                 else:
                     return None
-        except:
+        except Exception:
             return None
 
     def _rewind(self):

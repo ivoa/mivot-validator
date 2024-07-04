@@ -7,7 +7,6 @@ Created on 21 Feb 2023
 import os
 
 from mivot_validator.utils.xml_utils import XmlUtils
-from mivot_validator.utils.session import Session
 from mivot_validator.instance_checking.inheritance_checker import InheritanceChecker
 from mivot_validator.instance_checking.snippet_builder import Builder
 

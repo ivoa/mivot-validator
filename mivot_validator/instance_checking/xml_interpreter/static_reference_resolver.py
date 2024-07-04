@@ -28,7 +28,8 @@ class StaticReferenceResolver:
         - A exception is risen if the reference cannot be resolved
         - Works even if REFERENCE tags are numbered by the former processing
 
-        :param annotation_seeker: utility to extract desired elements from the mapping block
+        :param annotation_seeker: utility to extract desired
+                                  elements from the mapping block
         :param templates_ref: Identifier of the table where instance comes from
         :param instance: etree Element
         :return: the number of references resolved
@@ -36,9 +37,13 @@ class StaticReferenceResolver:
         retour = 0
         for ele in instance.xpath(".//*[starts-with(name(), 'REFERENCE_')]"):
             dmref = ele.get("dmref")
-            # If we have no @dmref in REFERENCE, we consider this is a ref based on a keys
+            # If we have no @dmref in REFERENCE, we consider this
+            # is a ref based on a keys
             if dmref is None:
-                StaticReferenceResolver.resolve_from_forein_key(ele, annotation_seeker)
+                StaticReferenceResolver.resolve_from_forein_key(
+                    ele,
+                    annotation_seeker
+                    )
                 continue
 
             target = annotation_seeker.get_globals_instance_by_dmid(dmref)
@@ -52,9 +57,11 @@ class StaticReferenceResolver:
                 raise MappingException(f"Cannot resolve reference={dmref}")
             # Resolve static references recursively
             if found_in_global is False:
-                StaticReferenceResolver.resolve(annotation_seeker, templates_ref, ele)
+                StaticReferenceResolver.resolve(
+                    annotation_seeker, templates_ref, ele)
             else:
-                StaticReferenceResolver.resolve(annotation_seeker, None, ele)
+                StaticReferenceResolver.resolve(
+                    annotation_seeker, None, ele)
             # Set the reference role to the copied instance
             target_copy = deepcopy(target)
             # if the reference is within a collection: no role
@@ -81,7 +88,8 @@ class StaticReferenceResolver:
 
         .. code-block:: xml
 
-           <REFERENCE_4 dmrole="coords:Coordinate.coordSys" sourceref="_CoordinateSystems">
+           <REFERENCE_4 dmrole="coords:Coordinate.coordSys"
+                        sourceref="_CoordinateSystems">
                <FOREIGN_KEY ref="_band" value="G"/>
            </REFERENCE_4>
 
@@ -89,7 +97,8 @@ class StaticReferenceResolver:
         - FOREIGN_KEY@value is not pas of the mapping, it is meant to be added
           by the caller while reading the data rows
 
-        :param annotation_seeker: utility to extract desired elements from the mapping block
+        :param annotation_seeker: utility to extract desired elements
+                                  from the mapping block
         :param ref_element: <REFERENCE> element
         """
         pk_value = None

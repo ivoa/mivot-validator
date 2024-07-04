@@ -1,7 +1,8 @@
 """
 Created on 19 Apr 2023
 
-generate for a given model all  non-abstract object and data types (one per snippet)
+generate for a given model all  non-abstract object
+and data types (one per snippet)
 .
 @author: julien abid
 """
@@ -12,7 +13,9 @@ import sys
 from urllib.parse import urlparse
 from urllib.request import urlretrieve
 
-from mivot_validator.instance_checking.model_snippets_builder import ModelBuilder
+from mivot_validator.instance_checking.model_snippets_builder import (
+    ModelBuilder
+    )
 from mivot_validator.utils.session import Session
 
 
@@ -25,7 +28,8 @@ def main():
         print("   Create MIVOT snippets from VODML files")
         print("   path: either a simple file to any VODML-Model or an url")
         print(
-            "   output_dir: path to the chosen output directory (session working directory by default)"
+            "   output_dir: path to the chosen output directory"
+            "(session working directory by default)"
         )
         print("   exit status: 0 in case of success, 1 otherwise")
         sys.exit(1)
@@ -40,11 +44,14 @@ def main():
     vodml_path = check_args(sys.argv[1])
     snippet = ModelBuilder(vodml_path, session)
     if snippet.build():
+        folder = os.path.basename(
+            sys.argv[1]
+            ).split('.')[0].split('_')[0].split('-')[0].lower()
         print("\n===============================================")
         print(
             f"Snippets generated in "
             f"{session.tmp_data_path} \nin the folder : "
-            f"{os.path.basename(sys.argv[1]).split('.')[0].split('_')[0].split('-')[0].lower()}"
+            f"{folder}"
         )
         print("===============================================\n")
 

@@ -5,7 +5,9 @@ Created on 23 Jun 2022
 """
 
 import sys
-from mivot_validator.annotated_votable_validator import AnnotatedVOTableValidator
+from mivot_validator.annotated_votable_validator import (
+    AnnotatedVOTableValidator
+    )
 
 
 def main():

@@ -41,7 +41,8 @@ class DictUtils:
     @staticmethod
     def get_fatal_value(dictionary, key):
         """
-        returns dictionary[key] if available and trigger a system exit otherwise.
+        returns dictionary[key] if available and trigger
+        a system exit otherwise.
 
         :param dictionary: dictionary
         :type dictionary: Python Dict
@@ -65,7 +66,8 @@ class DictUtils:
         :type dictionary: Python Dict
         :param key: key of the searched value
         :type key: string
-        :param null: value taken when the key os not available (None by default)
+        :param null: value taken when the key os
+                     not available (None by default)
         :type null: string
         :return: the value attached to the key or the null value
         :rtype: any supported Dict value
@@ -118,7 +120,8 @@ class DictUtils:
     @staticmethod
     def write_dict_from_file(dictionary, filename, fatal=False):
         """
-        Write the dictionary in filename, rises an exception if something goes wrong.
+        Write the dictionary in filename, rises an exception
+        if something goes wrong.
 
         :param filename: filename
         :type filename: string
@@ -197,18 +200,25 @@ class DictUtils:
         :param text: string to be formated
         :type text: string
         """
-        replaced = re.sub("svom_mxt_proto_any_.*", "svom_mxt_proto_any_SEQID", text)
+        replaced = re.sub(
+            "svom_mxt_proto_any_.*",
+            "svom_mxt_proto_any_SEQID",
+            text)
         replaced = re.sub("svom_test_.*", "svom_test_any_SEQID", replaced)
         replaced = re.sub(
-            "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}", "DATE", replaced
+            "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",
+            "DATE",
+            replaced
         )
         return replaced
 
     @staticmethod
     def get_permanent_object(dico):
         """
-        This method make the object content independent of a specific run context
-        It us used to format object in a way they can be checked in unit demo
+        This method make the object content independent
+        of a specific run context
+        It us used to format object in a way they
+        can be checked in unit demo
         dates values are replaced with DATE
         and the seq_id with SEQID.
 

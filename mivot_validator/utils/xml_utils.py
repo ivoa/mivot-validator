@@ -70,7 +70,8 @@ class XmlUtils:
     def set_column_indices(mapping_block, index_map):
         """
         add column ranks to attribute having a ref.
-        Using ranks allow to identify columns even numpy raw have been serialised as []
+        Using ranks allow to identify columns even numpy
+        raw have been serialised as []
         """
         for ele in mapping_block.xpath("//ATTRIBUTE"):
             ref = ele.get("ref")

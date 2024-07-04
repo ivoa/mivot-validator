@@ -22,7 +22,8 @@ class ResourceSeeker:
         """
         Return the list of table ids
         Only resource children are considered
-        The id is first look up in ID then in name and finally 'AnonymousTable' is taken
+        The id is first look up in ID then in name and
+        finally 'AnonymousTable' is taken
         """
         retour = []
         for table in self._resource.tables:
@@ -40,7 +41,9 @@ class ResourceSeeker:
         :param table_name:
         """
         for table in self._resource.tables:
-            if table_name is None or table.name == table_name or table.ID == table_name:
+            if (table_name is None
+                    or table.name == table_name
+                    or table.ID == table_name):
                 return table
         return None
 

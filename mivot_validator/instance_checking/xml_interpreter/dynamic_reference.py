@@ -9,9 +9,9 @@ from mivot_validator.instance_checking.xml_interpreter import logger
 from mivot_validator.instance_checking.xml_interpreter.exceptions import (
     MappingException,
 )
-from mivot_validator.instance_checking.xml_interpreter.static_reference_resolver import (
-    StaticReferenceResolver,
-)
+from mivot_validator.instance_checking.\
+        xml_interpreter.static_reference_resolver import (
+            StaticReferenceResolver)
 
 
 class DynamicReference:
@@ -42,10 +42,13 @@ class DynamicReference:
             self.target_id = fkey[0].get("sourceref")
             fkey = self.xml_block.xpath("//FOREIGN_KEY")
             self.fk_ref = fkey[0].get("ref")
-            index_map = self.resource_seeker.get_id_index_mapping(self.templates_ref)
+            index_map = self.resource_seeker.get_id_index_mapping(
+                self.templates_ref)
             self.fk_col = index_map[self.fk_ref]
-            self.target_xml_block = self.annotation_seeker.get_globals_collection(
-                self.target_id
+            self.target_xml_block = (
+                self.annotation_seeker.get_globals_collection(
+                    self.target_id
+                )
             )
             if self.target_xml_block is None:
                 raise MappingException(
@@ -54,10 +57,12 @@ class DynamicReference:
 
     def get_target_instance(self, data_row):
         key = data_row[self.fk_col]
-        fkey = self.target_xml_block.xpath("//PRIMARY_KEY[@value='" + key + "']")
+        fkey = self.target_xml_block.xpath(
+            "//PRIMARY_KEY[@value='" + key + "']")
         if len(fkey) == 0:
             raise MappingException(
-                f"GLOBALS/COLLECTION with dmid={self.target_id} has no item with PRIMARY_KEY={key}"
+                f"GLOBALS/COLLECTION with dmid={self.target_id}"
+                f"has no item with PRIMARY_KEY={key}"
             )
         if len(fkey) > 1:
             raise MappingException(

@@ -11,13 +11,13 @@ from copy import deepcopy
 from mivot_validator.instance_checking.xml_interpreter.exceptions import (
     MappingException,
 )
-from mivot_validator.instance_checking.xml_interpreter.table_iterator import (
-    TableIterator,
-)
+from mivot_validator.instance_checking.\
+        xml_interpreter.table_iterator import TableIterator
 from mivot_validator.instance_checking import logger
-from mivot_validator.instance_checking.xml_interpreter.static_reference_resolver import (
-    StaticReferenceResolver,
-)
+from mivot_validator.instance_checking.\
+        xml_interpreter.static_reference_resolver import (
+            StaticReferenceResolver
+            )
 
 
 class Where:
@@ -25,7 +25,8 @@ class Where:
     Evaluator of foreign data against a primary key
     """
 
-    def __init__(self, resource_seeker, foreignkey, primarykey, fk_is_constant=False):
+    def __init__(self, resource_seeker,
+                 foreignkey, primarykey, fk_is_constant=False):
         """
         :param foreignkey: identifier of the column used for the foreign key
         :param primarykey: identifier of the column used for the primary key
@@ -37,7 +38,8 @@ class Where:
         self.primarykey = primarykey
         # Number of primary table used as primary key
         self.primary_col = None
-        # flag telling thta the primary key must be evaluated against a constant value
+        # flag telling thta the primary key must
+        # be evaluated against a constant value
         self.fk_is_constant = fk_is_constant
 
     def __repr__(self):
@@ -47,19 +49,22 @@ class Where:
         )
 
     def set_primary_col(self, primary_table_ref):
-        index_map = self.resource_seeker.get_id_index_mapping(primary_table_ref)
+        index_map = self.resource_seeker.get_id_index_mapping(
+            primary_table_ref)
         self.primary_col = index_map[self.primarykey]
 
     def set_foreign_col(self, foreign_table_ref):
         if self.fk_is_constant is False:
-            index_map = self.resource_seeker.get_id_index_mapping(foreign_table_ref)
+            index_map = self.resource_seeker.get_id_index_mapping(
+                foreign_table_ref)
             self.foreign_col = index_map[self.foreignkey]
 
     def match(self, primary_key_value, foreign_row):
         """
         Returns True if the value of the foreign key read out of the
         foreign row matches primary_key_value
-        The comparisons are based on string representations of the evaluated values
+        The comparisons are based on string representations
+        of the evaluated values
 
         :param primary_key: value of the primary key
         :param foreign_row: Numpy data row of the joined table that must
@@ -90,7 +95,8 @@ class JoinOperator:
         self.last_joined_data = None
 
     def _set_filter(self):
-        for ele in self.xml_join_block.xpath("//*[starts-with(name(), 'JOIN_')]"):
+        for ele in self.xml_join_block.xpath(
+                "//*[starts-with(name(), 'JOIN_')]"):
             self.target_id = ele.get("dmref")
 
         self.target_table_id = self.annotation_seeker.get_globals_collection(
@@ -127,7 +133,9 @@ class JoinOperator:
         for ele in self.xml_join_block.xpath("//WHERE"):
             if ele.get("foreignkey") is not None:
                 where = Where(
-                    self.resource_seeker, ele.get("foreignkey"), ele.get("primarykey")
+                    self.resource_seeker,
+                    ele.get("foreignkey"),
+                    ele.get("primarykey")
                 )
             else:
                 where = Where(
@@ -148,7 +156,8 @@ class JoinOperator:
 
     def _set_foreign_instance(self):
         # TODO should be done once for ever
-        index_map = self.resource_seeker.get_id_index_mapping(self.target_table_id)
+        index_map = self.resource_seeker.get_id_index_mapping(
+            self.target_table_id)
         for ele in self.foreign_xml_instance.xpath("//ATTRIBUTE"):
             ref = ele.get("ref")
             if ref is not None:
@@ -163,11 +172,14 @@ class JoinOperator:
                 break
             is_valid = True
             for where in self.wheres:
-                # the primary col is in the GLOBALS: no row and the foreign_key is constant
+                # the primary col is in the GLOBALS: no row
+                # and the foreign_key is constant
                 if primary_row is None:
                     where_match = where.match(None, row)
                 else:
-                    where_match = where.match(primary_row[where.primary_col], row)
+                    where_match = where.match(
+                        primary_row[where.primary_col], row
+                        )
 
                 if where_match is False:
                     is_valid = False

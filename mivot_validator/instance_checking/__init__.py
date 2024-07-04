@@ -1,4 +1,3 @@
-import os
 from mivot_validator.utils.logger_setup import LoggerSetup
 
 logger = LoggerSetup.get_logger()

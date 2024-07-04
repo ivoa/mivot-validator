@@ -10,7 +10,8 @@ Created on 23 May 2024
 @author: laurentmichel
 """
 
-import os, tempfile
+import os
+import tempfile
 import urllib.request
 import shutil
 from mivot_validator import logger
@@ -47,16 +48,24 @@ class Session(object):
         )
 
         self.install_vodml(
-            "coords", "https://ivoa.net/xml/VODML/Coords-v1.0.vo-dml.xml"
+            "coords",
+            "https://ivoa.net/xml/VODML/Coords-v1.0.vo-dml.xml"
         )
-        self.install_vodml("meas", "https://ivoa.net/xml/VODML/Meas-v1.vo-dml.xml")
+        self.install_vodml("meas",
+                           "https://ivoa.net/xml/VODML/Meas-v1.vo-dml.xml")
         self.install_vodml(
-            "ivoa", "https://ivoa.net/xml/VODML/20180519/IVOA-v1.0.vo-dml.xml"
+            "ivoa",
+            "https://ivoa.net/xml/VODML/20180519/IVOA-v1.0.vo-dml.xml"
         )
-        self.install_vodml("Phot", "https://ivoa.net/xml/VODML/Phot-v1.vodml.xml")
+        self.install_vodml(
+            "Phot",
+            "https://ivoa.net/xml/VODML/Phot-v1.vodml.xml"
+            )
         self.install_local_vodml("mango")
 
-        logger.info(f"setup session in {self.tmp_dirname} ({os.getpid()})")
+        logger.info(
+            f"setup session in {self.tmp_dirname} ({os.getpid()})"
+            )
 
     def _is_model_here(self, model_name):
         """
@@ -95,7 +104,8 @@ class Session(object):
 
     def install_local_vodml(self, model_name):
         """
-        Install the model model_name from the vodml files located in the package
+        Install the model model_name from the vodml files
+        located in the package
         """
         if self._is_model_here(model_name):
             logger.info(f"{model_name} already here")

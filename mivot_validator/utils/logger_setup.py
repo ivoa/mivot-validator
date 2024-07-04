@@ -2,8 +2,10 @@
 Global logger setup
 Must be used by the whole application
 
-The default format can be restored at any time with LoggerSetup.set_default_format()
-The log level can be set at any time with LoggerSetup.set_debug/info/warning/error_level
+The default format can be restored at any time with
+LoggerSetup.set_default_format()
+The log level can be set at any time with
+LoggerSetup.set_debug/info/warning/error_level
 The level is set at INFO by default
 
 Created on 4 December 2019
