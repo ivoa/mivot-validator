@@ -12,8 +12,8 @@ author = 'Laurent MICHEL'
 import sys, os
 sys.path.insert(0, os.path.abspath('../..'))
 sys.path.insert(0, os.path.abspath('../'))
-from mivot_validator.version import Version
-release = Version
+from mivot_validator.version import __version__
+release = __version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
