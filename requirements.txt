@@ -3,6 +3,6 @@ lxml
 xmlschema
 xmltodict
 astropy
-sphinx
-sphinx-autobuild
-sphinx-autosummary
+#sphinx
+#sphinx-autobuild
+#sphinx-autosummary
