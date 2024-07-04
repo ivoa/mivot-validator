@@ -5,6 +5,7 @@ generate for a given model all  non-abstract object and data types (one per snip
 .
 @author: julien abid
 """
+
 import os
 import sys
 
@@ -14,6 +15,7 @@ from urllib.request import urlretrieve
 from mivot_validator.instance_checking.model_snippets_builder import ModelBuilder
 from mivot_validator.utils.session import Session
 
+
 def main():
     """
     Package launcher (script)
@@ -22,17 +24,18 @@ def main():
         print("USAGE: mivot-snippet-model [path] <output_dir>")
         print("   Create MIVOT snippets from VODML files")
         print("   path: either a simple file to any VODML-Model or an url")
-        print("   output_dir: path to the chosen output directory (session working directory by default)")
+        print(
+            "   output_dir: path to the chosen output directory (session working directory by default)"
+        )
         print("   exit status: 0 in case of success, 1 otherwise")
         sys.exit(1)
-    
+
     session = Session()
     print(sys.argv)
-        # id output is not absolute use the default session work dir
+    # id output is not absolute use the default session work dir
     if len(sys.argv) > 3 and os.path.isabs(sys.argv[2]):
         output_dir = os.path.dirname(sys.argv[2])
         session.tmp_data_path = output_dir
-
 
     vodml_path = check_args(sys.argv[1])
     snippet = ModelBuilder(vodml_path, session)

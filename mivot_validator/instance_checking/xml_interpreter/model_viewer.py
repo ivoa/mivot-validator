@@ -3,6 +3,7 @@ Created on 5 Jan 2022
 
 @author: laurentmichel
 """
+
 import re
 from copy import deepcopy
 from lxml import etree
@@ -42,7 +43,7 @@ class ModelViewer:
     Standard usage applied to data rows
 
     .. code-block:: python
-    
+
         votable = parse(votable_path)
         for resource in votable.resources:
             model_viewer = ModelViewer(resource)
@@ -58,7 +59,7 @@ class ModelViewer:
     Standard usage applied to global instances
 
     .. code-block:: python
-    
+
         votable = parse(votable_path)
         for resource in votable.resources:
             model_viewer = ModelViewer(resource)
@@ -70,7 +71,7 @@ class ModelViewer:
         """
         Constructor
         votable_path is a workaround allowing to extract the annotation block outside of astropy
-        
+
         :param resource: VOTable resource
         :type resource: astropy.Resource
         """
@@ -126,7 +127,7 @@ class ModelViewer:
         """
         Collection types are GLOBALS/COLLECTION/INSTANCE@dmtype:
         used for collections of static objects
-        
+
         :return : The dmtypes of all the top level INSTANCE/COLLECTION of GLOBALS
         :rtype:  {'COLLECTION': [dmtpyes], 'INSTANCE': [dmtypes]}
         """
@@ -138,7 +139,7 @@ class ModelViewer:
     def get_templates_models(self):
         """
         COLLECTION not implemented yet
-        
+
         :return : The dmtypes (except ivoa:\*) of all INSTANCE/COLLECTION of all TEMPLATES
         :rtype:  {'tableref: {'COLLECTIONS': [dmtpyes], 'INSTANCE': [dmtypes]}, ...}
         """

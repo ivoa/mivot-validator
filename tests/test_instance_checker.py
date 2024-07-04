@@ -6,6 +6,7 @@ are compliant with their VODML class definitions
 
 @author: laurentmichel
 """
+
 import os
 import unittest
 from mivot_validator.utils.session import Session
@@ -59,7 +60,9 @@ class TestInstCheck(unittest.TestCase):
                 session = Session()
                 file_path = os.path.join(mapping_sample, sample_file)
                 instance = XmlUtils.xmltree_from_file(file_path)
-                status = InstanceChecker.check_instance_validity(instance.getroot(), session)
+                status = InstanceChecker.check_instance_validity(
+                    instance.getroot(), session
+                )
                 session.close()
                 self.assertTrue(status)
 

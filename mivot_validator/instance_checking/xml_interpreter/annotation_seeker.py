@@ -3,6 +3,7 @@ Created on 11 Dec 2021
 
 @author: laurentmichel
 """
+
 from mivot_validator.instance_checking.xml_interpreter.exceptions import (
     MappingException,
 )

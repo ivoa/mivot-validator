@@ -8,6 +8,7 @@ XML instances to be checked are provided as XML snippets
 
 @author: laurentmichel
 """
+
 import os
 import unittest
 import traceback
@@ -45,9 +46,7 @@ class TestModelCompliance(unittest.TestCase):
                     instance = XmlUtils.xmltree_from_file(
                         os.path.join(mapping_sample, sample_file),
                     )
-                    InstanceChecker.check_instance_validity(instance.getroot(),
-                                                            session
-                                                            )
+                    InstanceChecker.check_instance_validity(instance.getroot(), session)
                     session.close()
                     self.assertTrue(True)
                 except:

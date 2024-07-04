@@ -3,6 +3,7 @@ Created on 22 Dec 2021
 
 @author: laurentmichel
 """
+
 from copy import deepcopy
 from mivot_validator.instance_checking.xml_interpreter import logger
 from mivot_validator.instance_checking.xml_interpreter.exceptions import (

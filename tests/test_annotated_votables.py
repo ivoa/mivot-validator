@@ -5,6 +5,7 @@ The annotated votables against both schemas (MIVOT and VOTable 1.3)
 Created on 2022/07/01
 @author: laurentmichel
 """
+
 import os
 import unittest
 from mivot_validator.utils.session import Session
@@ -51,6 +52,7 @@ class Test(unittest.TestCase):
         self.assertFalse(
             annotated_votable_validator.validate(os.path.realpath(__file__))
         )
+
 
 if __name__ == "__main__":
     unittest.main()

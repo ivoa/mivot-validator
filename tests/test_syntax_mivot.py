@@ -6,6 +6,7 @@ VOTables against the MIVOT schema
 
 @author: laurentmichel
 """
+
 import os
 import unittest
 from mivot_validator.annotated_votable_validator import AnnotatedVOTableValidator

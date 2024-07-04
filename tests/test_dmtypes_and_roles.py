@@ -5,6 +5,7 @@ Test suite validating that all role and types of the annotation are consistent w
 
 @author: laurentmichel
 """
+
 import os
 import unittest
 from mivot_validator.utils.session import Session
@@ -14,7 +15,7 @@ mapping_sample = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data
 
 
 class Test(unittest.TestCase):
-    
+
     def testOK(self):
         """
         Check that all sample files tagged as OK are actually valid

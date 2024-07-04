@@ -4,6 +4,7 @@ Created on 29 mai 2019
 
 @author: michel
 """
+
 import json
 import re
 import urllib
@@ -22,7 +23,7 @@ class DictUtils:
     def get_required_value(dictionary, key):
         """
         returns dictionary[key] if available and rises an exception otherwise.
-        
+
         :param dictionary: dictionary
         :type dictionary: Python Dict
         :param key: key of the searched value
@@ -41,7 +42,7 @@ class DictUtils:
     def get_fatal_value(dictionary, key):
         """
         returns dictionary[key] if available and trigger a system exit otherwise.
-        
+
         :param dictionary: dictionary
         :type dictionary: Python Dict
         :param key: key of the searched value
@@ -59,7 +60,7 @@ class DictUtils:
     def get_optional_value(dictionary, key, null=None):
         """
         returns dictionary[key] if available or a null value otherwise.
-        
+
         :param dictionary: dictionary
         :type dictionary: Python Dict
         :param key: key of the searched value
@@ -81,7 +82,7 @@ class DictUtils:
         """
         Remove all comment keys ("$desc").
         not recursive.
-        
+
         :param dictionary: dictionary
         :type dictionary: Python Dict
         """
@@ -92,7 +93,7 @@ class DictUtils:
     def read_dict_from_file(filename, fatal=False):
         """
         Read a Dict in filename, rises an exception if something goes wrong.
-        
+
         :param filename: filename
         :type filename: string
         :param fatal: trigger a systeml exit if true
@@ -118,7 +119,7 @@ class DictUtils:
     def write_dict_from_file(dictionary, filename, fatal=False):
         """
         Write the dictionary in filename, rises an exception if something goes wrong.
-        
+
         :param filename: filename
         :type filename: string
         :param fatal: trigger a systeml exit if true
@@ -138,7 +139,7 @@ class DictUtils:
     def read_dict_from_url(url, fatal=False):
         """
         Read a Dict from url, rises an exception if something goes wrong.
-        
+
         :param url: url
         :type url: string
         :param fatal: trigger a systeml exit if true
@@ -165,7 +166,7 @@ class DictUtils:
     @staticmethod
     def get_pretty_json(dictionnary):
         """
-        
+
         :return: A pretty string representation of the dictionary
         :rtype: Python Dict
         """
@@ -180,7 +181,7 @@ class DictUtils:
     @staticmethod
     def print_pretty_json(dictionnary):
         """
-        
+
         :return: Print out pretty string representation of the dictionary
         """
         print(DictUtils.get_pretty_json(dictionnary))
@@ -192,7 +193,7 @@ class DictUtils:
         It us used to format object in a way they can be checked in unit demo
         dates values are replaced with DATE
         and the seq_id with SEQID.
-        
+
         :param text: string to be formated
         :type text: string
         """
@@ -210,7 +211,7 @@ class DictUtils:
         It us used to format object in a way they can be checked in unit demo
         dates values are replaced with DATE
         and the seq_id with SEQID.
-        
+
         :param dico: object to be formated
         :type dico: anything
         """
@@ -236,7 +237,7 @@ class DictUtils:
         """
         Returns a copy of dict with all keys prefixed with prefix
         Works only art root level, no recursion.
-        
+
         :param dictionnary: dict on which key prefixes must be applied
         :type dictionnary: dict
         :param prefix: prefix to be aplied to the keys
@@ -252,7 +253,7 @@ class DictUtils:
     def find_item_by_key(dictionnary, key):
         """
         Look for the first dictionary item attached to key
-        
+
         :param dictionary: dictionary to be explored
         :type dictionary: {}
         :param key: searched key
@@ -266,7 +267,7 @@ class DictUtils:
     def _find_item_by_key(dictionnary, key, result):
         """
         Look for the first dictionary item attached to key
-        
+
         :param dictionary: dictionary to be explored
         :type dictionary: {}
         :param key: searched key

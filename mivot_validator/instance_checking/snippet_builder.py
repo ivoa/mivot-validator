@@ -3,6 +3,7 @@ Created on 22 Dec 2022
 
 @author: laurentmichel
 """
+
 import os
 from mivot_validator.utils.xml_utils import XmlUtils
 from mivot_validator.instance_checking.xml_interpreter.exceptions import (
@@ -25,12 +26,12 @@ class Constraints:
         self.role = None
         self.model_name = model_name
         self.constraints = {}
-        self.verbose=verbose
-        
+        self.verbose = verbose
+
     def _print_(self, message):
         if self.verbose:
             self._print_(message)
-           
+
     def add_constraint(self, ele):
         refs = ele.xpath(".//datatype/vodml-ref")
         if len(refs) == 0:
@@ -43,7 +44,9 @@ class Constraints:
         self._print_(f"add constraint on role {self.role}: type={self.datatype} ")
 
     def get_contraint(self, const_key):
-        self._print_(f"look for the constrains {const_key} in {self.constraints.keys()}")
+        self._print_(
+            f"look for the constrains {const_key} in {self.constraints.keys()}"
+        )
         for key in self.constraints.keys():
             if const_key.endswith(key):
                 self._print_(f"  found as {self.constraints[key]}")
@@ -84,12 +87,12 @@ class Builder:
         self.constraints = Constraints(model_name)
         self.class_name = class_name
         self.resolved_references = []
-        self.verbose=verbose
-        
+        self.verbose = verbose
+
     def _print_(self, message):
         if self.verbose:
             self._print_(message)
-           
+
     def build(self):
         """
         Build one snippet for the dataType/objectType found in the VODML block
@@ -113,7 +116,7 @@ class Builder:
     def build_object(self, ele, role, root, aggregate):
         """
         Build a MIVOT instance from a VOMDL element
-        
+
         :ele: VODML representation of the class to be mapped
         :role: VODML role to be affected to the built instance
         :root: If true the INSTANCE is not a component of an enclosing object.
@@ -125,7 +128,9 @@ class Builder:
                     Otherwise, those components are
                     enclosed in an INSTANCE (composition case)
         """
-        self._print_(f"build object with role={role} within the class {self.class_name}")
+        self._print_(
+            f"build object with role={role} within the class {self.class_name}"
+        )
         for tags in list(ele):
             if tags.tag == "constraint":
                 self.constraints.add_constraint(tags)
@@ -312,10 +317,9 @@ class Builder:
             elif tags.tag == "multiplicity":
                 max_occurs = int(tags.xpath(".//maxOccurs")[0].text)
 
-
         if not dmtype:
-            return 
-        
+            return
+
         if dmtype.lower().endswith("string"):
             unit_att = ""
         else:
@@ -442,7 +446,9 @@ class Builder:
             )
         elif abstract_vodmlid in DEFAULT_CONCRETE_CLASSES:
             concrete_type = DEFAULT_CONCRETE_CLASSES[abstract_vodmlid]
-            self._print_(f"    Take {concrete_type} as concrete type for {abstract_vodmlid}")
+            self._print_(
+                f"    Take {concrete_type} as concrete type for {abstract_vodmlid}"
+            )
             self.write_out(
                 f"<!-- {concrete_type} taken as concrete type for {abstract_vodmlid} -->"
             )

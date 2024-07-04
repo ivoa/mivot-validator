@@ -3,6 +3,7 @@ Created on 23 Jun 2022
 
 @author: laurentmichel
 """
+
 import sys, os
 from astropy.io.votable import parse
 from mivot_validator.utils.session import Session

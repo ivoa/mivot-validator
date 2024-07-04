@@ -3,6 +3,7 @@ Created on 21 Feb 2023
 
 @author: laurentmichel
 """
+
 import os
 
 from mivot_validator.utils.xml_utils import XmlUtils
@@ -14,6 +15,7 @@ from mivot_validator.instance_checking.snippet_builder import Builder
 inheritence_tree = {}
 ivoa_types = ["ivoa:RealQuantity", "ivoa:IntQuantity"]
 
+
 class CheckFailedException(Exception):
     pass
 
@@ -21,7 +23,7 @@ class CheckFailedException(Exception):
 class InstanceChecker:
     """
     API operating the validation of mapped instances against the VODML definition
-    
+
     - all ATTRIBUTE/COLLECTION/INSTANCE children of the mapped instance must be
       referenced in the VODML with the same dmrole and the same dmtype.
     - The dmtype checking takes into account the inheritance
@@ -308,8 +310,10 @@ class InstanceChecker:
         if eles[0] == "ivoa":
             print("-> IVOA/ see later")
             return True
-        
-        vodml_instance = InstanceChecker._get_vodml_class_tree(eles[0], eles[1],session)
+
+        vodml_instance = InstanceChecker._get_vodml_class_tree(
+            eles[0], eles[1], session
+        )
 
         for child in instance_etree.xpath("./*"):
             if child.tag == "ATTRIBUTE":
@@ -359,7 +363,10 @@ class InstanceChecker:
                     raise CheckFailedException(f"Duplicated dmrole {dmrole}")
                 checked_roles.append(child.get("dmrole"))
 
-                if InstanceChecker._check_collection(child, vodml_instance, session) is False:
+                if (
+                    InstanceChecker._check_collection(child, vodml_instance, session)
+                    is False
+                ):
                     message = (
                         f"cannot find collection with dmrole={dmrole} "
                         f"in complex type {dmtype}"

@@ -3,6 +3,7 @@ Created on 22 Dec 2021
 
 @author: laurentmichel
 """
+
 from copy import deepcopy
 from mivot_validator.instance_checking.xml_interpreter.exceptions import (
     MappingException,
@@ -23,10 +24,10 @@ class StaticReferenceResolver:
         in the templates_ref table.
         REFERENCE elements are replaced with the referenced
         objects set with the roles of the REFERENCEs
-        
+
         - A exception is risen if the reference cannot be resolved
         - Works even if REFERENCE tags are numbered by the former processing
-        
+
         :param annotation_seeker: utility to extract desired elements from the mapping block
         :param templates_ref: Identifier of the table where instance comes from
         :param instance: etree Element
@@ -77,7 +78,7 @@ class StaticReferenceResolver:
         """
         Resolve a static reference based on a key mechanism
         e.g.
-        
+
         .. code-block:: xml
 
            <REFERENCE_4 dmrole="coords:Coordinate.coordSys" sourceref="_CoordinateSystems">

@@ -17,6 +17,7 @@ from mivot_validator.instance_checking.snippet_builder import Builder
 from mivot_validator.utils.xml_utils import XmlUtils
 from mivot_validator.instance_checking.instance_checker import InstanceChecker
 
+
 class BColors:
     """
     Color codes for terminal output
@@ -43,7 +44,6 @@ def setup_elements(graph, dmtype, abstract_list):
         for i in range(len(v)):
             if k != dmtype and v[i] in res:
                 res[res.index(v[i])] = [v[i], f"{k}/{v[i]}"]
-
 
     for el in res:
         if isinstance(el, list):
@@ -102,7 +102,7 @@ class InstanceSnippetBuilder:
         :output_name: file name of the generated  mivot instance
         :concrete_list: list of abstract classes [{"dmtype", "dmrole", "context", "class"}, ...]
         """
-        
+
         self.vodmlid = vodmlid
         self.xml_file = None
         self.output_dir = session.tmp_data_path
@@ -123,19 +123,15 @@ class InstanceSnippetBuilder:
 
     def _build_reference_snippet(self):
         """
-        Extract the requested instance from the model 
+        Extract the requested instance from the model
         no concrete class here, it will be used as basis for building the output
         """
         model, dmtype = DmtypeUtils.split_dmtype(self.vodmlid)
-        generic = Builder(
-            model,
-            dmtype,
-            self.session
-        )
+        generic = Builder(model, dmtype, self.session)
         generic.build()
         self.xml_file = generic.outputname
         self.build_file = self.xml_file
-        
+
     def build(self):
         """
         Build the concrete MIVOT snippet
@@ -336,10 +332,7 @@ class InstanceSnippetBuilder:
 
             return state
         for cc_dict in self.concrete_list:
-            if (
-                self.dmrole == cc_dict["dmrole"]
-                and self.dmtype == cc_dict["dmtype"]
-            ):
+            if self.dmrole == cc_dict["dmrole"] and self.dmtype == cc_dict["dmtype"]:
                 return True
         return False
 
@@ -435,17 +428,12 @@ class InstanceSnippetBuilder:
         with open(xml_file, "w", encoding="utf-8") as file:
             file.write(buffer)
 
-
     def get_instance(self, model_name, class_name):
         """
         Get the instance of the class class_name of the model model_name
         :return: the instance path
         """
-        builder = Builder(
-            model_name,
-            class_name,
-            self.session
-        )
+        builder = Builder(model_name, class_name, self.session)
         builder.build()
 
         return builder.outputname
@@ -479,9 +467,9 @@ class InstanceSnippetBuilder:
         Add the abstract classes to the list
         """
         for i in ["objectType", "dataType"]:
-            xml_tree = XmlUtils.xmltree_from_file(
-                self.session.get_vodml(model)
-            ).xpath(f".//{i}")
+            xml_tree = XmlUtils.xmltree_from_file(self.session.get_vodml(model)).xpath(
+                f".//{i}"
+            )
 
             for ele in xml_tree:
                 if (
@@ -550,8 +538,8 @@ class InstanceSnippetBuilder:
 
                 print(
                     f'{BColors.WARNING}{cc_dict["class"]}'
-                    f' is an invalid proposition '
-                    f'for {self.dmtype} (for {self.dmrole}).\n{BColors.ENDC}'
+                    f" is an invalid proposition "
+                    f"for {self.dmtype} (for {self.dmrole}).\n{BColors.ENDC}"
                 )
             else:
                 if min_occurs == 0:
@@ -563,21 +551,21 @@ class InstanceSnippetBuilder:
             if self.dmrole != cc_dict["dmrole"]:
                 print(
                     f'{BColors.WARNING}{cc_dict["dmrole"]} '
-                    f'is an invalid dmrole for class {self.dmtype}'
+                    f"is an invalid dmrole for class {self.dmtype}"
                     f" in parent class {parent_key}. "
                     f"Actual dmrole: {self.dmrole}\n{BColors.ENDC}"
                 )
             if self.dmtype != cc_dict["dmtype"]:
                 print(
                     f'{BColors.WARNING}{cc_dict["dmtype"]} '
-                    f'is an invalid dmtype for dmrole {self.dmrole}'
+                    f"is an invalid dmtype for dmrole {self.dmrole}"
                     f" in parent class {parent_key}. "
                     f"Actual dmtype: {self.dmtype}\n{BColors.ENDC}"
                 )
             if parent_key != cc_dict["context"]:
                 print(
                     f'{BColors.WARNING}{cc_dict["context"]} '
-                    f'is an invalid parent class for dmrole {self.dmrole}'
+                    f"is an invalid parent class for dmrole {self.dmrole}"
                     f" and dmtype {self.dmtype}. "
                     f"Actual parent class: {parent_key}\n{BColors.ENDC}"
                 )

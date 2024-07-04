@@ -6,11 +6,14 @@ Concrete classes can be given as parameters of by interactive user input
 
 @author: julien abid
 """
+
 import os.path
 import sys
 import argparse
 from mivot_validator.utils.session import Session
-from mivot_validator.instance_checking.instance_snippet_builder import InstanceSnippetBuilder
+from mivot_validator.instance_checking.instance_snippet_builder import (
+    InstanceSnippetBuilder,
+)
 
 CONSTRAINTS = None
 
@@ -32,6 +35,7 @@ def check_concrete_classes(args, parser=None):
             sys.exit(1)
     return args
 
+
 def main():
     """
     Package launcher (script)
@@ -45,7 +49,7 @@ def main():
         metavar="vodml_id",
         type=str,
         nargs="?",
-        help="Vodml_id of the class for which we want a snippet."
+        help="Vodml_id of the class for which we want a snippet.",
     )
     parser.add_argument(
         "output",
@@ -54,7 +58,7 @@ def main():
         nargs="?",
         help="output file: absolute path or simple file name",
     )
-    
+
     parser.add_argument(
         "-cc",
         "--concrete-class",
@@ -82,14 +86,11 @@ def main():
     output_file = os.path.basename(args["output"])
 
     vodml_id = args["vodml_id"]
-    
+
     classes_list = check_concrete_classes(args["concrete_class"], parser)
-    
+
     snippet = InstanceSnippetBuilder(
-        vodml_id,
-        output_file,
-        session,
-        concrete_list=classes_list
+        vodml_id, output_file, session, concrete_list=classes_list
     )
     snippet.build()
     snippet.output_result()

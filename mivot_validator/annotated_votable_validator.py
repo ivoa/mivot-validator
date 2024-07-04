@@ -3,6 +3,7 @@ Created on 2022/07/01
 
 @author: laurentmichel
 """
+
 import os
 import ssl
 from lxml import etree
@@ -26,9 +27,7 @@ class AnnotatedVOTableValidator:
     # MIVOT schema
     votable_validator = None
     defaut_votable_schema = "http://www.ivoa.net/xml/VOTable/v1.3"
-    vodml_validator = XMLValidator(
-        "https://ivoa.net/xml/MIVOT/mivot-v1.xsd"
-    )
+    vodml_validator = XMLValidator("https://ivoa.net/xml/MIVOT/mivot-v1.xsd")
 
     def validate(self, data_path):
         """
@@ -67,18 +66,20 @@ class AnnotatedVOTableValidator:
         If not found take the 1.3 XSD (default)
         Build the validator instance from the schema
         """
-        XMLSchemaNamespace = '{http://www.w3.org/2001/XMLSchema-instance}'
+        XMLSchemaNamespace = "{http://www.w3.org/2001/XMLSchema-instance}"
         document = etree.parse(data_path).getroot()
-        schemaLink = document.get(XMLSchemaNamespace + 'schemaLocation')
+        schemaLink = document.get(XMLSchemaNamespace + "schemaLocation")
         if schemaLink is None:
-            schemaLink = document.get(XMLSchemaNamespace + 'noNamespaceSchemaLocation')
+            schemaLink = document.get(XMLSchemaNamespace + "noNamespaceSchemaLocation")
         if schemaLink:
             self.defaut_votable_schema = schemaLink.split(" ")[-1]
             logger.info(f"Validate against {schemaLink.split(' ')[-1]}")
         else:
             logger.info(f"Validate against {self.defaut_votable_schema}")
-  
-        AnnotatedVOTableValidator.votable_validator = XMLValidator(self.defaut_votable_schema)
+
+        AnnotatedVOTableValidator.votable_validator = XMLValidator(
+            self.defaut_votable_schema
+        )
 
     def __validate_file(self, file_path):
         """

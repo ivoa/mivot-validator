@@ -4,10 +4,13 @@ Testing generations of concrete snippets
 Created on 9 May 2023
 @author: julien abid
 """
+
 import unittest
 import os
 import filecmp
-from mivot_validator.instance_checking.instance_snippet_builder import InstanceSnippetBuilder
+from mivot_validator.instance_checking.instance_snippet_builder import (
+    InstanceSnippetBuilder,
+)
 from mivot_validator.utils.session import Session
 
 OUTPUT = os.path.abspath(os.getcwd() + "/../tmp_snippets/")
@@ -95,14 +98,18 @@ class Test(unittest.TestCase):
             },
         ]
         session = Session()
-        snippet = InstanceSnippetBuilder("meas:Position", FILE_NAME, session, concrete_list=classes_list)
+        snippet = InstanceSnippetBuilder(
+            "meas:Position", FILE_NAME, session, concrete_list=classes_list
+        )
 
         # When
         snippet.build()
         snippet.output_result()
 
         # Then
-        self.assertTrue(os.path.exists(session.tmp_data_path + "/" + FILE_NAME + ".xml"))
+        self.assertTrue(
+            os.path.exists(session.tmp_data_path + "/" + FILE_NAME + ".xml")
+        )
 
     def testFileCohesion(self):
         """
@@ -160,18 +167,20 @@ class Test(unittest.TestCase):
             },
         ]
         session = Session()
-        snippet = InstanceSnippetBuilder("meas:Position", FILE_NAME, session, concrete_list=classes_list)
+        snippet = InstanceSnippetBuilder(
+            "meas:Position", FILE_NAME, session, concrete_list=classes_list
+        )
         # When
         snippet.build()
         snippet.output_result()
-                    
+
         # Then
         if os.path.exists(os.path.join(session.tmp_data_path, FILE_NAME + ".xml")):
             filecmp.clear_cache()
             self.assertTrue(
                 filecmp.cmp(
                     os.path.join(session.tmp_data_path, FILE_NAME + ".xml"),
-                    #os.path.join(session.tmp_data_path, FILE_NAME + ".xml"),
+                    # os.path.join(session.tmp_data_path, FILE_NAME + ".xml"),
                     os.path.realpath(
                         os.getcwd() + "/../../../tests/data/" + REF_FILE_NAME + ".xml"
                     ),

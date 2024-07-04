@@ -3,6 +3,7 @@ Created on 23 Jun 2022
 
 @author: laurentmichel
 """
+
 import sys
 from mivot_validator.utils.session import Session
 from mivot_validator.dmtypes_and_role_checker import DmTypesAndRolesChecker

@@ -6,6 +6,7 @@ of a VODML model
 
 @author: julien abid
 """
+
 import os
 
 from mivot_validator.instance_checking.snippet_builder import Builder
@@ -59,7 +60,7 @@ class ModelBuilder(Builder):
     def build_object(self, ele, role, root, aggregate):
         """
         Build a MIVOT instance from a VOMDL element
-        
+
         :ele: VODML representation of the class to be mapped
         :role: VODML role to be affected to the built instance
         :aggregate: If False, all components found out

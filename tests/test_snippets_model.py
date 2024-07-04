@@ -4,6 +4,7 @@ Testing generations of generic snippets from a VODML-Model file
 Created on 9 May 2023
 @author: julien abid
 """
+
 import unittest
 import os
 
@@ -47,7 +48,6 @@ def getDataTypes(model):
 
 class Test(unittest.TestCase):
 
-
     @classmethod
     def tearDownClass(cls):
         if os.path.exists("../xml_interpreter/tmp_vodml"):
@@ -57,7 +57,7 @@ class Test(unittest.TestCase):
         """
         Check that files are generated in the given directory
         """
-        
+
         for model_name in MODELS:
             session = Session()
             # Given
@@ -82,21 +82,52 @@ class Test(unittest.TestCase):
             session = Session()
 
             snippets = ModelBuilder(model_name, session)
-            object_types = getObjectTypes(XmlUtils.xmltree_from_file(session.get_vodml(model_name)))
-            data_types = getDataTypes(XmlUtils.xmltree_from_file(session.get_vodml(model_name)))
+            object_types = getObjectTypes(
+                XmlUtils.xmltree_from_file(session.get_vodml(model_name))
+            )
+            data_types = getDataTypes(
+                XmlUtils.xmltree_from_file(session.get_vodml(model_name))
+            )
 
             # When
             snippets.build()
 
             # Then
             for obj in object_types:
-                print(session.tmp_data_path + "/" + model_name + "/" + model_name + "." + obj + ".xml")
+                print(
+                    session.tmp_data_path
+                    + "/"
+                    + model_name
+                    + "/"
+                    + model_name
+                    + "."
+                    + obj
+                    + ".xml"
+                )
                 self.assertTrue(
-                    os.path.exists(session.tmp_data_path + "/" + model_name + "/" + model_name + "." + obj + ".xml")
+                    os.path.exists(
+                        session.tmp_data_path
+                        + "/"
+                        + model_name
+                        + "/"
+                        + model_name
+                        + "."
+                        + obj
+                        + ".xml"
+                    )
                 )
             for data in data_types:
                 self.assertTrue(
-                    os.path.exists(session.tmp_data_path + "/" + model_name + "/" + model_name + "." + data + ".xml")
+                    os.path.exists(
+                        session.tmp_data_path
+                        + "/"
+                        + model_name
+                        + "/"
+                        + model_name
+                        + "."
+                        + data
+                        + ".xml"
+                    )
                 )
 
 

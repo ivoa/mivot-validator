@@ -3,6 +3,7 @@ Created on 2 Feb 2023
 
 @author: laurentmichel
 """
+
 import os
 import ssl
 from lxml import etree
@@ -11,6 +12,7 @@ from . import logger
 # This restores the same behavior as before.
 context = ssl._create_unverified_context()
 
+
 class DmTypesAndRolesChecker(object):
     """
     This module checks that all dmroles and dmtypes used a referenced in the mapped models
@@ -18,7 +20,7 @@ class DmTypesAndRolesChecker(object):
     - Only meas/coord/ivoa are checked, the other models are ignored
     - The checking is based on the vodml-id whatever their context in the vodml files
 
-    all errors are reported in the self.message list. 
+    all errors are reported in the self.message list.
     The validation is considered as successful if the message list is empty at the end of the process
     """
 
@@ -28,9 +30,13 @@ class DmTypesAndRolesChecker(object):
         self.models = []
         self.messages = []
         self.session = session
-        session.install_vodml("coords", "https://ivoa.net/xml/VODML/Coords-v1.0.vo-dml.xml");
-        session.install_vodml("meas", "https://ivoa.net/xml/VODML/Meas-v1.vo-dml.xml");
-        session.install_vodml("ivoa", "https://ivoa.net/xml/VODML/20180519/IVOA-v1.0.vo-dml.xml");
+        session.install_vodml(
+            "coords", "https://ivoa.net/xml/VODML/Coords-v1.0.vo-dml.xml"
+        )
+        session.install_vodml("meas", "https://ivoa.net/xml/VODML/Meas-v1.vo-dml.xml")
+        session.install_vodml(
+            "ivoa", "https://ivoa.net/xml/VODML/20180519/IVOA-v1.0.vo-dml.xml"
+        )
         self.__get_model_types("coords")
         self.__get_model_types("meas")
         self.__get_model_types("ivoa")
@@ -48,7 +54,7 @@ class DmTypesAndRolesChecker(object):
         if name not in self.model_types.keys():
             self.model_types[name] = []
 
-        #with urlopen(url, context=context) as f:
+        # with urlopen(url, context=context) as f:
         vodml = etree.parse(self.session.get_vodml(name))
         for ele in vodml.xpath(".//objectType/vodml-id"):
             self.model_types[name].append(f"{name}:{ele.text}")
@@ -100,7 +106,7 @@ class DmTypesAndRolesChecker(object):
                 self._check_instance(ele)
             elif tag.endswith("COLLECTION"):
                 self._check_instance(ele)
-        
+
         if len(self.messages) == 0:
             logger.info("valid: dmtypes and dmroles match the models")
             return True

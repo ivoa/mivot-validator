@@ -6,6 +6,7 @@ Test checking that the validator builds correct inheritence trees.
 
 @author: laurentmichel
 """
+
 import os
 import unittest
 from mivot_validator.utils.dict_utils import DictUtils
@@ -25,8 +26,8 @@ vodml_sample = os.path.join(
     "vodml/",
 )
 
+
 class TestInheritenceGraph(unittest.TestCase):
- 
 
     def testInheritenceGraph(self):
         return

@@ -5,6 +5,7 @@ Test suite validating the whole votables against both schema (VOTable MIVOT)
 
 @author: laurentmichel
 """
+
 import os
 import unittest
 from mivot_validator.annotated_votable_validator import AnnotatedVOTableValidator
