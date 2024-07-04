@@ -9,16 +9,13 @@ serialized in provided generic MIVOT snippet
 """
 
 import os
-import ssl
-from urllib.parse import urlparse
-from urllib.request import urlretrieve
 
 from lxml import etree
 
+from mivot_validator.utils.dmtype_utils import DmtypeUtils
 from mivot_validator.instance_checking.snippet_builder import Builder
 from mivot_validator.utils.xml_utils import XmlUtils
 from mivot_validator.instance_checking.instance_checker import InstanceChecker
-
 
 class BColors:
     """
@@ -93,25 +90,22 @@ def remove_value(dict_obj, key, value):
         del dict_obj[key]
 
 
-class InstanceBuilder:
+class InstanceSnippetBuilder:
     """
     Build a concrete MIVOT view of the class model_name:class_name of the model
     serialized in provided generic MIVOT snippet
     """
 
-    def __init__(self, xml_file, output_dir, output_name, concrete_list=None):
+    def __init__(self, vodmlid, output_name, session, concrete_list=None):
         """
-        :xml_file: path to the generic MIVOT
-        :output_dir: path to the output directory
-        :abstract_classes: list of abstract classes
-        :buffer: temporary content of the output file
-        :build_file: actual path of the file being built (recursively)
-        :dmrole: dmrole of the current instance
-        :dmroles: list of dmroles in the snippet
-
+        :vodmlid: id of the class from which the concrete instance will be built
+        :output_name: file name of the generated  mivot instance
+        :concrete_list: list of abstract classes [{"dmtype", "dmrole", "context", "class"}, ...]
         """
-        self.xml_file = xml_file
-        self.output_dir = output_dir
+        
+        self.vodmlid = vodmlid
+        self.xml_file = None
+        self.output_dir = session.tmp_data_path
         self.output_name = output_name
         self.buffer = ""
         self.build_file = self.xml_file
@@ -124,7 +118,24 @@ class InstanceBuilder:
         self.abstract_classes = []
         self.collections = []
         self.mapping_block = None
+        self.session = session
+        self._build_reference_snippet()
 
+    def _build_reference_snippet(self):
+        """
+        Extract the requested instance from the model 
+        no concrete class here, it will be used as basis for building the output
+        """
+        model, dmtype = DmtypeUtils.split_dmtype(self.vodmlid)
+        generic = Builder(
+            model,
+            dmtype,
+            self.session
+        )
+        generic.build()
+        self.xml_file = generic.outputname
+        self.build_file = self.xml_file
+        
     def build(self):
         """
         Build the concrete MIVOT snippet
@@ -166,7 +177,7 @@ class InstanceBuilder:
                     if self.get_dm_type(line).split(":")[0] not in self.added_model:
                         self.inheritance_graph.update(
                             **InstanceChecker._build_inheritence_graph(
-                                self.get_model_xml_from_name(
+                                self.session.get_vodml(
                                     self.get_dm_type(line).split(":")[0]
                                 )
                             )
@@ -365,7 +376,7 @@ class InstanceBuilder:
             counter = 0
             for line in file:
                 if (
-                    InstanceBuilder.get_dm_role(previous_line)
+                    InstanceSnippetBuilder.get_dm_role(previous_line)
                     != "mango:Property.associatedProperties"
                 ):
                     if (
@@ -424,73 +435,6 @@ class InstanceBuilder:
         with open(xml_file, "w", encoding="utf-8") as file:
             file.write(buffer)
 
-    @staticmethod
-    def get_model_xml_from_name(model_name):
-        """
-        Get the model XML from the MIVOT snippet
-        :return: the model XML
-        """
-        local_vodml_path = None
-
-        ssl.create_default_context().check_hostname = False
-
-        if model_name == "meas":
-            if urlparse("https://ivoa.net/xml/VODML/Meas-v1.0.vo-dml.xml").scheme:
-                temp_dir = "tmp_vodml"
-                os.makedirs(temp_dir, exist_ok=True)
-                local_vodml_path = os.path.join(
-                    temp_dir,
-                    os.path.basename("https://ivoa.net/xml/VODML/Meas-v1.0.vo-dml.xml"),
-                )
-                urlretrieve(
-                    "https://ivoa.net/xml/VODML/Meas-v1.0.vo-dml.xml", local_vodml_path
-                )
-
-        elif model_name == "coords":
-            if urlparse("https://ivoa.net/xml/VODML/Coords-v1.0.vo-dml.xml").scheme:
-                temp_dir = "tmp_vodml"
-                os.makedirs(temp_dir, exist_ok=True)
-                local_vodml_path = os.path.join(
-                    temp_dir,
-                    os.path.basename(
-                        "https://ivoa.net/xml/VODML/Coords-v1.0.vo-dml.xml"
-                    ),
-                )
-                urlretrieve(
-                    "https://ivoa.net/xml/VODML/Coords-v1.0.vo-dml.xml",
-                    local_vodml_path,
-                )
-        elif model_name == "ivoa":
-            if urlparse("https://ivoa.net/xml/VODML/IVOA-v1.vo-dml.xml").scheme:
-                temp_dir = "tmp_vodml"
-                os.makedirs(temp_dir, exist_ok=True)
-                local_vodml_path = os.path.join(
-                    temp_dir,
-                    os.path.basename("https://ivoa.net/xml/VODML/IVOA-v1.vo-dml.xml"),
-                )
-                urlretrieve(
-                    "https://ivoa.net/xml/VODML/IVOA-v1.vo-dml.xml", local_vodml_path
-                )
-        elif model_name == "Phot":
-            if urlparse("https://ivoa.net/xml/VODML/Phot-v1.1.vodml.xml").scheme:
-                temp_dir = "tmp_vodml"
-                os.makedirs(temp_dir, exist_ok=True)
-                local_vodml_path = os.path.join(
-                    temp_dir,
-                    os.path.basename("https://ivoa.net/xml/VODML/Phot-v1.1.vodml.xml"),
-                )
-                urlretrieve(
-                    "https://ivoa.net/xml/VODML/Phot-v1.1.vodml.xml", local_vodml_path
-                )
-        elif model_name == "instfov":
-            local_vodml_path = "../vodml/instfov.vo-dml.xml"
-        elif model_name == "mango":
-            local_vodml_path = "../vodml/mango.vo-dml.xml"
-
-        if local_vodml_path is not None:
-            return os.path.abspath(local_vodml_path)
-
-        return None
 
     def get_instance(self, model_name, class_name):
         """
@@ -500,8 +444,7 @@ class InstanceBuilder:
         builder = Builder(
             model_name,
             class_name,
-            self.get_model_xml_from_name(model_name),
-            "../tmp_snippets/temp",
+            self.session
         )
         builder.build()
 
@@ -537,7 +480,7 @@ class InstanceBuilder:
         """
         for i in ["objectType", "dataType"]:
             xml_tree = XmlUtils.xmltree_from_file(
-                self.get_model_xml_from_name(model)
+                self.session.get_vodml(model)
             ).xpath(f".//{i}")
 
             for ele in xml_tree:
@@ -562,12 +505,12 @@ class InstanceBuilder:
         if len(self.dmrole) > 0:
             to_check = self.dmrole.split(":")[1]
             xml_tree = XmlUtils.xmltree_from_file(
-                self.get_model_xml_from_name(parent_key.split(":")[0])
+                self.session.get_vodml(parent_key.split(":")[0])
             ).xpath(".//objectType/attribute")
         else:
             to_check = self.dmtype.split(":")[1]
             xml_tree = XmlUtils.xmltree_from_file(
-                self.get_model_xml_from_name(self.dmtype.split(":")[0])
+                self.session.get_vodml(self.dmtype.split(":")[0])
             ).xpath(".//objectType")
 
         for ele in xml_tree:

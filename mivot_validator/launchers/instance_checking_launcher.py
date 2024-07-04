@@ -3,8 +3,9 @@ Created on 23 Jun 2022
 
 @author: laurentmichel
 """
-import sys
+import sys, os
 from astropy.io.votable import parse
+from mivot_validator.utils.session import Session
 from mivot_validator.instance_checking.xml_interpreter.model_viewer import ModelViewer
 from mivot_validator.instance_checking.instance_checker import InstanceChecker
 
@@ -21,6 +22,10 @@ def main():
         sys.exit(1)
 
     votable_path = sys.argv[1]
+    if not os.path.isabs(votable_path):
+        print(os.getcwd())
+        votable_path = os.path.join(os.getcwd(), votable_path)
+
     votable = parse(votable_path)
 
     mviewer = None
@@ -45,10 +50,10 @@ def main():
         # The references are resolved in order to be able to check their counterparts
         model_view = mviewer.get_model_view(resolve_ref=True)
         # Validate all instances  on which the table data are mapped
-        InstanceChecker._clean_tmpdata_dir()
+        session = Session()
         for instance in model_view.xpath(".//INSTANCE"):
             print(f'CHECKING: instance {instance.get("dmtype")}')
-            InstanceChecker.check_instance_validity(instance)
+            InstanceChecker.check_instance_validity(instance, session)
 
 
 if __name__ == "__main__":

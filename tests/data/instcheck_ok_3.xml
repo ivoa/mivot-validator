@@ -1,8 +1,8 @@
-<INSTANCE dmrole="" dmtype="mango:Source">
-  <COLLECTION dmrole="mango:Source.propertyDock">
+<INSTANCE dmrole="" dmtype="mango:MangoObject">
+  <COLLECTION dmrole="mango:MangoObject.propertyDock">
 
     <!-- Property enclosing a Photometric point -->
-    <INSTANCE dmtype="mango:PhysicalProperty">
+    <INSTANCE dmtype="mango:PhotometricProperty">
 
       <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
         <ATTRIBUTE dmrole="mango:VocabularyTerm.uri" dmtype="ivoa:string" value="" />
@@ -10,10 +10,8 @@
       </INSTANCE>
       <ATTRIBUTE dmrole="mango:Property.description" dmtype="ivoa:string" value="Photometric point" />
 
-      <INSTANCE dmrole="mango:PhysicalProperty.measure" dmtype="mango:extmeas.PhotometricMeasure">
-        <ATTRIBUTE dmrole="mango:extmeas.PhotometricMeasure.value" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
-        <REFERENCE dmrole="mango:extmeas.PhotometricMeasure.photCal" dmref="_ONE_GLOBALS_PHOTCALS" />
-      </INSTANCE>
+      <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+      <REFERENCE dmrole="mango:PhotometricProperty.photCal" dmref="_ONE_GLOBALS_PHOTCALS" />
 
       <COLLECTION dmrole="mango:Property.associatedProperties">
       </COLLECTION>

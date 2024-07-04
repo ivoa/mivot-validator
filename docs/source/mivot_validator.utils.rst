@@ -12,14 +12,6 @@ mivot\_validator.utils.dict\_utils module
    :undoc-members:
    :show-inheritance:
 
-mivot\_validator.utils.file\_utils module
------------------------------------------
-
-.. automodule:: mivot_validator.utils.file_utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 mivot\_validator.utils.json\_encoder module
 -------------------------------------------
 

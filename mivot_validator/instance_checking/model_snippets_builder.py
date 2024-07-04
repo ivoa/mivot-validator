@@ -20,7 +20,7 @@ class ModelBuilder(Builder):
     :param output_dir: path to the output directory
     """
 
-    def __init__(self, vodml_path, output_dir):
+    def __init__(self, vodml_path, session):
         self.model_name = (
             os.path.basename(vodml_path)
             .split(".")[0]
@@ -29,7 +29,7 @@ class ModelBuilder(Builder):
             .lower()
         )
 
-        super().__init__(self.model_name, "", vodml_path, output_dir)
+        super().__init__(self.model_name, "", session)
 
     def build(self):
         """
@@ -59,6 +59,7 @@ class ModelBuilder(Builder):
     def build_object(self, ele, role, root, aggregate):
         """
         Build a MIVOT instance from a VOMDL element
+        
         :ele: VODML representation of the class to be mapped
         :role: VODML role to be affected to the built instance
         :aggregate: If False, all components found out

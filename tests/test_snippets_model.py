@@ -9,14 +9,9 @@ import os
 
 from mivot_validator.utils.xml_utils import XmlUtils
 from mivot_validator.instance_checking.model_snippets_builder import ModelBuilder
+from mivot_validator.utils.session import Session
 
-OUTPUT = os.path.abspath(os.getcwd() + "/../tmp_snippets/")
-MODELS = {
-    "coords": os.getcwd() + "/../vodml/Coords-v1.0.vo-dml.xml",
-    "meas": os.getcwd() + "/../vodml/Meas-v1.vo-dml.xml",
-    "phot": os.getcwd() + "/../vodml/Phot-v1.1.vodml.xml",
-    "mango": os.getcwd() + "/../vodml/mango.vo-dml.xml",
-}
+MODELS = ["coords", "meas", "Phot", "ivoa", "mango"]
 MAPPING_SAMPLE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data")
 
 
@@ -52,24 +47,6 @@ def getDataTypes(model):
 
 class Test(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        if not os.path.exists(OUTPUT):
-            os.system("mkdir " + OUTPUT)
-
-    @classmethod
-    def setUp(cls):
-        if os.path.exists(OUTPUT):
-            for file in os.listdir(OUTPUT):
-                if file != ".gitkeep":
-                    os.system("rm -rf " + OUTPUT + "/" + file)
-
-    @classmethod
-    def tearDown(cls):
-        if os.path.exists(OUTPUT):
-            for file in os.listdir(OUTPUT):
-                if file != ".gitkeep":
-                    os.system("rm -rf " + OUTPUT + "/" + file)
 
     @classmethod
     def tearDownClass(cls):
@@ -80,16 +57,18 @@ class Test(unittest.TestCase):
         """
         Check that files are generated in the given directory
         """
-        for model_name, model in MODELS.items():
+        
+        for model_name in MODELS:
+            session = Session()
             # Given
-            snippets = ModelBuilder(model, OUTPUT)
+            snippets = ModelBuilder(model_name, session)
 
             # When
             snippets.build()
 
             # Then
             self.assertTrue(
-                len(os.listdir(OUTPUT + "/" + model_name)) > 0,
+                len(os.listdir(session.tmp_data_path + "/" + model_name)) > 0,
                 f"Snippets for model {model_name} should be generated",
             )
 
@@ -98,24 +77,26 @@ class Test(unittest.TestCase):
         Check that files generated in the given directory
         are the object types and data types of the model
         """
-        for model_name, model in MODELS.items():
+        for model_name in MODELS:
             # Given
-            snippets = ModelBuilder(model, os.path.abspath(os.getcwd() + "/../tmp_snippets/"))
-            object_types = getObjectTypes(XmlUtils.xmltree_from_file(model))
-            data_types = getDataTypes(XmlUtils.xmltree_from_file(model))
+            session = Session()
+
+            snippets = ModelBuilder(model_name, session)
+            object_types = getObjectTypes(XmlUtils.xmltree_from_file(session.get_vodml(model_name)))
+            data_types = getDataTypes(XmlUtils.xmltree_from_file(session.get_vodml(model_name)))
 
             # When
             snippets.build()
 
             # Then
             for obj in object_types:
-                print(OUTPUT + "/" + model_name + "/" + model_name + "." + obj + ".xml")
+                print(session.tmp_data_path + "/" + model_name + "/" + model_name + "." + obj + ".xml")
                 self.assertTrue(
-                    os.path.exists(OUTPUT + "/" + model_name + "/" + model_name + "." + obj + ".xml")
+                    os.path.exists(session.tmp_data_path + "/" + model_name + "/" + model_name + "." + obj + ".xml")
                 )
             for data in data_types:
                 self.assertTrue(
-                    os.path.exists(OUTPUT + "/" + model_name + "/" + model_name + "." + data + ".xml")
+                    os.path.exists(session.tmp_data_path + "/" + model_name + "/" + model_name + "." + data + ".xml")
                 )
 
 

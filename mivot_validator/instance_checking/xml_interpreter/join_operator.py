@@ -59,6 +59,7 @@ class Where:
         Returns True if the value of the foreign key read out of the
         foreign row matches primary_key_value
         The comparisons are based on string representations of the evaluated values
+        
         :param primary_key: value of the primary key
         :param foreign_row: Numpy data row of the joined table that must
                be checked against the primary key

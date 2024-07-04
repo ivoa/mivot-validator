@@ -42,6 +42,7 @@ class ModelViewer:
     Standard usage applied to data rows
 
     .. code-block:: python
+    
         votable = parse(votable_path)
         for resource in votable.resources:
             model_viewer = ModelViewer(resource)
@@ -57,6 +58,7 @@ class ModelViewer:
     Standard usage applied to global instances
 
     .. code-block:: python
+    
         votable = parse(votable_path)
         for resource in votable.resources:
             model_viewer = ModelViewer(resource)
@@ -68,6 +70,7 @@ class ModelViewer:
         """
         Constructor
         votable_path is a workaround allowing to extract the annotation block outside of astropy
+        
         :param resource: VOTable resource
         :type resource: astropy.Resource
         """
@@ -85,10 +88,6 @@ class ModelViewer:
         self._joins = {}
         self._dyn_references = {}
         self._extract_mapping_block(votable_path=votable_path)
-
-    """
-    Properties
-    """
 
     @property
     def annotation_seeker(self):
@@ -117,10 +116,6 @@ class ModelViewer:
         self._assert_table_is_connected()
         return self._current_data_row
 
-    """
-    Global accessors
-    """
-
     def get_table_ids(self):
         """
         return a list of the table located just below self.resource
@@ -131,6 +126,7 @@ class ModelViewer:
         """
         Collection types are GLOBALS/COLLECTION/INSTANCE@dmtype:
         used for collections of static objects
+        
         :return : The dmtypes of all the top level INSTANCE/COLLECTION of GLOBALS
         :rtype:  {'COLLECTION': [dmtpyes], 'INSTANCE': [dmtypes]}
         """
@@ -142,7 +138,8 @@ class ModelViewer:
     def get_templates_models(self):
         """
         COLLECTION not implemented yet
-        :return : The dmtypes (except ivoa:*) of all INSTANCE/COLLECTION of all TEMPLATES
+        
+        :return : The dmtypes (except ivoa:\*) of all INSTANCE/COLLECTION of all TEMPLATES
         :rtype:  {'tableref: {'COLLECTIONS': [dmtpyes], 'INSTANCE': [dmtypes]}, ...}
         """
         retour = {}
@@ -151,10 +148,6 @@ class ModelViewer:
             retour[tid] = {"COLLECTIONS": [], "INSTANCE": tmplids}
 
         return retour
-
-    """
-    Data browsing
-    """
 
     def get_globals_instance(self, dmtype, resolve_ref=True):
         """
@@ -303,7 +296,7 @@ class ModelViewer:
     def get_model_component_by_type(self, searched_dmtype):
         """
         return the list of the xml instances with @dmtype=searched_ type
-         from the model view of the current data row
+        from the model view of the current data row
         Return a {} if no matching dmtype was found
         """
         self._assert_table_is_connected()
@@ -317,7 +310,7 @@ class ModelViewer:
     def get_model_component_by_role(self, searched_dmrole):
         """
         return the list of the xml instances with
-        @dmrole=searched_role from the model view
+        \@dmrole=searched_role from the model view
         of the current data row
         Return a [] if no matching dmrole was found
         """

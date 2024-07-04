@@ -81,11 +81,11 @@ ivo://esavo/gaia/tap).</INFO>
         </GLOBALS>
 
         <TEMPLATES>
-          <INSTANCE dmrole="" dmtype="mango:Source">
+          <INSTANCE dmrole="" dmtype="mango:MangoObject">
             <!-- Root class of the model. MANGO instance are meant of be Source instances. A source has an identifier and two docks: 
               one for the parameters and one for the associated data." -->
-            <ATTRIBUTE dmrole="mango:Source.identifier" dmtype="ivoa:string" ref="source_id" />
-              <COLLECTION dmrole="mango:Source.propertyDock">
+            <ATTRIBUTE dmrole="mango:MangoObject.identifier" dmtype="ivoa:string" ref="source_id" />
+              <COLLECTION dmrole="mango:MangoObject.propertyDock">
               <!-- Property enclosing a Position -->
               <INSTANCE dmtype="mango:PhysicalProperty">
 

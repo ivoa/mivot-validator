@@ -1,8 +1,7 @@
-<INSTANCE dmrole="" dmtype="mango:extmeas.PhotometricMeasure">
+<INSTANCE dmrole="" dmtype="mango:PhotometricProperty">
    <!-- 
           TODO : Missing description : please, update your UML model asap.
         " -->
-   <ATTRIBUTE dmrole="meas:Measure.ucd" dmtype="ivoa:string" value="phot.mag;em.opt;stat.mean"/>
-   <ATTRIBUTE dmrole="mango:extmeas.PhotometricMeasure.value" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
-   <INSTANCE dmrole="mango:extmeas.PhotometricMeasure.photCal" dmtype="Phot:PhotCal"/>
+   <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   <INSTANCE dmrole="mango:PhotometricProperty.photCal" dmtype="Phot:PhotCal"/>
 </INSTANCE>

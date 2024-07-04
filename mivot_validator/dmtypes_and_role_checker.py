@@ -5,13 +5,11 @@ Created on 2 Feb 2023
 """
 import os
 import ssl
-from urllib.request import urlopen
 from lxml import etree
 from . import logger
 
 # This restores the same behavior as before.
 context = ssl._create_unverified_context()
-
 
 class DmTypesAndRolesChecker(object):
     """
@@ -24,20 +22,20 @@ class DmTypesAndRolesChecker(object):
     The validation is considered as successful if the message list is empty at the end of the process
     """
 
-    def __init__(self):
+    def __init__(self, session):
         self.model_roles = {}
         self.model_types = {}
         self.models = []
         self.messages = []
-        self.__get_model_types(
-            "coords", "https://ivoa.net/xml/VODML/Coords-v1.0.vo-dml.xml"
-        )
-        self.__get_model_types("meas", "https://ivoa.net/xml/VODML/Meas-v1.vo-dml.xml")
-        self.__get_model_types(
-            "ivoa", "https://ivoa.net/xml/VODML/20180519/IVOA-v1.0.vo-dml.xml"
-        )
+        self.session = session
+        session.install_vodml("coords", "https://ivoa.net/xml/VODML/Coords-v1.0.vo-dml.xml");
+        session.install_vodml("meas", "https://ivoa.net/xml/VODML/Meas-v1.vo-dml.xml");
+        session.install_vodml("ivoa", "https://ivoa.net/xml/VODML/20180519/IVOA-v1.0.vo-dml.xml");
+        self.__get_model_types("coords")
+        self.__get_model_types("meas")
+        self.__get_model_types("ivoa")
 
-    def __get_model_types(self, name, url):
+    def __get_model_types(self, name):
         """
         store roles and types of the model components
         :param name: model name
@@ -50,18 +48,18 @@ class DmTypesAndRolesChecker(object):
         if name not in self.model_types.keys():
             self.model_types[name] = []
 
-        with urlopen(url, context=context) as f:
-            vodml = etree.parse(f)
-            for ele in vodml.xpath(".//objectType/vodml-id"):
-                self.model_types[name].append(f"{name}:{ele.text}")
-            for ele in vodml.xpath(".//dataType/vodml-id"):
-                self.model_types[name].append(f"{name}:{ele.text}")
-            for ele in vodml.xpath(".//primitiveType/vodml-id"):
-                self.model_types[name].append(f"{name}:{ele.text}")
-            for ele in vodml.xpath(".//attribute/vodml-id"):
-                self.model_roles[name].append(f"{name}:{ele.text}")
-            for ele in vodml.xpath(".//composition/vodml-id"):
-                self.model_roles[name].append(f"{name}:{ele.text}")
+        #with urlopen(url, context=context) as f:
+        vodml = etree.parse(self.session.get_vodml(name))
+        for ele in vodml.xpath(".//objectType/vodml-id"):
+            self.model_types[name].append(f"{name}:{ele.text}")
+        for ele in vodml.xpath(".//dataType/vodml-id"):
+            self.model_types[name].append(f"{name}:{ele.text}")
+        for ele in vodml.xpath(".//primitiveType/vodml-id"):
+            self.model_types[name].append(f"{name}:{ele.text}")
+        for ele in vodml.xpath(".//attribute/vodml-id"):
+            self.model_roles[name].append(f"{name}:{ele.text}")
+        for ele in vodml.xpath(".//composition/vodml-id"):
+            self.model_roles[name].append(f"{name}:{ele.text}")
 
     def validate(self, file_path):
         """
@@ -102,8 +100,13 @@ class DmTypesAndRolesChecker(object):
                 self._check_instance(ele)
             elif tag.endswith("COLLECTION"):
                 self._check_instance(ele)
-
-        return len(self.messages) == 0
+        
+        if len(self.messages) == 0:
+            logger.info("valid: dmtypes and dmroles match the models")
+            return True
+        logger.error("not valid: dmtypes and dmroles does not match the models")
+        print(self.messages)
+        return False
 
     def _check_instance(self, ele):
         """
@@ -149,7 +152,7 @@ class DmTypesAndRolesChecker(object):
 
     def __is_xml(self, file_path):
         """
-        :param file_path: file path ot be evaluated
+        :param file_path: file path to be evaluated
         :type file_path: string
         :return: true if file_path is an XML file (test based on the prolog)
         :rtype: boolean

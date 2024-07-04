@@ -11,8 +11,8 @@ XML instances to be checked are provided as XML snippets
 import os
 import unittest
 import traceback
+from mivot_validator.utils.session import Session
 from mivot_validator.utils.xml_utils import XmlUtils
-from mivot_validator.utils.dict_utils import DictUtils
 
 from mivot_validator.instance_checking.instance_checker import (
     InstanceChecker,
@@ -41,11 +41,14 @@ class TestModelCompliance(unittest.TestCase):
         for sample_file in files:
             if sample_file.startswith("instcheck") and "_ok_" in sample_file:
                 try:
-                    InstanceChecker._clean_tmpdata_dir()
+                    session = Session()
                     instance = XmlUtils.xmltree_from_file(
-                        os.path.join(mapping_sample, sample_file)
+                        os.path.join(mapping_sample, sample_file),
                     )
-                    InstanceChecker.check_instance_validity(instance.getroot())
+                    InstanceChecker.check_instance_validity(instance.getroot(),
+                                                            session
+                                                            )
+                    session.close()
                     self.assertTrue(True)
                 except:
                     traceback.print_exc()
@@ -56,8 +59,10 @@ class TestModelCompliance(unittest.TestCase):
             os.path.join(mapping_sample, "instcheck_ko_1.xml")
         )
         try:
-            InstanceChecker.check_instance_validity(instance.getroot())
+            session = Session()
+            InstanceChecker.check_instance_validity(instance.getroot(), session)
             self.assertTrue(False, "test should fail")
+            session.close()
         except CheckFailedException as exp:
             self.assertEqual(
                 str(exp),
@@ -68,7 +73,8 @@ class TestModelCompliance(unittest.TestCase):
             os.path.join(mapping_sample, "instcheck_ko_2.xml")
         )
         try:
-            InstanceChecker.check_instance_validity(instance.getroot())
+            session = Session()
+            InstanceChecker.check_instance_validity(instance.getroot(), session)
             self.assertTrue(False, "test should fail")
         except MappingException as exp:
             print(exp)
@@ -78,7 +84,8 @@ class TestModelCompliance(unittest.TestCase):
             os.path.join(mapping_sample, "instcheck_ko_3.xml")
         )
         try:
-            InstanceChecker.check_instance_validity(instance.getroot())
+            session = Session()
+            InstanceChecker.check_instance_validity(instance.getroot(), session)
             self.assertTrue(False, "test should fail")
         except CheckFailedException as exp:
             print(exp)

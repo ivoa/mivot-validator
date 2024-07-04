@@ -15,7 +15,7 @@ class XMLValidator:
     """
 
     def __init__(self, xsd_path):
-        logger.info("Using schema %s", xsd_path)
+        logger.debug("Using schema %s", xsd_path)
         # Schema against which data are validated
         self.xmlschema = xmlschema.XMLSchema11(xsd_path)
 

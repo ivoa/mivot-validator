@@ -74,9 +74,9 @@ class AnnotatedVOTableValidator:
             schemaLink = document.get(XMLSchemaNamespace + 'noNamespaceSchemaLocation')
         if schemaLink:
             self.defaut_votable_schema = schemaLink.split(" ")[-1]
-            logger.info(f"Schema located in the votable: validate against {schemaLink.split(' ')[-1]}")
+            logger.info(f"Validate against {schemaLink.split(' ')[-1]}")
         else:
-            logger.info(f"Schema not located in the votable: validate against {self.defaut_votable_schema}")
+            logger.info(f"Validate against {self.defaut_votable_schema}")
   
         AnnotatedVOTableValidator.votable_validator = XMLValidator(self.defaut_votable_schema)
 
@@ -116,6 +116,7 @@ class AnnotatedVOTableValidator:
         logger.info("- Validate against MIVOT")
         retour = self.validate_mivot(file_path)
         if retour is True:
+            logger.info("- passed")
             logger.info(f"{file_name} is a valid annotated VOTable")
         return retour
 

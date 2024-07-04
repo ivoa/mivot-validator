@@ -1,8 +1,8 @@
 """
 Created on 19 Apr 2023
 
-script launcher for the model snippets generator package
-
+generate for a given model all  non-abstract object and data types (one per snippet)
+.
 @author: julien abid
 """
 import os
@@ -12,7 +12,7 @@ from urllib.parse import urlparse
 from urllib.request import urlretrieve
 
 from mivot_validator.instance_checking.model_snippets_builder import ModelBuilder
-
+from mivot_validator.utils.session import Session
 
 def main():
     """
@@ -22,23 +22,25 @@ def main():
         print("USAGE: mivot-snippet-model [path] <output_dir>")
         print("   Create MIVOT snippets from VODML files")
         print("   path: either a simple file to any VODML-Model or an url")
-        print("   output_dir: path to the choosen output directory")
+        print("   output_dir: path to the chosen output directory (session working directory by default)")
         print("   exit status: 0 in case of success, 1 otherwise")
         sys.exit(1)
+    
+    session = Session()
+    print(sys.argv)
+        # id output is not absolute use the default session work dir
+    if len(sys.argv) > 3 and os.path.isabs(sys.argv[2]):
+        output_dir = os.path.dirname(sys.argv[2])
+        session.tmp_data_path = output_dir
 
-    path = check_args(sys.argv[1])
 
-    if not os.path.exists("../tmp_snippets"):
-        os.makedirs("../tmp_snippets")
-
-    output_dir = sys.argv[2] if len(sys.argv) == 3 else os.path.abspath(os.getcwd() + "/../tmp_snippets/")
-
-    snippet = ModelBuilder(vodml_path=path, output_dir=output_dir)
+    vodml_path = check_args(sys.argv[1])
+    snippet = ModelBuilder(vodml_path, session)
     if snippet.build():
         print("\n===============================================")
         print(
             f"Snippets generated in "
-            f"{output_dir} \nin the folder : "
+            f"{session.tmp_data_path} \nin the folder : "
             f"{os.path.basename(sys.argv[1]).split('.')[0].split('_')[0].split('-')[0].lower()}"
         )
         print("===============================================\n")

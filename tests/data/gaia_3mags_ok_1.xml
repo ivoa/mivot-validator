@@ -228,17 +228,17 @@ ivo://esavo/gaia/tap).</INFO>
           the rows of the first table -->
         <TEMPLATES>
           <!-- Each row is map as one Mango instance The only mandatory attribute for Mango object is the source identifier. -->
-          <INSTANCE dmtype="mango:Source">
+          <INSTANCE dmtype="mango:MangoObject">
             <!-- Root class of the model. MANGO instance are meant of be Source instances. A source has an identifier and two docks: 
               one for the parameters and one for the associated data. (TBD)" -->
-            <ATTRIBUTE dmrole="mango:Source.identifier" dmtype="ivoa:string" ref="source_id" />
+            <ATTRIBUTE dmrole="mango:MangoObject.identifier" dmtype="ivoa:string" ref="source_id" />
 
             <!-- Container for the properties of the MANGO source instance These properties are made of classes aggregating classes 
               from Meas/Coord/PhotDM/Mango -->
-            <COLLECTION dmrole="mango:Source.propertyDock">
+            <COLLECTION dmrole="mango:MangoObject.propertyDock">
             
               <!-- 1st property MAG G -->
-              <INSTANCE dmtype="mango:PhysicalProperty">
+              <INSTANCE dmtype="mango:PhotometricProperty">
                 <!-- All MANGO properties are made of a block allowing to refine the property semantic, a measure and a set of associated 
                   properties -->
                 <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
@@ -246,22 +246,17 @@ ivo://esavo/gaia/tap).</INFO>
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" value="#magnitude" />
                 </INSTANCE>
                 <ATTRIBUTE dmrole="mango:Property.description" dmtype="ivoa:string" value="G Band magnitude" />
-                <!-- The measure carried by the property can be a physical measure, a computed measure, a flag or a label. Here the 
-                  photometry is a physical measure which extends meas:Measure -->
-                <INSTANCE dmrole="mango:PhysicalProperty.measure" dmtype="mango:extmeas.PhotometricMeasure">
-                  <ATTRIBUTE dmrole="meas:Measure.ucd" dmtype="ivoa:string" value="phot.mag;em.opt;stat.mean" />
                   <!-- There is non class in the Coordinate model for photometric measures, Mango defines it -->
-                  <ATTRIBUTE dmrole="mango:extmeas.PhotometricMeasure.value" dmtype="ivoa:RealQuantity" unit="mag"
+                  <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" unit="mag"
                     ref="phot_g_mean_mag" />
                   <!-- The reference just tells that the INSTANCE must be searched in the GLOABLS The REFERENCE tag has nothing to 
                     do with UML references -->
-                  <REFERENCE dmref="_G_PHOTCAL" dmrole="mango:extmeas.PhotometricMeasure.photCal" />
-                </INSTANCE>
+                  <REFERENCE dmref="_G_PHOTCAL" dmrole="mango:PhotometricProperty.photCal" />
 
               </INSTANCE>
 
               <!-- 2nd property MAG Gbp -->
-              <INSTANCE dmtype="mango:PhysicalProperty">
+              <INSTANCE dmtype="mango:PhotometricProperty">
                 <!-- All MANGO properties are made of a block allowing to refine the property semantic, a measure and a set of associated 
                   properties -->
                 <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
@@ -269,22 +264,17 @@ ivo://esavo/gaia/tap).</INFO>
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" value="#magnitude" />
                 </INSTANCE>
                 <ATTRIBUTE dmrole="mango:Property.description" dmtype="ivoa:string" value="G Band magnitude" />
-                <!-- The measure carried by the property can be a physical measure, a computed measure, a flag or a label. Here the 
-                  photometry is a physical measure which extends meas:Measure -->
-                <INSTANCE dmrole="mango:PhysicalProperty.measure" dmtype="mango:extmeas.PhotometricMeasure">
-                  <ATTRIBUTE dmrole="meas:Measure.ucd" dmtype="ivoa:string" value="phot.mag;em.opt;stat.mean" />
                   <!-- There is non class in the Coordinate model for photometric measures, Mango defines it -->
-                  <ATTRIBUTE dmrole="mango:extmeas.PhotometricMeasure.value" dmtype="ivoa:RealQuantity" unit="mag"
+                  <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" unit="mag"
                     ref="phot_bp_mean_mag" />
                   <!-- The reference just tells that the INSTANCE must be searched in the GLOABLS The REFERENCE tag has nothing to 
                     do with UML references -->
-                  <REFERENCE dmref="_Gbp_PHOTCAL" dmrole="mango:extmeas.PhotometricMeasure.photCal" />
-                </INSTANCE>
+                  <REFERENCE dmref="_Gbp_PHOTCAL" dmrole="mango:PhotometricProperty.photCal" />
               </INSTANCE>
 
 
               <!-- 3rd property MAG Grp -->
-              <INSTANCE dmtype="mango:PhysicalProperty">
+              <INSTANCE dmtype="mango:PhotometricProperty">
                 <!-- All MANGO properties are made of a block allowing to refine the property semantic, a measure and a set of associated 
                   properties -->
                 <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
@@ -292,17 +282,12 @@ ivo://esavo/gaia/tap).</INFO>
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" value="#magnitude" />
                 </INSTANCE>
                 <ATTRIBUTE dmrole="mango:Property.description" dmtype="ivoa:string" value="G Band magnitude" />
-                <!-- The measure carried by the property can be a physical measure, a computed measure, a flag or a label. Here the 
-                  photometry is a physical measure which extends meas:Measure -->
-                <INSTANCE dmrole="mango:PhysicalProperty.measure" dmtype="mango:extmeas.PhotometricMeasure">
-                  <ATTRIBUTE dmrole="meas:Measure.ucd" dmtype="ivoa:string" value="phot.mag;em.opt;stat.mean" />
                   <!-- There is non class in the Coordinate model for photometric measures, Mango defines it -->
-                  <ATTRIBUTE dmrole="mango:extmeas.PhotometricMeasure.value" dmtype="ivoa:RealQuantity" unit="mag"
+                  <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" unit="mag"
                     ref="phot_rp_mean_mag" />
                   <!-- The reference just tells that the INSTANCE must be searched in the GLOABLS The REFERENCE tag has nothing to 
                     do with UML references -->
-                  <REFERENCE dmref="_Grp_PHOTCAL" dmrole="mango:extmeas.PhotometricMeasure.photCal" />
-                </INSTANCE>
+                  <REFERENCE dmref="_Grp_PHOTCAL" dmrole="mango:PhotometricProperty.photCal" />
               </INSTANCE>
             </COLLECTION>
           </INSTANCE>

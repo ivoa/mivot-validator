@@ -4,22 +4,15 @@ Created on 21 Feb 2023
 @author: laurentmichel
 """
 import os
-import shutil
-import urllib.request
 
 from mivot_validator.utils.xml_utils import XmlUtils
+from mivot_validator.utils.session import Session
 from mivot_validator.instance_checking.inheritance_checker import InheritanceChecker
 from mivot_validator.instance_checking.snippet_builder import Builder
-
-tmp_data_path = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "tmp_snippets"
-)
-vodml_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "vodml")
 
 # types to be ignored for now
 inheritence_tree = {}
 ivoa_types = ["ivoa:RealQuantity", "ivoa:IntQuantity"]
-
 
 class CheckFailedException(Exception):
     pass
@@ -28,6 +21,7 @@ class CheckFailedException(Exception):
 class InstanceChecker:
     """
     API operating the validation of mapped instances against the VODML definition
+    
     - all ATTRIBUTE/COLLECTION/INSTANCE children of the mapped instance must be
       referenced in the VODML with the same dmrole and the same dmtype.
     - The dmtype checking takes into account the inheritance
@@ -40,7 +34,7 @@ class InstanceChecker:
     inheritence_tree = {"meas:Measure": ["mango:extmeas.PhotometricMeasure"]}
 
     @staticmethod
-    def _get_vodml_class_tree(model, dmtype):
+    def _get_vodml_class_tree(model, dmtype, session):
         """
         Extract from the VODML file the object to be checked
         Store first on disk a VODML representation of the searched object type
@@ -59,19 +53,18 @@ class InstanceChecker:
         ------
         The etree serialisation of the XML snippet
         """
-        filepath = os.path.join(tmp_data_path, f"{model}:{dmtype}")
+        filepath = os.path.join(session.tmp_data_path, f"{model}:{dmtype}")
         filepath = filepath.replace(":", ".") + ".xml"
 
         if os.path.exists(filepath) is False:
             print(f"-> build snippet for class {model}:{dmtype}")
 
-            vodml_filename = InstanceChecker._get_model_location(model)
+            vodml_filename = session.get_vodml(model)
             builder = Builder(
                 model,
                 dmtype,
                 # "Property",
-                vodml_filename,
-                tmp_data_path,
+                session,
             )
             # build the XML snippet and store it on disk
             builder.build()
@@ -82,46 +75,10 @@ class InstanceChecker:
         return XmlUtils.xmltree_from_file(filepath)
 
     @staticmethod
-    def _clean_tmpdata_dir():
-        for filename in os.listdir(tmp_data_path):
-            file_path = os.path.join(tmp_data_path, filename)
-            if filename.endswith(".xml") and os.path.isfile(file_path):
-                os.unlink(file_path)
-
-    @staticmethod
     def _get_vodmlid(vodmlid, model_name):
         if ":" in vodmlid:
             return f"{vodmlid}"
         return f"{model_name}:{vodmlid}"
-
-    @staticmethod
-    def _get_model_location(model):
-        """
-        Store locally the VODML file in the local cache
-        """
-        if model.lower() == "meas":
-            vodml_filename = "Meas-v1.vo-dml.xml"
-        elif model.lower() == "coords":
-            vodml_filename = "Coords-v1.0.vo-dml.xml"
-        elif model.lower() == "phot":
-            vodml_filename = "Phot-v1.vodml.xml"
-        elif model.lower() == "ivoa":
-            vodml_filename = "IVOA-v1.vo-dml.xml"
-        elif model.lower() == "mango":
-            vodml_filename = "mango.vo-dml.xml"
-        else:
-            raise CheckFailedException(f"Model {model} not supported yet")
-
-        output_path = os.path.join(tmp_data_path, vodml_filename)
-        if os.path.exists(output_path) is False:
-            url = f"https://ivoa.net/xml/VODML/{vodml_filename}"
-            print(f"-> downloading {url}")
-            try:
-                urllib.request.urlretrieve(url, output_path)
-            except:
-                print(f"-> download failed, try to copy from  {vodml_path}")
-                shutil.copy(os.path.join(vodml_path, vodml_filename), tmp_data_path)
-        return output_path
 
     @staticmethod
     def _build_inheritence_graph(vodml_filepath):
@@ -221,7 +178,7 @@ class InstanceChecker:
         return False
 
     @staticmethod
-    def _check_collection(collection_etree, vodml_instance):
+    def _check_collection(collection_etree, vodml_instance, session):
         """
         checks that the MIVOT representation of the collection matches the model definition
 
@@ -280,7 +237,7 @@ class InstanceChecker:
                         )
                     for item in collection_etree.xpath("./*"):
                         if item.tag == "INSTANCE":
-                            InstanceChecker.check_instance_validity(item)
+                            InstanceChecker.check_instance_validity(item, session)
                     return
 
         if role_found is False:
@@ -331,7 +288,7 @@ class InstanceChecker:
         )
 
     @staticmethod
-    def check_instance_validity(instance_etree):
+    def check_instance_validity(instance_etree, session):
         """
         Public method. The only one meant to be used from from outside
         Checks that instance_etree is compliant with the model it refers to
@@ -351,7 +308,8 @@ class InstanceChecker:
         if eles[0] == "ivoa":
             print("-> IVOA/ see later")
             return True
-        vodml_instance = InstanceChecker._get_vodml_class_tree(eles[0], eles[1])
+        
+        vodml_instance = InstanceChecker._get_vodml_class_tree(eles[0], eles[1],session)
 
         for child in instance_etree.xpath("./*"):
             if child.tag == "ATTRIBUTE":
@@ -383,7 +341,7 @@ class InstanceChecker:
                     raise CheckFailedException(f"Duplicated dmrole {dmrole}")
                 checked_roles.append(child.get("dmrole"))
 
-                if InstanceChecker.check_instance_validity(child) is False:
+                if InstanceChecker.check_instance_validity(child, session) is False:
                     message = (
                         f"cannot find instance with dmrole={dmrole} "
                         f'dmtype={child.get("dmtype")} in complex type {dmtype}'
@@ -401,7 +359,7 @@ class InstanceChecker:
                     raise CheckFailedException(f"Duplicated dmrole {dmrole}")
                 checked_roles.append(child.get("dmrole"))
 
-                if InstanceChecker._check_collection(child, vodml_instance) is False:
+                if InstanceChecker._check_collection(child, vodml_instance, session) is False:
                     message = (
                         f"cannot find collection with dmrole={dmrole} "
                         f"in complex type {dmtype}"

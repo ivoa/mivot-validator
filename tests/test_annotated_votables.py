@@ -7,6 +7,7 @@ Created on 2022/07/01
 """
 import os
 import unittest
+from mivot_validator.utils.session import Session
 from mivot_validator.annotated_votable_validator import AnnotatedVOTableValidator
 
 mapping_sample = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data")
@@ -50,7 +51,6 @@ class Test(unittest.TestCase):
         self.assertFalse(
             annotated_votable_validator.validate(os.path.realpath(__file__))
         )
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -20,12 +20,17 @@ class Constraints:
     There are stored in a dict {role: type}
     """
 
-    def __init__(self, model_name):
+    def __init__(self, model_name, verbose=False):
         self.datatype = None
         self.role = None
         self.model_name = model_name
         self.constraints = {}
-
+        self.verbose=verbose
+        
+    def _print_(self, message):
+        if self.verbose:
+            self._print_(message)
+           
     def add_constraint(self, ele):
         refs = ele.xpath(".//datatype/vodml-ref")
         if len(refs) == 0:
@@ -35,25 +40,25 @@ class Constraints:
             self.model_name + ":", ""
         )
         self.constraints[self.role] = self.datatype
-        print(f"add constraint on role {self.role}: type={self.datatype} ")
+        self._print_(f"add constraint on role {self.role}: type={self.datatype} ")
 
     def get_contraint(self, const_key):
-        print(f"look for the constrains {const_key} in {self.constraints.keys()}")
+        self._print_(f"look for the constrains {const_key} in {self.constraints.keys()}")
         for key in self.constraints.keys():
             if const_key.endswith(key):
-                print(f"  found as {self.constraints[key]}")
+                self._print_(f"  found as {self.constraints[key]}")
                 return self.constraints[key]
-        print("  not found")
+        self._print_("  not found")
         return None
 
     def get_superclass_contraint(self, const_key):
-        print(f"look for const {const_key} in {self.constraints.keys()}")
+        self._print_(f"look for const {const_key} in {self.constraints.keys()}")
         stripped_key = const_key.replace(self.model_name + ":", "")
         for key in self.constraints.keys():
             if key.startswith(stripped_key) is True:
-                print(f"  found SC as {self.constraints[key]}")
+                self._print_(f"  found SC as {self.constraints[key]}")
                 return self.constraints[key]
-        print("  not found")
+        self._print_("  not found")
         return None
 
 
@@ -63,22 +68,28 @@ class Builder:
     serialized in the provided VOMDL file
     """
 
-    def __init__(self, model_name, class_name, vodml_path, output_dir):
+    def __init__(self, model_name, class_name, session, verbose=False):
         """
         :model_name: name of the model to be processed (could be retrieved
                      in the vodml
         :class_name: name of the class (VOMDLID)  to be mapped
-        :vodml_path: full path of the VODML file
         """
         self.model_name = model_name
-        self.vodml = XmlUtils.xmltree_from_file(vodml_path)
-        self.output_dir = output_dir
+        if not session.get_vodml(model_name):
+            raise NotImplementedError(f"model {model_name} not supported")
+        self.vodml = XmlUtils.xmltree_from_file(session.get_vodml(model_name))
+        self.output_dir = session.tmp_data_path
         self.output = None
         self.outputname = None
         self.constraints = Constraints(model_name)
         self.class_name = class_name
         self.resolved_references = []
-
+        self.verbose=verbose
+        
+    def _print_(self, message):
+        if self.verbose:
+            self._print_(message)
+           
     def build(self):
         """
         Build one snippet for the dataType/objectType found in the VODML block
@@ -87,7 +98,7 @@ class Builder:
         for ele in self.vodml.xpath(".//dataType"):
             for tags in ele.getchildren():
                 if tags.tag == "vodml-id" and tags.text == self.class_name:
-                    print(f"build datatype {tags.text}")
+                    self._print_(f"build datatype {tags.text}")
                     self.build_object(ele, "", True, True)
                     return
 
@@ -102,31 +113,32 @@ class Builder:
     def build_object(self, ele, role, root, aggregate):
         """
         Build a MIVOT instance from a VOMDL element
+        
         :ele: VODML representation of the class to be mapped
         :role: VODML role to be affected to the built instance
         :root: If true the INSTANCE is not a component of an enclosing object.
-        The snippet file must be initialized
-        :aggregate: If False, all componentsfound out in the
+               The snippet file must be initialized
+        :aggregate: If False, all components found out in the
                     VODML element are added
                     to the enclosing instance (in that case of
                     inheritance reconstruction).
                     Otherwise, those components are
                     enclosed in an INSTANCE (composition case)
         """
-        print(f"build object with role={role} within the class {self.class_name}")
+        self._print_(f"build object with role={role} within the class {self.class_name}")
         for tags in list(ele):
             if tags.tag == "constraint":
                 self.constraints.add_constraint(tags)
                 break
         for tags in list(ele):
-            print(f"   TAG {tags.tag}")
+            self._print_(f"   TAG {tags.tag}")
             if tags.tag == "vodml-id":
-                print(f"== build {tags.text}")
+                self._print_(f"== build {tags.text}")
                 if root is True:
                     self.outputname = os.path.join(
                         self.output_dir, self.model_name + "." + tags.text + ".xml"
                     )
-                    print(f"opening {self.model_name}.{tags.text}.xml")
+                    self._print_(f"opening {self.model_name}.{tags.text}.xml")
                     self.output = open(self.outputname, "w")
                 if aggregate is True:
                     dmid = ""
@@ -167,7 +179,7 @@ class Builder:
         insert in the current snippet the VOMDL element matching the VODML reference element
         :ele: VODML  element of the reference
         """
-        print("== Add reference")
+        self._print_("== Add reference")
         vodmlid = None
         for tags in ele.getchildren():
             if tags.tag == "vodml-id":
@@ -186,11 +198,11 @@ class Builder:
             reftype = const_type
 
         if vodmlid in self.resolved_references:
-            print(
+            self._print_(
                 f"   Reference {vodmlid} skipped to break a model loop (already processed)"
             )
             return
-        print(f"   Reference {vodmlid} processed for the fist time")
+        self._print_(f"   Reference {vodmlid} processed for the fist time")
         self.resolved_references.append(vodmlid)
 
         if max_occurs != "1":
@@ -215,7 +227,7 @@ class Builder:
         insert in the current snippet the VOMDL element matching the VODML composition element
         :ele: VODML  element of the composition
         """
-        print("== Add composition")
+        self._print_("== Add composition")
         vodmlid = None
         for tags in ele.getchildren():
             if tags.tag == "vodml-id":
@@ -252,7 +264,7 @@ class Builder:
         add to the current snippet the super class components
         :ele: EXTEND VODML element
         """
-        print("== add extend")
+        self._print_("== add extend")
         for tags in ele.getchildren():
             if tags.tag == "vodml-ref":
                 reftype = tags.text
@@ -261,7 +273,7 @@ class Builder:
         const_type = self.constraints.get_contraint(reftype)
         if const_type is not None in self.constraints.constraints:
             reftype = const_type
-        print(f"ref type {reftype}")
+        self._print_(f"ref type {reftype}")
 
         #
         # Not very nice path , but as long as we do not handle cros-model inheritance links
@@ -337,12 +349,12 @@ class Builder:
 
     def get_object_by_ref(self, vodmlid, role, aggregate, extend=False):
         """ """
-        print(f"search object with vodmlid={vodmlid}")
+        self._print_(f"search object with vodmlid={vodmlid}")
         for ele in self.vodml.xpath(".//objectType"):
             abstract_att = ele.get("abstract")
             for tags in list(ele):
                 if tags.tag == "vodml-id" and tags.text == vodmlid:
-                    print("  found in objecttype")
+                    self._print_("  found in objecttype")
 
                     if (
                         extend is False
@@ -359,8 +371,8 @@ class Builder:
 
             for tags in list(ele):  # root is the ElementTree object
                 if tags.tag == "vodml-id" and tags.text == vodmlid:
-                    print("  found in datatype")
-                    print(extend)
+                    self._print_("  found in datatype")
+                    self._print_(extend)
                     if (
                         extend is False
                         and abstract_att is not None
@@ -422,7 +434,7 @@ class Builder:
 
     def get_concrete_type_by_ref(self, abstract_vodmlid, role, aggregate, extend):
         """ """
-        print(f"search concrete object of vodmlid={abstract_vodmlid}")
+        self._print_(f"search concrete object of vodmlid={abstract_vodmlid}")
         if role.endswith("coordSpace"):
             self.write_out(
                 "<!-- the axis representation (coords:PhysicalCoordSys.coordSpace)"
@@ -430,7 +442,7 @@ class Builder:
             )
         elif abstract_vodmlid in DEFAULT_CONCRETE_CLASSES:
             concrete_type = DEFAULT_CONCRETE_CLASSES[abstract_vodmlid]
-            print(f"    Take {concrete_type} as concrete type for {abstract_vodmlid}")
+            self._print_(f"    Take {concrete_type} as concrete type for {abstract_vodmlid}")
             self.write_out(
                 f"<!-- {concrete_type} taken as concrete type for {abstract_vodmlid} -->"
             )
@@ -449,7 +461,7 @@ class Builder:
         """
         Tells whether the datatype ele is abstract or not
         """
-        print(f' is that abstract {ele.get("abstract")} ?')
+        self._print_(f' is that abstract {ele.get("abstract")} ?')
         return ele.get("abstract") is not None
 
     def get_vodmlid(self, vodmlid):
@@ -465,7 +477,7 @@ class Builder:
         Write out the element given as string into the current snippet
         """
         if self.output is None:
-            print(string)
+            self._print_(string)
         else:
             self.output.write(string)
             self.output.write("\n")
@@ -475,7 +487,7 @@ class Builder:
         Snippet aggregation: no longer used
         """
         if os.path.exists(filename):
-            print(f"include file {filename}")
+            self._print_(f"include file {filename}")
             lines = []
             with open(filename) as include_file:
                 lines = include_file.readlines()
@@ -483,5 +495,5 @@ class Builder:
                 self.write_out(line)
             return True
 
-        print(f"Cannot find file {filename}")
+        self._print_(f"Cannot find file {filename}")
         return False

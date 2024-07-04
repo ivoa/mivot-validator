@@ -4,10 +4,11 @@ Setup script for mivot-validator
 """
 
 from setuptools import setup, find_packages
+from mivot_validator.version import __version__
 
 entry_points = {
     "console_scripts": [
-        "mivot-votable-validate = mivot_validator.launchers.votable_launcher:main",
+        #"mivot-votable-validate = mivot_validator.launchers.votable_launcher:main",
         "mivot-validate = mivot_validator.launchers.votable_launcher:main",
         "mivot-mapping-validate = mivot_validator.launchers.mivot_launcher:main",
         "types-and-roles-validate = mivot_validator.launchers.typesandroles_launcher:main",
@@ -29,7 +30,7 @@ setup(
     packages=find_packages(),
     install_requires=["xmlschema", "lxml"],
     include_package_data=True,
-    version="2.0",
+    version=__version__,
     license="MIT",
     description="Validator for model annotations in VOTable",
     long_description=readme_file,

@@ -25,36 +25,8 @@ vodml_sample = os.path.join(
     "vodml/",
 )
 
-
 class TestInheritenceGraph(unittest.TestCase):
-    def testModelLocation(self):
-        InstanceChecker._clean_tmpdata_dir()
-        return
-        self.assertTrue(
-            InstanceChecker._get_model_location("meas").endswith(
-                "tmp_snippets/Meas-v1.vo-dml.xml"
-            )
-        )
-        self.assertTrue(
-            InstanceChecker._get_model_location("coords").endswith(
-                "tmp_snippets/Coords-v1.0.vo-dml.xml"
-            )
-        )
-        self.assertTrue(
-            InstanceChecker._get_model_location("phot").endswith(
-                "tmp_snippets/Phot-v1.vodml.xml"
-            )
-        )
-        self.assertTrue(
-            InstanceChecker._get_model_location("ivoa").endswith(
-                "tmp_snippets/IVOA-v1.vo-dml.xml"
-            )
-        )
-        self.assertTrue(
-            InstanceChecker._get_model_location("mango").endswith(
-                "tmp_snippets/mango.vo-dml.xml"
-            )
-        )
+ 
 
     def testInheritenceGraph(self):
         return

@@ -38,6 +38,8 @@ class AnnotationSeeker(object):
             if self._name_match(child.tag, Ele.GLOBALS) is True:
                 logger.info("Found GLOBALS")
                 self._globals_block = child
+            elif self._name_match(child.tag, Ele.MODEL):
+                print(f"model========= {child.get('name')} {child.get('url')}")
 
         # get the TEMPLATES blocks
         for child in self._xml_block:
@@ -63,6 +65,7 @@ class AnnotationSeeker(object):
             "FOREIGN_KEY",
             "WHERE",
             "VODML",
+            "MODEL",
         ]:
             xpath = ".//" + tag
             for ele in self._xml_block.xpath(xpath):

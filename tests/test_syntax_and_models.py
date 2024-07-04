@@ -8,8 +8,9 @@ and the model compliance
 """
 import os, sys
 import unittest
-from mivot_validator.annotated_votable_validator import AnnotatedVOTableValidator
 from astropy.io.votable import parse
+from mivot_validator.utils.session import Session
+from mivot_validator.annotated_votable_validator import AnnotatedVOTableValidator
 from mivot_validator.instance_checking.xml_interpreter.model_viewer import ModelViewer
 from mivot_validator.instance_checking.instance_checker import InstanceChecker
 
@@ -33,6 +34,7 @@ class Test(unittest.TestCase):
 
                     mviewer = None
                     for resource in votable.resources:
+                        session = Session()
                         if len(votable.resources) != 1:
                             print(
                                 "VOTable with more than one resource are not supported yet"
@@ -46,13 +48,12 @@ class Test(unittest.TestCase):
                         # and get its model view
                         # The references are resolved in order to be able to check their counterparts
                         model_view = mviewer.get_model_view(resolve_ref=True)
-                        # empty the snipper cache
-                        InstanceChecker._clean_tmpdata_dir()
+                        # empty the snippet cache
 
                         # Validate all instances  on which the table data are mapped
                         for instance in model_view.xpath(".//INSTANCE"):
                             print(f'CHECKING: instance {instance.get("dmtype")}')
-                            InstanceChecker.check_instance_validity(instance)
+                            InstanceChecker.check_instance_validity(instance, session)
 
     def testNotExistingFile(self):
         """

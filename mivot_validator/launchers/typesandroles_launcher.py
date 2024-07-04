@@ -4,6 +4,7 @@ Created on 23 Jun 2022
 @author: laurentmichel
 """
 import sys
+from mivot_validator.utils.session import Session
 from mivot_validator.dmtypes_and_role_checker import DmTypesAndRolesChecker
 
 
@@ -17,8 +18,8 @@ def main():
         print("   exit status: 0 in case of success, 1 otherwise")
         sys.exit(1)
 
-    types_and_role_checker = DmTypesAndRolesChecker()
-    if types_and_role_checker.validate_mivot(sys.argv[1]) is True:
+    types_and_role_checker = DmTypesAndRolesChecker(Session())
+    if types_and_role_checker.validate(sys.argv[1]) is True:
         sys.exit(0)
     else:
         sys.exit(1)
