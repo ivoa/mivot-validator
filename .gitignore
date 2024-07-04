@@ -63,3 +63,5 @@ mivot_validator/instance_checking/tmp_snippets/*
 !mivot_validator/instance_checking/tmp_snippets/.gitkeep 
 
 */_build/**
+*token*
+*recov
