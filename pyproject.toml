@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mivot-validator"
 version = "0.0.1"
-description = "Read the latest Real Python tutorials"
+description = "Tools for validating VOTable annotated with MIVOT and to generate MIVOT snippets"
 readme = "README.md"
 authors = [{ name = "Laurent Michel", email = "laurent.michel@astro.unistra.fr" }]
 license = { file = "LICENSE" }
