@@ -65,3 +65,4 @@ mivot_validator/instance_checking/tmp_snippets/*
 */_build/**
 *token*
 *recov
+dist
