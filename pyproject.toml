@@ -7,6 +7,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mivot-validator"
+#dynamic = ["version"]
 dynamic = ["version"]
 description = "Tools for validating VOTable annotated with MIVOT and to generate MIVOT snippets"
 readme = "README.md"
@@ -26,7 +27,7 @@ dependencies = [
 requires-python = ">=3.6"
 
 [tool.hatch.version]
-path = "mivot-validator/version.py"
+path = "mivot_validator/version.py"
 
 [project.optional-dependencies]
 dev = ["pip-tools", "pytest"]
