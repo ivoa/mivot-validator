@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   deploy:
-
+    if: ${{ github.event.python-test.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
