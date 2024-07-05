@@ -9,12 +9,12 @@
 project = 'mivot-validator'
 copyright = '2023, Laurent MICHEL'
 author = 'Laurent MICHEL'
-release = '0.0.1'
 
 import sys, os
 sys.path.insert(0, os.path.abspath('../..'))
 sys.path.insert(0, os.path.abspath('../'))
-
+from mivot_validator.version import __version__
+release = __version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -42,4 +42,4 @@ exclude_patterns = []
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
+html_static_path = []

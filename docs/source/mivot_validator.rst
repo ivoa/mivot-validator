@@ -30,14 +30,6 @@ mivot\_validator.dmtypes\_and\_role\_checker module
    :undoc-members:
    :show-inheritance:
 
-mivot\_validator.logger\_setup module
--------------------------------------
-
-.. automodule:: mivot_validator.logger_setup
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 mivot\_validator.xml\_validator module
 --------------------------------------
 
