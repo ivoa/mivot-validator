@@ -2,13 +2,13 @@
 
 [build-system]
 requires      = ["setuptools>=61.0.0", "wheel", "hatchling"]
-build-backend = "hatchling.build"
+build-backend = "setuptools"
 
 
 [project]
 name = "mivot-validator"
 #dynamic = ["version"]
-dynamic = ["version"]
+version ="0.0.2"
 description = "Tools for validating VOTable annotated with MIVOT and to generate MIVOT snippets"
 readme = "README.md"
 authors = [{ name = "Laurent Michel", email = "laurent.michel@astro.unistra.fr" }]
