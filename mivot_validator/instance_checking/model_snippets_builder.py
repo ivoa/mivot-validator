@@ -27,7 +27,6 @@ class ModelBuilder(Builder):
             .split(".")[0]
             .split("_")[0]
             .split("-")[0]
-            .lower()
         )
 
         super().__init__(self.model_name, "", session)
