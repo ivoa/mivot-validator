@@ -30,7 +30,7 @@ jobs:
       with:
         python-version: '3.x'
     - name: Test and Lint
-      uses: ./.github/workflows/python-test.yml
+      uses: actions/python-test
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
