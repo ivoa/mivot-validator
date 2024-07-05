@@ -1,4 +1,4 @@
-from mivot_validator.logger_setup import LoggerSetup
+from mivot_validator.utils.logger_setup import LoggerSetup
 
 logger = LoggerSetup.get_logger()
 LoggerSetup.set_info_level()

@@ -38,3 +38,7 @@ mivot-instance-validate = "mivot_validator.launchers.instance_checking_launcher:
 mivot-snippet-model = "mivot_validator.launchers.model_snippets_launcher:main"
 mivot-snippet-instance = "mivot_validator.launchers.instance_snippet_launcher:main"
 
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]

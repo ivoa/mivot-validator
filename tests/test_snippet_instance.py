@@ -182,7 +182,7 @@ class Test(unittest.TestCase):
                     os.path.join(session.tmp_data_path, FILE_NAME + ".xml"),
                     # os.path.join(session.tmp_data_path, FILE_NAME + ".xml"),
                     os.path.realpath(
-                        os.getcwd() + "/../../../tests/data/" + REF_FILE_NAME + ".xml"
+                        os.path.dirname(__file__) + "/data/" + REF_FILE_NAME + ".xml"
                     ),
                     shallow=False,
                 )
