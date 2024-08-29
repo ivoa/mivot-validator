@@ -24,9 +24,9 @@ def main():
     Package launcher (script)
     """
     if len(sys.argv) < 2:
-        print("USAGE: mivot-snippet-model [path] <output_dir>")
+        print("USAGE: mivot-snippet-model [url] <output_dir>")
         print("   Create MIVOT snippets from VODML files")
-        print("   path: either a simple file to any VODML-Model or an url")
+        print("   url: url of any VODML-Model (must be prefixed with file:// in case of local file)")
         print(
             "   output_dir: path to the chosen output directory"
             "(session working directory by default)"
@@ -35,14 +35,18 @@ def main():
         sys.exit(1)
 
     session = Session()
-    print(sys.argv)
-    # id output is not absolute use the default session work dir
-    if len(sys.argv) > 3 and os.path.isabs(sys.argv[2]):
-        output_dir = os.path.dirname(sys.argv[2])
+
+    # if output is not absolute use the default session work dir
+    if len(sys.argv) >= 2 and os.path.isdir(sys.argv[2]):            
+        output_dir = os.path.abspath(sys.argv[2])
         session.tmp_data_path = output_dir
 
     vodml_path = check_args(sys.argv[1])
-    snippet = ModelBuilder(vodml_path, session)
+    try:
+        snippet = ModelBuilder(vodml_path, session)
+    except Exception:
+        sys.exit(1)
+        
     if snippet.build():
         folder = os.path.basename(
             sys.argv[1]
@@ -50,7 +54,7 @@ def main():
         print("\n===============================================")
         print(
             f"Snippets generated in "
-            f"{session.tmp_data_path} \nin the folder : "
+            f"{session.tmp_data_path} \n in the folder : "
             f"{folder}"
         )
         print("===============================================\n")
@@ -68,7 +72,7 @@ def check_args(args):
     :return: local path
     """
     local_vodml_path = args
-    if urlparse(args).scheme:
+    if not urlparse(args).scheme:
         temp_dir = "tmp_vodml"
         os.makedirs(temp_dir, exist_ok=True)
         local_vodml_path = os.path.join(temp_dir, os.path.basename(args))

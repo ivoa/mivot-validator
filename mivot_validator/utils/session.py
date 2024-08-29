@@ -61,7 +61,6 @@ class Session(object):
             "Phot",
             "https://ivoa.net/xml/VODML/Phot-v1.vodml.xml"
             )
-        self.install_local_vodml("mango")
 
         logger.info(
             f"setup session in {self.tmp_dirname} ({os.getpid()})"
@@ -79,13 +78,13 @@ class Session(object):
         """
         return os.path.join(self.vodml_path, f"{model_name}.vo-dml.xml")
 
-    def install_vodml(self, model_name, url):
+    def install_vodml(self, model_name, url, force=False):
         """
         Install the model model_name from the give, url or
         from the vodml files located in the package in case of failure
         """
 
-        if self._is_model_here(model_name):
+        if self._is_model_here(model_name) and not force:
             logger.info(f"{model_name} already here")
             return True
 
@@ -100,6 +99,7 @@ class Session(object):
         except Exception as exception:
             logger.error(f"error fetching URL {url}")
             logger.error(f"{exception}")
+            raise FileNotFoundError from exception
             return False
 
     def install_local_vodml(self, model_name):
