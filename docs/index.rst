@@ -129,10 +129,10 @@ Build all MIVOT snippets for a model
    
    $ mivot-snippet-model [VODML path or url]
     
-   USAGE: mivot-snippet-model [path] [output_dir]
+   USAGE: mivot-snippet-model [url] [output_dir]
            Create MIVOT snippets from VODML files
-           path: either a simple file to any VODML-Model or an ur
-           output_dir: (optional) path to the chosen output directory (session working directory by default)
+           url: url of any VODML-Model (must be prefixed with file:// in case of local file)
+           output_dir: path to the chosen output directory(session working directory by default)
            exit status: 0 in case of success, 1 otherwise
 
 Build the MIVOT snippet for one model class with resolving abstract types:
