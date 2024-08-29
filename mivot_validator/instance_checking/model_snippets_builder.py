@@ -28,7 +28,7 @@ class ModelBuilder(Builder):
             .split("_")[0]
             .split("-")[0]
         )
-
+        session.install_vodml(self.model_name, vodml_path, force=True)
         super().__init__(self.model_name, "", session)
 
     def build(self):
