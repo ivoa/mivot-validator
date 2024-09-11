@@ -213,7 +213,8 @@ class InstanceChecker:
         role_found = False
 
         for vodml_child in vodml_instance.xpath("./COLLECTION"):
-            if vodml_child.get("dmrole") == collection_etree.get("dmrole"):
+            print(f'{vodml_child.get("dmrole")} {collection_role}')
+            if vodml_child.get("dmrole") == collection_role:
                 role_found = True
                 # Get the item type as defined by vodml
                 for vodml_item in vodml_child.xpath("./*"):
@@ -304,6 +305,7 @@ class InstanceChecker:
         """
         checked_roles = []
         dmtype = instance_etree.get("dmtype")
+        print(f'>> {dmtype} {instance_etree.get("dmrole")}')
         eles = dmtype.split(":")
         print(f"-> check class {eles[0]}:{eles[1]}")
         if eles[0] == "ivoa":
@@ -341,7 +343,7 @@ class InstanceChecker:
             elif child.tag == "INSTANCE":
                 dmrole = child.get("dmrole")
                 if dmrole in checked_roles:
-                    raise CheckFailedException(f"Duplicated dmrole {dmrole}")
+                    raise CheckFailedException(f"Duplicated dmrole {dmrole} (dmtype {child.get('dmtype')})")
                 checked_roles.append(child.get("dmrole"))
 
                 if InstanceChecker.check_instance_validity(child, session) is False:

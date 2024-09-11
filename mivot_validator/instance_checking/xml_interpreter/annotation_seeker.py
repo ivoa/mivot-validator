@@ -33,7 +33,8 @@ class AnnotationSeeker(object):
         self._globals_block = None
         # Templates dictionary {tableref: XML-TEMPLATES}
         self._templates_blocks = {}
-
+        # declared models (name: url)
+        self._declared_models = {}
         # get the GLOBALS block
         for child in self._xml_block:
             if self._name_match(child.tag, Ele.GLOBALS) is True:
@@ -41,6 +42,7 @@ class AnnotationSeeker(object):
                 self._globals_block = child
             elif self._name_match(child.tag, Ele.MODEL):
                 print(f"model========= {child.get('name')} {child.get('url')}")
+                self._declared_models[child.get('name')] = child.get('url')
 
         # get the TEMPLATES blocks
         for child in self._xml_block:

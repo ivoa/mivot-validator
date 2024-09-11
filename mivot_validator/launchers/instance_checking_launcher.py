@@ -56,6 +56,8 @@ def main():
         model_view = mviewer.get_model_view(resolve_ref=True)
         # Validate all instances  on which the table data are mapped
         session = Session()
+        for key, value in mviewer.get_declared_models().items():
+            session.install_vodml(key, value)
         for instance in model_view.xpath(".//INSTANCE"):
             print(f'CHECKING: instance {instance.get("dmtype")}')
             InstanceChecker.check_instance_validity(instance, session)
