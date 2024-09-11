@@ -31,7 +31,7 @@
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.magnitudeSystem" dmtype="ivoa:string" value="Chandra"/>
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.effectiveWavlength" dmtype="ivoa:real" value="2.3"/>
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.unit" dmtype="ivoa:string" value="KeV"/>
-      <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.bandWidth" dmtype="ivoa:real" value="6.5"/>
+      <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.bandwidth" dmtype="ivoa:real" value="6.5"/>
     </INSTANCE>
     <INSTANCE dmid="PhotFrame_ACISHard" dmrole="" dmtype="mango:stcextend.PhotFilter">
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.name" dmtype="ivoa:string" value="ACIS Hard"/>
@@ -39,7 +39,7 @@
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.magnitudeSystem" dmtype="ivoa:string" value="Chandra"/>
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.effectiveWavlength" dmtype="ivoa:real" value="3.8"/>
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.unit" dmtype="ivoa:string" value="KeV"/>
-      <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.bandWidth" dmtype="ivoa:real" value="5.0"/>
+      <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.bandwidth" dmtype="ivoa:real" value="5.0"/>
     </INSTANCE>
     <INSTANCE dmid="PhotFrame_ACISMedium" dmrole="" dmtype="mango:stcextend.PhotFilter">
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.name" dmtype="ivoa:string" value="ACIS Medium"/>
@@ -47,7 +47,7 @@
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.magnitudeSystem" dmtype="ivoa:string" value="Chandra"/>
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.effectiveWavlength" dmtype="ivoa:real" value="1.56"/>
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.unit" dmtype="ivoa:string" value="KeV"/>
-      <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.bandWidth" dmtype="ivoa:real" value="1.8"/>
+      <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.bandwidth" dmtype="ivoa:real" value="1.8"/>
     </INSTANCE>
     <INSTANCE dmid="PhotFrame_ACISSoft" dmrole="" dmtype="mango:stcextend.PhotFilter">
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.name" dmtype="ivoa:string" value="ACIS Soft"/>
@@ -55,7 +55,7 @@
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.magnitudeSystem" dmtype="ivoa:string" value="Chandra"/>
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.effectiveWavlength" dmtype="ivoa:real" value="1.2"/>
       <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.unit" dmtype="ivoa:string" value="KeV"/>
-      <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.bandWidth" dmtype="ivoa:real" value="0.7"/>
+      <ATTRIBUTE dmrole="mango:stcextend.PhotFilter.bandwidth" dmtype="ivoa:real" value="0.7"/>
     </INSTANCE>
     <INSTANCE dmid="PhotFrame_ACISHRSoftHard" dmrole="" dmtype="mango:stcextend.HRFrame">
       <INSTANCE dmref="PhotFrame_ACISSoft" dmrole="mango:stcextend.HRFrame.low"/>
