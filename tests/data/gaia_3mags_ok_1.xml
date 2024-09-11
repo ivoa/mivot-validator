@@ -241,7 +241,7 @@ ivo://esavo/gaia/tap).</INFO>
               <INSTANCE dmtype="mango:PhotometricProperty">
                 <!-- All MANGO properties are made of a block allowing to refine the property semantic, a measure and a set of associated 
                   properties -->
-                <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
+                <INSTANCE dmrole="mango:Property.semantics" dmtype="mango:VocabularyTerm">
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.uri" dmtype="ivoa:string" value="ivo://vocab" />
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" value="#magnitude" />
                 </INSTANCE>
@@ -259,7 +259,7 @@ ivo://esavo/gaia/tap).</INFO>
               <INSTANCE dmtype="mango:PhotometricProperty">
                 <!-- All MANGO properties are made of a block allowing to refine the property semantic, a measure and a set of associated 
                   properties -->
-                <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
+                <INSTANCE dmrole="mango:Property.semantics" dmtype="mango:VocabularyTerm">
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.uri" dmtype="ivoa:string" value="ivo://vocab" />
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" value="#magnitude" />
                 </INSTANCE>
@@ -277,7 +277,7 @@ ivo://esavo/gaia/tap).</INFO>
               <INSTANCE dmtype="mango:PhotometricProperty">
                 <!-- All MANGO properties are made of a block allowing to refine the property semantic, a measure and a set of associated 
                   properties -->
-                <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
+                <INSTANCE dmrole="mango:Property.semantics" dmtype="mango:VocabularyTerm">
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.uri" dmtype="ivoa:string" value="ivo://vocab" />
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" value="#magnitude" />
                 </INSTANCE>

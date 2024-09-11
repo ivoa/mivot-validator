@@ -85,7 +85,7 @@
                       -->
           <COLLECTION dmrole="mango:MangoObject.parameters">
             <INSTANCE dmrole="mango:MangoObject.parameters" dmtype="mango:Parameter">
-              <ATTRIBUTE dmrole="mango:Parameter.semantic" dmtype="ivoa:string" value="#position.corrected"/>
+              <ATTRIBUTE dmrole="mango:Parameter.semantics" dmtype="ivoa:string" value="#position.corrected"/>
               <ATTRIBUTE dmrole="mango:Parameter.ucd" dmtype="ivoa:string" value="pos.eq"/>
               <ATTRIBUTE dmrole="mango:Parameter.description" dmtype="ivoa:string" value="Source sky position"/>
               <ATTRIBUTE dmrole="mango:Parameter.reductionStatus" dmtype="ivoa:string" value="Corrected"/>
@@ -112,7 +112,7 @@
               </INSTANCE>
             </INSTANCE>
             <INSTANCE dmrole="mango:MangoObject.parameters" dmtype="mango:Parameter">
-              <ATTRIBUTE dmrole="mango:Parameter.semantic" dmtype="ivoa:string" value="#position.lonlat"/>
+              <ATTRIBUTE dmrole="mango:Parameter.semantics" dmtype="ivoa:string" value="#position.lonlat"/>
               <ATTRIBUTE dmrole="mango:Parameter.ucd" dmtype="ivoa:string" value="pos.galactic"/>
               <ATTRIBUTE dmrole="mango:Parameter.description" dmtype="ivoa:string" value="Source position"/>
               <ATTRIBUTE dmrole="mango:Parameter.reductionStatus" dmtype="ivoa:string" value="Corrected"/>
@@ -139,7 +139,7 @@
               </INSTANCE>
             </INSTANCE>
             <INSTANCE dmrole="mango:MangoObject.parameters" dmtype="mango:Parameter">
-              <ATTRIBUTE dmrole="mango:Parameter.semantic" dmtype="ivoa:string" value="#error"/>
+              <ATTRIBUTE dmrole="mango:Parameter.semantics" dmtype="ivoa:string" value="#error"/>
               <ATTRIBUTE dmrole="mango:Parameter.ucd" dmtype="ivoa:string" value="phys.angSize;pos.errorEllipse"/>
               <ATTRIBUTE dmrole="mango:Parameter.description" dmtype="ivoa:string" value="major radius ro ellipse error at confidence 95% "/>
               <ATTRIBUTE dmrole="mango:Parameter.reductionStatus" dmtype="ivoa:string" value="Computed"/>
@@ -161,7 +161,7 @@
               </INSTANCE>
             </INSTANCE>
             <INSTANCE dmrole="mango:MangoObject.parameters" dmtype="mango:Parameter">
-              <ATTRIBUTE dmrole="mango:Parameter.semantic" dmtype="ivoa:string" value="#error"/>
+              <ATTRIBUTE dmrole="mango:Parameter.semantics" dmtype="ivoa:string" value="#error"/>
               <ATTRIBUTE dmrole="mango:Parameter.ucd" dmtype="ivoa:string" value="phys.angSize;pos.errorEllipse"/>
               <ATTRIBUTE dmrole="mango:Parameter.description" dmtype="ivoa:string" value="minor radius r1 ellipse error at confidence 95% "/>
               <ATTRIBUTE dmrole="mango:Parameter.reductionStatus" dmtype="ivoa:string" value="Computed"/>
@@ -183,7 +183,7 @@
               </INSTANCE>
             </INSTANCE>
             <INSTANCE dmrole="mango:MangoObject.parameters" dmtype="mango:Parameter">
-              <ATTRIBUTE dmrole="mango:Parameter.semantic" dmtype="ivoa:string" value="position_angle"/>
+              <ATTRIBUTE dmrole="mango:Parameter.semantics" dmtype="ivoa:string" value="position_angle"/>
               <ATTRIBUTE dmrole="mango:Parameter.ucd" dmtype="ivoa:string" value="pos.posAng"/>
               <ATTRIBUTE dmrole="mango:Parameter.description" dmtype="ivoa:string" value="Position Angle  "/>
               <ATTRIBUTE dmrole="mango:Parameter.reductionStatus" dmtype="ivoa:string" value="Computed"/>
@@ -205,7 +205,7 @@
               </INSTANCE>
             </INSTANCE>
             <INSTANCE dmrole="mango:MangoObject.parameters" dmtype="mango:Parameter">
-              <ATTRIBUTE dmrole="mango:Parameter.semantic" dmtype="ivoa:string" value="#flux.corrected"/>
+              <ATTRIBUTE dmrole="mango:Parameter.semantics" dmtype="ivoa:string" value="#flux.corrected"/>
               <ATTRIBUTE dmrole="mango:Parameter.ucd" dmtype="ivoa:string" value="phot.flux;em.X-ray"/>
               <ATTRIBUTE dmrole="mango:Parameter.description" dmtype="ivoa:string" value="[0/5.5e-10]? Aperture-corrected net energy flux inferred from the source region aperture; ACIS broad (0.5-7.0keV) band, in erg/s/cm^2^ (flux_aper_b) (14)"/>
               <ATTRIBUTE dmrole="mango:Parameter.reductionStatus" dmtype="ivoa:string" value=""/>
@@ -225,7 +225,7 @@
               </INSTANCE>
             </INSTANCE>
             <INSTANCE dmrole="mango:MangoObject.parameters" dmtype="mango:Parameter">
-              <ATTRIBUTE dmrole="mango:Parameter.semantic" dmtype="ivoa:string" value="#flux.corrected"/>
+              <ATTRIBUTE dmrole="mango:Parameter.semantics" dmtype="ivoa:string" value="#flux.corrected"/>
               <ATTRIBUTE dmrole="mango:Parameter.ucd" dmtype="ivoa:string" value="phot.flux;em.X-ray"/>
               <ATTRIBUTE dmrole="mango:Parameter.description" dmtype="ivoa:string" value="[0/5.4e-10]? Aperture-corrected net energy flux inferred from the source region aperture; ACIS hard (2.0-7.0keV) band in erg/s/cm^2^ (flux_aper_h) (14)"/>
               <ATTRIBUTE dmrole="mango:Parameter.reductionStatus" dmtype="ivoa:string" value=""/>
@@ -245,7 +245,7 @@
               </INSTANCE>
             </INSTANCE>
             <INSTANCE dmrole="mango:MangoObject.parameters" dmtype="mango:Parameter">
-              <ATTRIBUTE dmrole="mango:Parameter.semantic" dmtype="ivoa:string" value="#flux.corrected"/>
+              <ATTRIBUTE dmrole="mango:Parameter.semantics" dmtype="ivoa:string" value="#flux.corrected"/>
               <ATTRIBUTE dmrole="mango:Parameter.ucd" dmtype="ivoa:string" value="phot.flux;em.X-ray"/>
               <ATTRIBUTE dmrole="mango:Parameter.description" dmtype="ivoa:string" value="[0/1.9e-11]? Aperture-corrected net energy flux inferred from the source region aperture; ACIS medium (1.2-2keV) band in erg/s/cm^2^ (flux_aper_m) (14)"/>
               <ATTRIBUTE dmrole="mango:Parameter.reductionStatus" dmtype="ivoa:string" value=""/>
@@ -265,7 +265,7 @@
               </INSTANCE>
             </INSTANCE>
             <INSTANCE dmrole="mango:MangoObject.parameters" dmtype="mango:Parameter">
-              <ATTRIBUTE dmrole="mango:Parameter.semantic" dmtype="ivoa:string" value="#hardnessratio.computed"/>
+              <ATTRIBUTE dmrole="mango:Parameter.semantics" dmtype="ivoa:string" value="#hardnessratio.computed"/>
               <ATTRIBUTE dmrole="mango:Parameter.ucd" dmtype="ivoa:string" value="phot.flux;arith.ratio"/>
               <ATTRIBUTE dmrole="mango:Parameter.description" dmtype="ivoa:string" value="ACIS hard - soft energy band hardness ratio"/>
               <ATTRIBUTE dmrole="mango:Parameter.reductionStatus" dmtype="ivoa:string" value="Computed"/>
@@ -285,7 +285,7 @@
               </INSTANCE>
             </INSTANCE>
             <INSTANCE dmrole="mango:MangoObject.parameters" dmtype="mango:Parameter">
-              <ATTRIBUTE dmrole="mango:Parameter.semantic" dmtype="ivoa:string" value="#hardnessratio.computed"/>
+              <ATTRIBUTE dmrole="mango:Parameter.semantics" dmtype="ivoa:string" value="#hardnessratio.computed"/>
               <ATTRIBUTE dmrole="mango:Parameter.ucd" dmtype="ivoa:string" value="phot.flux;arith.ratio"/>
               <ATTRIBUTE dmrole="mango:Parameter.description" dmtype="ivoa:string" value="[-1/1]? ACIS medium-soft (0.5-1.2keV) energy band hardness ratio (hard_ms)"/>
               <ATTRIBUTE dmrole="mango:Parameter.reductionStatus" dmtype="ivoa:string" value="Computed"/>

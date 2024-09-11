@@ -89,7 +89,7 @@ ivo://esavo/gaia/tap).</INFO>
               <!-- Property enclosing a Position -->
               <INSTANCE dmtype="mango:PhysicalProperty">
 
-                <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
+                <INSTANCE dmrole="mango:Property.semantics" dmtype="mango:VocabularyTerm">
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.uri" dmtype="ivoa:string" value="" />
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" value="" />
                 </INSTANCE>
@@ -130,7 +130,7 @@ ivo://esavo/gaia/tap).</INFO>
               <!-- Property enclosing a ProperMotion -->
               <INSTANCE dmid="_PROPER_MOTION" dmtype="mango:PhysicalProperty">
 
-                <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
+                <INSTANCE dmrole="mango:Property.semantics" dmtype="mango:VocabularyTerm">
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.uri" dmtype="ivoa:string" value="" />
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" value="" />
                 </INSTANCE>
@@ -164,7 +164,7 @@ ivo://esavo/gaia/tap).</INFO>
               <!-- Property enclosing a Parallax -->
               <INSTANCE dmid="_PARALLAX" dmtype="mango:PhysicalProperty">
 
-                <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
+                <INSTANCE dmrole="mango:Property.semantics" dmtype="mango:VocabularyTerm">
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.uri" dmtype="ivoa:string" value="" />
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" value="" />
                 </INSTANCE>
@@ -190,7 +190,7 @@ ivo://esavo/gaia/tap).</INFO>
               <!-- Property enclosing the radial velocity -->
               <INSTANCE dmid="_RADIAL_VELOCITY" dmtype="mango:PhysicalProperty">
 
-                <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
+                <INSTANCE dmrole="mango:Property.semantics" dmtype="mango:VocabularyTerm">
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.uri" dmtype="ivoa:string" value="" />
                   <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" value="" />
                 </INSTANCE>

@@ -32,7 +32,9 @@ class TestSession(unittest.TestCase):
         fpath = session.get_vodml("ModelURL")
         self.assertTrue(fpath.endswith("ModelURL.vo-dml.xml"))
 
-        self.assertFalse(session.install_vodml("ModelNOURL", "https://,,,,,,.com"))
+        with self.assertRaises(Exception): 
+            session.install_vodml("ModelNOURL", "https://,,,,,,.com")
+            
         self.assertIsNone(session.get_vodml("ModelNOURL"))
 
         self.assertTrue(
