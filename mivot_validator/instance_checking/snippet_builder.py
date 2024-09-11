@@ -111,7 +111,13 @@ class Builder:
                     self.build_object(ele, "", True, True)
                     return
 
-        raise MappingException(f"Complex type {self.class_name} not found")
+        for ele in self.vodml.xpath(".//primitiveType"):
+            for tags in ele.getchildren():
+                if tags.tag == "vodml-id" and tags.text == self.class_name:
+                    self.build_object(ele, "", True, True)
+                    return
+
+        raise MappingException(f"Complex type {self.class_name} (model {self.model_name}) not found")
 
     def build_object(self, ele, role, root, aggregate):
         """
