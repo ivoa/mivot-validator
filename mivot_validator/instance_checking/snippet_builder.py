@@ -111,12 +111,6 @@ class Builder:
                     self.build_object(ele, "", True, True)
                     return
 
-        for ele in self.vodml.xpath(".//primitiveType"):
-            for tags in ele.getchildren():
-                if tags.tag == "vodml-id" and tags.text == self.class_name:
-                    self.build_object(ele, "", True, True)
-                    return
-
         raise MappingException(f"Complex type {self.class_name} (model {self.model_name}) not found")
 
     def build_object(self, ele, role, root, aggregate):
@@ -314,7 +308,7 @@ class Builder:
                 for ref in tags.getchildren():
                     vodmlref = ref.text
                     dmtype = self.get_vodmlid(vodmlref)
-                    if vodmlref.startswith("ivoa:") is False:
+                    if vodmlref.startswith("ivoa:") is False :
                         self.get_object_by_ref(
                             vodmlref.replace(self.model_name + ":", ""), dmrole, True
                         )
@@ -359,6 +353,7 @@ class Builder:
 
     def get_object_by_ref(self, vodmlid, role, aggregate, extend=False):
         """ """
+                    
         self._print_(f"search object with vodmlid={vodmlid}")
         for ele in self.vodml.xpath(".//objectType"):
             abstract_att = ele.get("abstract")
@@ -433,14 +428,13 @@ class Builder:
                     f'<ATTRIBUTE dmrole="{role}" dmtype="{dmtype}" value="OneOf {val_str}"/>'
                 )
                 return
-        # filename = vodmlid.replace(":", ".") + ".xml"
-        # filename = filename.replace(".Point.", ".LonLatPoint.")
-        # ilename = filename.replace(".TimeStamp.", ".MJD.")
-        self.write_out(f'<INSTANCE dmrole="{role}" dmtype="{vodmlid}"/>')
-
-        # if self.include_file(filename) is False:
-        #   raise Exception(f"Type {vodmlid} not found. File {filename} may be missing")
-        #
+         
+        # "coords:Epoch" is a primitive type, and right now, there is no way see it at this level
+        # we hardcode this specific case
+        if vodmlid == "coords:Epoch":
+            self.write_out(f'<ATTRIBUTE dmrole="{role}" dmtype="{vodmlid}"/>')
+        else:
+            self.write_out(f'<INSTANCE dmrole="{role}" dmtype="{vodmlid}"/>')
 
     def get_concrete_type_by_ref(self, abstract_vodmlid, role, aggregate, extend):
         """ """
