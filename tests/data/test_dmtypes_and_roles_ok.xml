@@ -95,7 +95,7 @@
                         dmtype="ivoa:RealQuantity" value="6246.77"/>
                 <ATTRIBUTE dmrole="mango:coordinates.PhotFilter.unit" 
                         dmtype="ivoa:Unit" value="Angstrom" />
-                <ATTRIBUTE dmrole="mango:coordinates.PhotFilter.bandWidth" 
+                <ATTRIBUTE dmrole="mango:coordinates.PhotFilter.bandwidth" 
                         dmtype="ivoa:real" value="4578.32"/>
               </INSTANCE>
             </INSTANCE>
@@ -114,7 +114,7 @@
                            dmtype="ivoa:RealQuantity" value="7740.87"/>
                 <ATTRIBUTE dmrole="mango:coordinates.PhotFilter.unit" 
                            dmtype="ivoa:Unit" value="Angstrom"/>
-                <ATTRIBUTE dmrole="mango:coordinates.PhotFilter.bandWidth" 
+                <ATTRIBUTE dmrole="mango:coordinates.PhotFilter.bandwidth" 
                            dmtype="ivoa:real" value="2943.72"/>
               </INSTANCE>
             </INSTANCE>
@@ -132,7 +132,7 @@
                            dmtype="ivoa:RealQuantity" value="5278.58"/>
                 <ATTRIBUTE dmrole="mango:coordinates.PhotFilter.unit" 
                            dmtype="ivoa:Unit" value="Angstrom"/>
-                <ATTRIBUTE dmrole="mango:coordinates.PhotFilter.bandWidth" 
+                <ATTRIBUTE dmrole="mango:coordinates.PhotFilter.bandwidth" 
                            dmtype="ivoa:real" value="2279.45"/>
               </INSTANCE>
             </INSTANCE>

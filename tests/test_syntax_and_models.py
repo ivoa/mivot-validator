@@ -36,6 +36,7 @@ class Test(unittest.TestCase):
                     mviewer = None
                     for resource in votable.resources:
                         session = Session()
+                        session.install_local_vodml("mango")
                         if len(votable.resources) != 1:
                             print(
                                 "VOTable with more than one resource are not supported yet"

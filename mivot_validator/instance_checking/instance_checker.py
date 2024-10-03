@@ -7,6 +7,7 @@ Created on 21 Feb 2023
 import os
 
 from mivot_validator.utils.xml_utils import XmlUtils
+from mivot_validator.utils.dmtype_utils import DmtypeUtils
 from mivot_validator.instance_checking.inheritance_checker import InheritanceChecker
 from mivot_validator.instance_checking.snippet_builder import Builder
 
@@ -32,7 +33,7 @@ class InstanceChecker:
     The VODML files are stored locally for the moment
     """
 
-    inheritence_tree = {"meas:Measure": ["mango:extmeas.PhotometricMeasure"]}
+    inheritence_tree = {}
 
     @staticmethod
     def _get_vodml_class_tree(model, dmtype, session):
@@ -40,8 +41,6 @@ class InstanceChecker:
         Extract from the VODML file the object to be checked
         Store first on disk a VODML representation of the searched object type
         and then works with that XML snippet
-
-        Only Meas/Coords/PhotDM are supported yet
 
         parameters
         ----------
@@ -98,7 +97,7 @@ class InstanceChecker:
         # No distinctions between objecttypeand datatypes
         # MIVOT does not make any difference
         # the vodml)id are unique within the scope of the whole model
-        for ele in vodml_tree.xpath("./dataType"):
+        for ele in vodml_tree.xpath(".//dataType"):
             for tags in ele.getchildren():
                 if tags.tag == "vodml-id":
                     sub_class = model_name + ":" + tags.text
@@ -109,7 +108,7 @@ class InstanceChecker:
                     if sub_class not in graph[super_class]:
                         graph[super_class].append(sub_class)
 
-        for ele in vodml_tree.xpath("./objectType"):
+        for ele in vodml_tree.xpath(".//objectType"):
             for tags in ele.getchildren():
                 if tags.tag == "vodml-id":
                     sub_class = model_name + ":" + tags.text
@@ -176,6 +175,14 @@ class InstanceChecker:
                 "dmtype"
             ) == attribute_etree.get("dmtype"):
                 return True
+            model1, class1 = DmtypeUtils.split_dmtype(
+                child.get("dmtype")
+                )
+            model2, class2 = DmtypeUtils.split_dmtype(
+                attribute_etree.get("dmtype")
+                )
+            if model1 != model2 and class1 == class2:
+                return True
         return False
 
     @staticmethod
@@ -213,7 +220,8 @@ class InstanceChecker:
         role_found = False
 
         for vodml_child in vodml_instance.xpath("./COLLECTION"):
-            if vodml_child.get("dmrole") == collection_etree.get("dmrole"):
+            print(f'{vodml_child.get("dmrole")} {collection_role}')
+            if vodml_child.get("dmrole") == collection_role:
                 role_found = True
                 # Get the item type as defined by vodml
                 for vodml_item in vodml_child.xpath("./*"):
@@ -278,6 +286,7 @@ class InstanceChecker:
                 ):
                     print(f"-> found that {actual_type} inherits from {vodml_type}")
                     return
+                print(InstanceChecker.inheritence_tree)
                 raise CheckFailedException(
                     f"Object type {enclosing_vodml_instance.getroot().get('dmtype')} "
                     f"has no component with dmrole={actual_role} and dmtype={actual_type} "
@@ -341,7 +350,7 @@ class InstanceChecker:
             elif child.tag == "INSTANCE":
                 dmrole = child.get("dmrole")
                 if dmrole in checked_roles:
-                    raise CheckFailedException(f"Duplicated dmrole {dmrole}")
+                    raise CheckFailedException(f"Duplicated dmrole {dmrole} (dmtype {child.get('dmtype')})")
                 checked_roles.append(child.get("dmrole"))
 
                 if InstanceChecker.check_instance_validity(child, session) is False:

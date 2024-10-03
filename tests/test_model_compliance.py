@@ -43,6 +43,7 @@ class TestModelCompliance(unittest.TestCase):
             if sample_file.startswith("instcheck") and "_ok_" in sample_file:
                 try:
                     session = Session()
+                    session.install_local_vodml("mango")
                     instance = XmlUtils.xmltree_from_file(
                         os.path.join(mapping_sample, sample_file),
                     )
@@ -77,7 +78,7 @@ class TestModelCompliance(unittest.TestCase):
             self.assertTrue(False, "test should fail")
         except MappingException as exp:
             print(exp)
-            self.assertEqual(str(exp), "Complex type Asymmetrical2DXXX not found")
+            self.assertEqual(str(exp), "Complex type Asymmetrical2DXXX (model meas) not found")
 
         instance = XmlUtils.xmltree_from_file(
             os.path.join(mapping_sample, "instcheck_ko_3.xml")
@@ -88,7 +89,7 @@ class TestModelCompliance(unittest.TestCase):
             self.assertTrue(False, "test should fail")
         except CheckFailedException as exp:
             print(exp)
-            self.assertEqual(str(exp), "Duplicated dmrole coords:LonLatPoint.lon")
+            self.assertEqual(str(exp), "Duplicated dmrole coords:LonLatPoint.lon (dmtype ivoa:RealQuantity)")
 
 
 if __name__ == "__main__":

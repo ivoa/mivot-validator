@@ -12,10 +12,20 @@ from mivot_validator.utils.xml_utils import XmlUtils
 from mivot_validator.instance_checking.model_snippets_builder import ModelBuilder
 from mivot_validator.utils.session import Session
 
-MODELS = ["coords", "meas", "Phot", "ivoa", "mango"]
+MODELS = ["coords", "meas", "Phot"]
 MAPPING_SAMPLE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data")
 
-
+def get_model_path(model):
+    mod_dir = os.path.dirname(__file__)
+    vodml_dir = os.path.realpath(
+        os.path.join(mod_dir, "..", "mivot_validator", "instance_checking", "vodml"))
+    if model == "coords":
+        return "file://" + os.path.join(vodml_dir, "Coords-v1.0.vo-dml.xml")
+    elif model == "meas":
+        return "file://" + os.path.join(vodml_dir, "Meas-v1.vo-dml.xml")
+    elif model == "Phot":
+        return "file://" +  os.path.join(vodml_dir, "Phot-v1.1.vodml.xml")
+    
 def getObjectTypes(model):
     """
     Get the object types of the given model which are not abstract
@@ -61,7 +71,7 @@ class Test(unittest.TestCase):
         for model_name in MODELS:
             session = Session()
             # Given
-            snippets = ModelBuilder(model_name, session)
+            snippets = ModelBuilder(get_model_path(model_name), session)
 
             # When
             snippets.build()

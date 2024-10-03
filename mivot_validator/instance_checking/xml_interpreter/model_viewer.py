@@ -338,6 +338,12 @@ class ModelViewer:
             retour.append(deepcopy(ele))
         return retour
 
+    def get_declared_models(self):
+        """
+        return the list of declared models ({name: url, ...}
+        """
+        return self._annotation_seeker._declared_models
+    
     """
     Private methods
     """

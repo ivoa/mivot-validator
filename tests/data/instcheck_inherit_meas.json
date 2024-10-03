@@ -1,6 +1,5 @@
 {
   "meas:Measure": [
-    "mango:extmeas.PhotometricMeasure",
     "meas:GenericMeasure",
     "meas:Position",
     "meas:Time",

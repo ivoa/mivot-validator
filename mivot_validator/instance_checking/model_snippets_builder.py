@@ -28,6 +28,11 @@ class ModelBuilder(Builder):
             .split("_")[0]
             .split("-")[0]
         )
+        # Model name should be read in the vodml file
+        # While this is not implemented, let's make short workaround
+        if self.model_name != "Phot":
+            self.model_name = self.model_name.lower()
+
         session.install_vodml(self.model_name, vodml_path, force=True)
         super().__init__(self.model_name, "", session)
 
