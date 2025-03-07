@@ -70,6 +70,9 @@ class Builder:
     Build a MIVOT view of the class model_name:class_name of the model
     serialized in the provided VOMDL file
     """
+    CACHE={}
+    RECORD=""
+    RECORD_ON=True
 
     def __init__(self, model_name, class_name, session, verbose=False):
         """
@@ -201,20 +204,30 @@ class Builder:
 
         if const_type is not None:
             reftype = const_type
-
+        already_here = False
         if vodmlid in self.resolved_references:
             self._print_(
                 f"   Reference {vodmlid} skipped to break a model loop (already processed)"
             )
-            return
+            already_here = True
+
+            #return
         self._print_(f"   Reference {vodmlid} processed for the fist time")
         self.resolved_references.append(vodmlid)
 
+        Builder.RECORD_ON = True
         if max_occurs != "1":
             self.write_out(
                 f'<COLLECTION dmrole="{(self.model_name + ":" + vodmlid)}" >'
             )
-            self.get_object_by_ref(
+            # if object type type has already be used, we populate the COLLECTION
+            # with an empty instance to avoid recursive forever  loops
+            if already_here:
+                self.write_out(
+                f'<INSTANCE dmtype="{(self.model_name + ":" + reftype)}" />'
+                )
+            else:
+                self.get_object_by_ref(
                 reftype.replace(self.model_name + ":", ""),
                 self.model_name + ":" + vodmlid,
                 True,
@@ -478,15 +491,23 @@ class Builder:
             return f"{vodmlid}"
         return f"{self.model_name}:{vodmlid}"
 
-    def write_out(self, string):
+    def write_out(self, string, record=False):
         """
         Write out the element given as string into the current snippet
         """
+        if record is True:
+            Builder.RECORD_ON = True
+            Builder.RECORD = ""
+        if Builder.RECORD_ON is True:
+            Builder.RECORD += string + "\n"
         if self.output is None:
             self._print_(string)
         else:
             self.output.write(string)
             self.output.write("\n")
+        if record is False:
+            Builder.RECORD_ON = False
+        
 
     def include_file(self, filename):
         """

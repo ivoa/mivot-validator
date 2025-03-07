@@ -153,6 +153,13 @@ In this example the tool will generate one snippet for the object type `coords:T
 - All MIVOT instances of (abstract) type ``coords:RefLocation`` playing the role ``coords:TimeFrame.refDirection``
   and hosted by a class playing the role ``coords:TimeSys``, will be replaced by instances of type ``coords:StdRefLocation``
 
+
+Change Log
+~~~~~~~~~~
+
+- 0.3: Support multiple instances of the same object in the snippet building
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
