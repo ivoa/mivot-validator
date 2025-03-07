@@ -271,7 +271,9 @@ class InstanceChecker:
             a documented exception ins case of failure
         """
         actual_role = actual_instance.get("dmrole")
+        #XmlUtils.pretty_print(enclosing_vodml_instance.getroot())
         for vodml_instance in enclosing_vodml_instance.getroot().xpath("./*"):
+            print(vodml_instance.get("dmrole") + " " + actual_role)
             if vodml_instance.get("dmrole") == actual_role:
                 actual_type = actual_instance.get("dmtype")
                 vodml_type = vodml_instance.get("dmtype")
@@ -287,6 +289,10 @@ class InstanceChecker:
                     print(f"-> found that {actual_type} inherits from {vodml_type}")
                     return
                 print(InstanceChecker.inheritence_tree)
+                print(vodml_type)
+                print(actual_type)
+                print(vodml_type in InstanceChecker.inheritence_tree)
+                print(actual_type in InstanceChecker.inheritence_tree[vodml_type])
                 raise CheckFailedException(
                     f"Object type {enclosing_vodml_instance.getroot().get('dmtype')} "
                     f"has no component with dmrole={actual_role} and dmtype={actual_type} "
