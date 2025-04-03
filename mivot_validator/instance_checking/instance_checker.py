@@ -288,11 +288,6 @@ class InstanceChecker:
                 ):
                     print(f"-> found that {actual_type} inherits from {vodml_type}")
                     return
-                print(InstanceChecker.inheritence_tree)
-                print(vodml_type)
-                print(actual_type)
-                print(vodml_type in InstanceChecker.inheritence_tree)
-                print(actual_type in InstanceChecker.inheritence_tree[vodml_type])
                 raise CheckFailedException(
                     f"Object type {enclosing_vodml_instance.getroot().get('dmtype')} "
                     f"has no component with dmrole={actual_role} and dmtype={actual_type} "
