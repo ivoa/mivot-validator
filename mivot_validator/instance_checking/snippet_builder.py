@@ -470,7 +470,7 @@ class Builder:
             return
         else:
             self.write_out(
-                f"<!-- Put here a concrete INSTANCE of {abstract_vodmlid} or left blank -->"
+                f"<!-- Replace by an INSTANCE of a derived classes of {abstract_vodmlid} if applicable. -->"
             )
             self.write_out(
                 f"<INSTANCE dmrole='{role}' dmtype='{self.model_name}:{abstract_vodmlid}'/>"
