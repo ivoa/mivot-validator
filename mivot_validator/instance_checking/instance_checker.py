@@ -19,6 +19,18 @@ ivoa_types = ["ivoa:RealQuantity", "ivoa:IntQuantity"]
 class CheckFailedException(Exception):
     pass
 
+def raise_check_failed_exception(message, tree_element):
+    """
+    Parameters
+    ----------
+    message: string
+        Exception message
+    tree_element: Element (XML)
+        XML element where the error occured
+    """
+    if tree_element:
+        XmlUtils.pretty_print(tree_element)
+    raise CheckFailedException(message)
 
 class InstanceChecker:
     """
@@ -211,8 +223,9 @@ class InstanceChecker:
             if item_type != "" and not checker.check_inheritance(
                 mivot_item_type, item_type
             ):
-                raise CheckFailedException(
-                    f"Collection with dmrole={collection_role} has items with different dmtypes "
+                raise_check_failed_exception(
+                    f"Collection with dmrole={collection_role} has items with different dmtypes",
+                    collection_etree
                 )
             item_type = mivot_item_type
 
@@ -239,10 +252,11 @@ class InstanceChecker:
                             not in InstanceChecker.inheritence_tree[vodml_type]
                         )
                     ):
-                        raise CheckFailedException(
+                        raise_check_failed_exception(
                             f"Collection with dmrole={collection_role} "
                             f"has items with prohibited types ({mivot_item_type}) "
-                            f"instead of expected {vodml_type} "
+                            f"instead of expected {vodml_type} ",
+                            item
                         )
                     for item in collection_etree.xpath("./*"):
                         if item.tag == "INSTANCE":
@@ -250,9 +264,10 @@ class InstanceChecker:
                     return
 
         if role_found is False:
-            raise CheckFailedException(
+            raise_check_failed_exception(
                 f"No collection with dmrole {collection_role} "
-                f"in object type {vodml_instance.getroot().get('dmtype')}"
+                f"in object type {vodml_instance.getroot().get('dmtype')}",
+                collection_etree
             )
 
     @staticmethod
@@ -288,14 +303,16 @@ class InstanceChecker:
                 ):
                     print(f"-> found that {actual_type} inherits from {vodml_type}")
                     return
-                raise CheckFailedException(
+                raise_check_failed_exception(
                     f"Object type {enclosing_vodml_instance.getroot().get('dmtype')} "
                     f"has no component with dmrole={actual_role} and dmtype={actual_type} "
-                    f"type should be {vodml_type}"
+                    f"type should be {vodml_type}",
+                    vodml_instance
                 )
-        raise CheckFailedException(
+        raise_check_failed_exception(
             f"dmrole {actual_role} not found in "
-            f"object type {enclosing_vodml_instance.getroot().get('dmtype')}"
+            f"object type {enclosing_vodml_instance.getroot().get('dmtype')}",
+            actual_instance
         )
 
     @staticmethod
@@ -314,6 +331,10 @@ class InstanceChecker:
         """
         checked_roles = []
         dmtype = instance_etree.get("dmtype")
+        if dmtype is None:
+            raise_check_failed_exception(f"Mising dmtype in \n {XmlUtils.pretty_string(instance_etree)}",
+                                         instance_etree)
+
         eles = dmtype.split(":")
         print(f"-> check class {eles[0]}:{eles[1]}")
         if eles[0] == "ivoa":
@@ -330,7 +351,8 @@ class InstanceChecker:
 
                 dmrole = child.get("dmrole")
                 if dmrole in checked_roles:
-                    raise CheckFailedException(f"Duplicated dmrole {dmrole}")
+                    raise_check_failed_exception(f"Duplicated dmrole {dmrole}",
+                                                 child)
                 checked_roles.append(child.get("dmrole"))
 
                 # ivao:Quantity are complex types that can be serialized as ATTRIBUTE.
@@ -343,7 +365,8 @@ class InstanceChecker:
                         f"cannot find attribute with dmrole={dmrole} "
                         f'dmtype={child.get("dmtype")} in complex type {dmtype}'
                     )
-                    raise CheckFailedException(message)
+                    raise_check_failed_exception(message,
+                                                 child)
                 print(
                     f'VALID: attribute with dmrole={child.get("dmrole")} '
                     f'dmtype={child.get("dmtype")} in complex type {dmtype}'
@@ -351,7 +374,8 @@ class InstanceChecker:
             elif child.tag == "INSTANCE":
                 dmrole = child.get("dmrole")
                 if dmrole in checked_roles:
-                    raise CheckFailedException(f"Duplicated dmrole {dmrole} (dmtype {child.get('dmtype')})")
+                    raise_check_failed_exception(f"Duplicated dmrole {dmrole} (dmtype {child.get('dmtype')})",
+                                                 child)
                 checked_roles.append(child.get("dmrole"))
 
                 if InstanceChecker.check_instance_validity(child, session) is False:
@@ -359,7 +383,8 @@ class InstanceChecker:
                         f"cannot find instance with dmrole={dmrole} "
                         f'dmtype={child.get("dmtype")} in complex type {dmtype}'
                     )
-                    raise CheckFailedException(message)
+                    raise_check_failed_exception(message,
+                                                 child)
                 InstanceChecker._check_membership(child, vodml_instance)
                 print(
                     f"VALID: instance with dmrole={dmrole} "
@@ -369,7 +394,8 @@ class InstanceChecker:
             elif child.tag == "COLLECTION":
                 dmrole = child.get("dmrole")
                 if dmrole in checked_roles:
-                    raise CheckFailedException(f"Duplicated dmrole {dmrole}")
+                    raise_check_failed_exception(f"Duplicated dmrole {dmrole}",
+                                                 child)
                 checked_roles.append(child.get("dmrole"))
 
                 if (
@@ -380,7 +406,8 @@ class InstanceChecker:
                         f"cannot find collection with dmrole={dmrole} "
                         f"in complex type {dmtype}"
                     )
-                    raise CheckFailedException(message)
+                    raise_check_failed_exception(message,
+                                                 instance_etree)
                 print(
                     f"VALID: collection with dmrole={dmrole} "
                     f"in complex type {dmtype}"
@@ -388,9 +415,11 @@ class InstanceChecker:
             elif child.tag == "REFERENCE":
                 dmrole = child.get("dmrole")
                 if dmrole in checked_roles:
-                    raise CheckFailedException(f"Duplicated dmrole {dmrole}")
+                    raise_check_failed_exception(f"Duplicated dmrole {dmrole}",
+                                                 child)
                 print(f"SKIPPED: Reference to instance with dmrole={dmrole}")
 
             else:
-                raise CheckFailedException(f"unsupported tag {child.tag}")
+                raise_check_failed_exception(f"unsupported tag {child.tag}",
+                                            child)
         return True
