@@ -28,7 +28,7 @@ def raise_check_failed_exception(message, tree_element):
     tree_element: Element (XML)
         XML element where the error occured
     """
-    if tree_element:
+    if tree_element is not None:
         XmlUtils.pretty_print(tree_element)
     raise CheckFailedException(message)
 
@@ -224,7 +224,7 @@ class InstanceChecker:
                 mivot_item_type, item_type
             ):
                 raise_check_failed_exception(
-                    f"Collection with dmrole={collection_role} has items with different dmtypes",
+                    f"Collection with dmrole={collection_role} has items with different dmtypes {mivot_item_type} {item_type}",
                     collection_etree
                 )
             item_type = mivot_item_type
@@ -237,9 +237,17 @@ class InstanceChecker:
             if vodml_child.get("dmrole") == collection_role:
                 role_found = True
                 # Get the item type as defined by vodml
+                vodml_type = None
                 for vodml_item in vodml_child.xpath("./*"):
                     vodml_type = vodml_item.get("dmtype")
                     break
+                # This occurs when the collection is empty or filled with ATTRIBUTE
+                # The latest is a bug in the snippet generator
+                # TODO: fix it
+                if not vodml_type:
+                    print(f"collection {collection_role} looks empty: no further checking")
+
+                    return
                 # Get the item type as used by mivot
                 for item in collection_etree.xpath("./*"):
                     mivot_item_type = item.get("dmtype")
@@ -288,7 +296,7 @@ class InstanceChecker:
         actual_role = actual_instance.get("dmrole")
         #XmlUtils.pretty_print(enclosing_vodml_instance.getroot())
         for vodml_instance in enclosing_vodml_instance.getroot().xpath("./*"):
-            print(vodml_instance.get("dmrole") + " " + actual_role)
+            #print(vodml_instance.get("dmrole") + " " + actual_role)
             if vodml_instance.get("dmrole") == actual_role:
                 actual_type = actual_instance.get("dmtype")
                 vodml_type = vodml_instance.get("dmtype")
