@@ -5,6 +5,7 @@ This package has 2 purposes:
 - Validation of VOTables annotated with IVOA recommendation [MIVOT](https://ivoa.net/documents/MIVOT/20230620/index.html)
 - MIVOT serialization of model components (snippets) that can be used to build annotations
 
+An extended description is available on [readthedocs](https://mivot-validator.readthedocs.io/en/latest/])
 ## Installation
 
 The validator is distributed as a Python package.
