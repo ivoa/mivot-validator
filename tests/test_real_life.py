@@ -25,7 +25,7 @@ class Test(unittest.TestCase):
         """
         Check that all sample files tagged as OK are actually valid
         """
-        votables = ["gaia_epoch_propagation_flat_full.xml", "xtapdb.xml"]
+        votables = ["gaia_with_mivot.xml", "xtapdb.xml"]
         annotated_votable_validator = AnnotatedVOTableValidator()
         for votable in votables:
             file_path = os.path.join(mapping_sample, votable)
