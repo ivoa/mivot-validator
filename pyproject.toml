@@ -21,7 +21,7 @@ keywords = ["ivoa", "data model", "votable", "annotation", "mivot"]
 dependencies = [
     "xmlschema",
     "xmltodict",
-    "astropy",
+    "astropy"
 ]
 requires-python = ">=3.6"
 

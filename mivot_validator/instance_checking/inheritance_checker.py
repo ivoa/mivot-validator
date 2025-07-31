@@ -3,8 +3,6 @@ Created on 30 May 2023
 
 @author: julien abid
 """
-from pyvo.mivot.utils.dict_utils import DictUtils
-
 
 class InheritanceChecker:
     """
