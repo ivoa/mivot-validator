@@ -3,6 +3,7 @@ Created on 30 May 2023
 
 @author: julien abid
 """
+from pyvo.mivot.utils.dict_utils import DictUtils
 
 
 class InheritanceChecker:
@@ -41,4 +42,18 @@ class InheritanceChecker:
             if el in inheritance_second:
                 return True
 
+        return False
+
+    def inherits_from(self, actual_class, parent_class):
+        """
+        Return True if actual_class inherits from parent_class
+        """
+
+        if actual_class == parent_class:
+            return True
+        
+        for parent, subs in self.tree.items():
+            if parent == parent_class and actual_class in subs:
+                return True
+        
         return False

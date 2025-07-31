@@ -97,6 +97,17 @@ class InstanceChecker:
         # No distinctions between objecttypeand datatypes
         # MIVOT does not make any difference
         # the vodml)id are unique within the scope of the whole model
+        for ele in vodml_tree.xpath(".//primitiveType"):
+            for tags in ele.getchildren():
+                if tags.tag == "vodml-id":
+                    sub_class = model_name + ":" + tags.text
+                for ext in ele.xpath("./extends/vodml-ref"):
+                    super_class = ext.text
+                    if super_class not in graph:
+                        graph[super_class] = []
+                    if sub_class not in graph[super_class]:
+                        graph[super_class].append(sub_class)
+        print(graph)
         for ele in vodml_tree.xpath(".//dataType"):
             for tags in ele.getchildren():
                 if tags.tag == "vodml-id":
@@ -171,9 +182,13 @@ class InstanceChecker:
             boolean
         """
         for child in vodml_instance.xpath("./ATTRIBUTE"):
-            if child.get("dmrole") == attribute_etree.get("dmrole") and child.get(
-                "dmtype"
-            ) == attribute_etree.get("dmtype"):
+            print("### " +  child.get("dmrole"), " ",  child.get("dmtype"))
+            
+                        
+            checker = InheritanceChecker(InstanceChecker.inheritence_tree)
+                        
+            if child.get("dmrole") == attribute_etree.get("dmrole") and checker.inherits_from(
+                attribute_etree.get("dmtype"), child.get("dmtype")):
                 return True
             model1, class1 = DmtypeUtils.split_dmtype(
                 child.get("dmtype")
@@ -271,7 +286,6 @@ class InstanceChecker:
             a documented exception ins case of failure
         """
         actual_role = actual_instance.get("dmrole")
-        #XmlUtils.pretty_print(enclosing_vodml_instance.getroot())
         for vodml_instance in enclosing_vodml_instance.getroot().xpath("./*"):
             print(vodml_instance.get("dmrole") + " " + actual_role)
             if vodml_instance.get("dmrole") == actual_role:
@@ -281,6 +295,8 @@ class InstanceChecker:
                     return
                 # Sort of ad_hoc patch meanwhile ivoa DM is properly supported
                 if actual_type == "ivoa:RealQuantity" and vodml_type == "ivoa:Quantity":
+                    return
+                if vodml_type == "ivoa:datetime" and actual_type in ["mango:year", "mango:jd", "mango:mjd", "mango:iso"]:
                     return
                 if (
                     vodml_type in InstanceChecker.inheritence_tree
