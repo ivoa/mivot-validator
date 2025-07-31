@@ -41,7 +41,6 @@ class AnnotationSeeker(object):
                 logger.info("Found GLOBALS")
                 self._globals_block = child
             elif self._name_match(child.tag, Ele.MODEL):
-                print(f"model========= {child.get('name')} {child.get('url')}")
                 self._declared_models[child.get('name')] = child.get('url')
 
         # get the TEMPLATES blocks

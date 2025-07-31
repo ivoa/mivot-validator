@@ -2,6 +2,7 @@
 
 - snippet generation: Change XML comments coming abstract instances
 - Add change log file
+- Print the XML element where the instance validation failed
 
 0.6:
 

@@ -131,7 +131,7 @@ class AnnotatedVOTableValidator:
         """
         # non XML files are considered as non valid
         if self.__is_xml(file_path) is False:
-            logger.error("File {file_path} does not look like XML")
+            logger.error(f"File {file_path} does not look like XML")
             return False
         if (
             AnnotatedVOTableValidator.vodml_validator.validate_file(

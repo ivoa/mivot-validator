@@ -3,7 +3,7 @@ Created on 5 Jan 2022
 
 @author: laurentmichel
 """
-
+import sys
 import re
 from copy import deepcopy
 from lxml import etree
@@ -245,6 +245,10 @@ class ModelViewer:
         """
         return a XML model view of the last read row
         """
+        
+        if self._current_data_row is None:
+            print("no data row: Cannot continue the process")
+            sys.exit(1)
         self._assert_table_is_connected()
         templates_copy = deepcopy(self._templates)
         if resolve_ref is True:
