@@ -9,3 +9,8 @@
 - Support inheritance in primitive types. This feature has been added to enable the validator
   to process `mango:ObsDate` which can have different representations
 - The test suite has been adapted to the MANGO model as it is in RFC
+
+
+0.7:
+- Replace INSTANCE with REFERENCE when a model loop is detected. REFERENCE are not validated
+- Update tests data sets with MANGO 1.0
