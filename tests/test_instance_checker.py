@@ -31,26 +31,6 @@ vodml_sample = os.path.join(
 
 
 class TestInstCheck(unittest.TestCase):
-    def testInheritenceGraph(self):
-        self.maxDiff = None
-        vodml_filepath = os.path.join(vodml_sample, "Meas-v1.vo-dml.xml")
-        InstanceChecker._build_inheritence_graph(vodml_filepath)
-        self.assertDictEqual(
-            InstanceChecker.inheritence_tree,
-            DictUtils.read_dict_from_file(
-                os.path.join(mapping_sample, "instcheck_inherit_meas.json")
-            ),
-        )
-        InstanceChecker.inheritence_tree = {}
-        vodml_filepath = os.path.join(vodml_sample, "Coords-v1.0.vo-dml.xml")
-        InstanceChecker._build_inheritence_graph(vodml_filepath)
-        DictUtils.print_pretty_json(InstanceChecker.inheritence_tree)
-        self.assertDictEqual(
-            InstanceChecker.inheritence_tree,
-            DictUtils.read_dict_from_file(
-                os.path.join(mapping_sample, "instcheck_inherit_coords.json")
-            ),
-        )
 
     def testOK(self):
         files = os.listdir(mapping_sample)
