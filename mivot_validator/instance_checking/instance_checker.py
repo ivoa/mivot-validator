@@ -48,6 +48,14 @@ class InstanceChecker:
     inheritence_tree = {}
 
     @staticmethod
+    def reset():
+        """
+        Reset the static inheritence tree cache
+        Mainly used by tests that run the static class several time in one process
+        """
+        InstanceChecker.inheritence_tree = {}
+        
+    @staticmethod
     def _get_vodml_class_tree(model, dmtype, session):
         """
         Extract from the VODML file the object to be checked
@@ -119,7 +127,7 @@ class InstanceChecker:
                         graph[super_class] = []
                     if sub_class not in graph[super_class]:
                         graph[super_class].append(sub_class)
-        print(graph)
+
         for ele in vodml_tree.xpath(".//dataType"):
             for tags in ele.getchildren():
                 if tags.tag == "vodml-id":
@@ -193,9 +201,7 @@ class InstanceChecker:
         ------
             boolean
         """
-        for child in vodml_instance.xpath("./ATTRIBUTE"):
-            print("### " +  child.get("dmrole"), " ",  child.get("dmtype"))
-            
+        for child in vodml_instance.xpath("./ATTRIBUTE"):            
                         
             checker = InheritanceChecker(InstanceChecker.inheritence_tree)
                         
@@ -239,7 +245,8 @@ class InstanceChecker:
                 mivot_item_type, item_type
             ):
                 raise_check_failed_exception(
-                    f"Collection with dmrole={collection_role} has items with different dmtypes {mivot_item_type} {item_type}",
+                    f"Collection with dmrole={collection_role} "
+                    "has items with different dmtypes {mivot_item_type} {item_type}",
                     collection_etree
                 )
             item_type = mivot_item_type
@@ -314,6 +321,9 @@ class InstanceChecker:
             if vodml_instance.get("dmrole") == actual_role:
                 actual_type = actual_instance.get("dmtype")
                 vodml_type = vodml_instance.get("dmtype")
+                if vodml_instance.tag == "REFERENCE":
+                    print(f"-> found a reference with dmrole={actual_role} and dmtype={vodml_type}: no checking")
+                    return
                 if actual_type == vodml_type:
                     return
                 # Sort of ad_hoc patch meanwhile ivoa DM is properly supported
@@ -360,7 +370,8 @@ class InstanceChecker:
                                          instance_etree)
 
         eles = dmtype.split(":")
-        print(f"-> check class {eles[0]}:{eles[1]}")
+        dmrole = instance_etree.get("dmrole")
+        print(f"-> check class {eles[0]}:{eles[1]} from role {dmrole if dmrole else 'None'}")
         if eles[0] == "ivoa":
             print("-> IVOA/ see later")
             return True
