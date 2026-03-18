@@ -38,7 +38,7 @@
    <VODML xmlns="http://www.ivoa.net/xml/mivot">
      <REPORT status="OK"/>
      <MODEL name="ivoa" url="https://www.ivoa.net/xml/VODML/IVOA-v1.vo-dml.xml"/>
-     <MODEL name="mango" url="https://raw.githubusercontent.com/ivoa-std/MANGO/refs/heads/wd-v1.0/vo-dml/mango.vo-dml.xml"/>
+     <MODEL name="mango" url="https://raw.githubusercontent.com/ivoa-std/MANGO/refs/heads/pr-1.0/vo-dml/mango.vo-dml.xml"/>
      <MODEL name="Phot" url="https://ivoa.net/xml/VODML/Phot-v1.vodml.xml"/>
      <MODEL name="coords" url="https://ivoa.net/xml/VODML/Coords-v1.vo-dml.xml"/>
      <GLOBALS>

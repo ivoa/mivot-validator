@@ -13,7 +13,7 @@ FROM "public".mergedentry
     <MODEL name="coords" url="https://www.ivoa.net/xml/STC/20200908/Coords-v1.0.vo-dml.xml"/>
     <MODEL name="meas" url="https://www.ivoa.net/xml/Meas/20200908/Meas-v1.0.vo-dml.xml"/>
     <MODEL name="phot" url="https://ivoa.net/xml/VODML/Phot-v1.vodml.xml"/>
-    <MODEL name="mango" url="https://raw.githubusercontent.com/lmichel/MANGO/draft-0.1/vo-dml/mango.vo-dml.xml"/>
+    <MODEL name="mango" url="https://raw.githubusercontent.com/ivoa-std/MANGO/refs/heads/pr-1.0/vo-dml/mango.vo-dml.xml"/>
     <!-- The GLOBALS block contains all objects with a scope covering all data. This is typically the case for the coordinate Systems -->
     <GLOBALS>
       <INSTANCE dmid="CoordSystem_ICRS_id" dmrole="" dmtype="coords:SpaceSys">
@@ -363,11 +363,11 @@ FROM "public".mergedentry
     to all attributes to insure the consistance between all of the instance parameters." -->
             <ATTRIBUTE dmrole="mango:EpochPosition.longitude" dmtype="ivoa:RealQuantity" ref="SC_RA" unit="deg"/>
             <ATTRIBUTE dmrole="mango:EpochPosition.latitude" dmtype="ivoa:RealQuantity" ref="SC_DEC" unit="deg"/>
-            <ATTRIBUTE dmrole="mango:EpochPosition.epoch" dmtype="coords:Epoch" value="2025"/>
+            <ATTRIBUTE dmrole="mango:EpochPosition.obsDate" dmtype="mango:DecimalYear" value="2025"/>
             <REFERENCE dmref="CoordSystem_ICRS_id" dmrole="mango:EpochPosition.spaceSys"/>
           </INSTANCE>
           <INSTANCE dmrole="" dmtype="mango:Color">
-            <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" ref="SC_HR1"/>
+            <ATTRIBUTE dmrole="mango:Color.value" dmtype="ivoa:RealQuantity" ref="SC_HR1"/>
             <INSTANCE dmrole="mango:Color.colorDef" dmtype="mango:ColorDef">
               <ATTRIBUTE dmrole="mango:ColorDef.definition" dmtype="mango:ColorDefinition" value="HardnessRatio"/>
               <REFERENCE dmref="CoordSystem_XMM_FILTER_EB2_id" dmrole="mango:ColorDef.high"/>
@@ -375,7 +375,7 @@ FROM "public".mergedentry
             </INSTANCE>
           </INSTANCE>
           <INSTANCE dmrole="" dmtype="mango:Color">
-            <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" ref="SC_HR2"/>
+            <ATTRIBUTE dmrole="mango:Color.value" dmtype="ivoa:RealQuantity" ref="SC_HR2"/>
             <INSTANCE dmrole="mango:Color.colorDef" dmtype="mango:ColorDef">
               <ATTRIBUTE dmrole="mango:ColorDef.definition" dmtype="mango:ColorDefinition" value="HardnessRatio"/>
               <REFERENCE dmref="CoordSystem_XMM_FILTER_EB3_id" dmrole="mango:ColorDef.high"/>
@@ -383,7 +383,7 @@ FROM "public".mergedentry
             </INSTANCE>
           </INSTANCE>
           <INSTANCE dmrole="" dmtype="mango:Color">
-            <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" ref="SC_HR3"/>
+            <ATTRIBUTE dmrole="mango:Color.value" dmtype="ivoa:RealQuantity" ref="SC_HR3"/>
             <INSTANCE dmrole="mango:Color.colorDef" dmtype="mango:ColorDef">
               <ATTRIBUTE dmrole="mango:ColorDef.definition" dmtype="mango:ColorDefinition" value="HardnessRatio"/>
               <REFERENCE dmref="CoordSystem_XMM_FILTER_EB4_id" dmrole="mango:ColorDef.high"/>
@@ -391,54 +391,54 @@ FROM "public".mergedentry
             </INSTANCE>
           </INSTANCE>
           <INSTANCE dmrole="" dmtype="mango:Color">
-            <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" ref="SC_HR4"/>
+            <ATTRIBUTE dmrole="mango:Color.value" dmtype="ivoa:RealQuantity" ref="SC_HR4"/>
             <INSTANCE dmrole="mango:Color.colorDef" dmtype="mango:ColorDef">
               <ATTRIBUTE dmrole="mango:ColorDef.definition" dmtype="mango:ColorDefinition" value="HardnessRatio"/>
               <REFERENCE dmref="CoordSystem_XMM_FILTER_EB5_id" dmrole="mango:ColorDef.high"/>
               <REFERENCE dmref="CoordSystem_XMM_FILTER_EB4_id" dmrole="mango:ColorDef.low"/>
             </INSTANCE>
           </INSTANCE>
-          <INSTANCE dmrole="" dmtype="mango:PhotometricProperty">
-            <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" ref="SC_EP_1_FLUX"/>
-            <INSTANCE dmrole="mango:PhotometricProperty.error" dmtype="mango:ErrorTypes.PropertyError1D">
-              <ATTRIBUTE dmrole="mango:ErrorTypes.PropertyError1D.sigma" dmtype="ivoa:real" ref="SC_EP_1_FLUX_ERR"/>
+          <INSTANCE dmrole="" dmtype="mango:Brightness">
+            <ATTRIBUTE dmrole="mango:Brightness.value" dmtype="ivoa:RealQuantity" ref="SC_EP_1_FLUX"/>
+            <INSTANCE dmrole="mango:Brightness.error" dmtype="mango:error.PErrorSym1D">
+              <ATTRIBUTE dmrole="mango:error.PErrorSym1D.sigma" dmtype="ivoa:RealQuantity" ref="SC_EP_1_FLUX_ERR"/>
             </INSTANCE>
-            <REFERENCE dmref="CoordSystem_XMM_EB1_id" dmrole="mango:PhotometricProperty.photCal"/>
+            <REFERENCE dmref="CoordSystem_XMM_EB1_id" dmrole="mango:Brightness.photCal"/>
           </INSTANCE>
-          <INSTANCE dmrole="" dmtype="mango:PhotometricProperty">
-            <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" ref="SC_EP_2_FLUX"/>
-            <INSTANCE dmrole="mango:PhotometricProperty.error" dmtype="mango:ErrorTypes.PropertyError1D">
-              <ATTRIBUTE dmrole="mango:ErrorTypes.PropertyError1D.sigma" dmtype="ivoa:real" ref="SC_EP_2_FLUX_ERR"/>
+          <INSTANCE dmrole="" dmtype="mango:Brightness">
+            <ATTRIBUTE dmrole="mango:Brightness.value" dmtype="ivoa:RealQuantity" ref="SC_EP_2_FLUX"/>
+            <INSTANCE dmrole="mango:Brightness.error" dmtype="mango:error.PErrorSym1D">
+              <ATTRIBUTE dmrole="mango:error.PErrorSym1D.sigma" dmtype="ivoa:RealQuantity" ref="SC_EP_2_FLUX_ERR"/>
             </INSTANCE>
-            <REFERENCE dmref="CoordSystem_XMM_EB2_id" dmrole="mango:PhotometricProperty.photCal"/>
+            <REFERENCE dmref="CoordSystem_XMM_EB2_id" dmrole="mango:Brightness.photCal"/>
           </INSTANCE>
-          <INSTANCE dmrole="" dmtype="mango:PhotometricProperty">
-            <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" ref="SC_EP_3_FLUX"/>
-            <INSTANCE dmrole="mango:PhotometricProperty.error" dmtype="mango:ErrorTypes.PropertyError1D">
-              <ATTRIBUTE dmrole="mango:ErrorTypes.PropertyError1D.sigma" dmtype="ivoa:real" ref="SC_EP_3_FLUX_ERR"/>
+          <INSTANCE dmrole="" dmtype="mango:Brightness">
+            <ATTRIBUTE dmrole="mango:Brightness.value" dmtype="ivoa:RealQuantity" ref="SC_EP_3_FLUX"/>
+            <INSTANCE dmrole="mango:Brightness.error" dmtype="mango:error.PErrorSym1D">
+              <ATTRIBUTE dmrole="mango:error.PErrorSym1D.sigma" dmtype="ivoa:RealQuantity" ref="SC_EP_3_FLUX_ERR"/>
             </INSTANCE>
-            <REFERENCE dmref="CoordSystem_XMM_EB3_id" dmrole="mango:PhotometricProperty.photCal"/>
+            <REFERENCE dmref="CoordSystem_XMM_EB3_id" dmrole="mango:Brightness.photCal"/>
           </INSTANCE>
-          <INSTANCE dmrole="" dmtype="mango:PhotometricProperty">
-            <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" ref="SC_EP_4_FLUX"/>
-            <INSTANCE dmrole="mango:PhotometricProperty.error" dmtype="mango:ErrorTypes.PropertyError1D">
-              <ATTRIBUTE dmrole="mango:ErrorTypes.PropertyError1D.sigma" dmtype="ivoa:real" ref="SC_EP_4_FLUX_ERR"/>
+          <INSTANCE dmrole="" dmtype="mango:Brightness">
+            <ATTRIBUTE dmrole="mango:Brightness.value" dmtype="ivoa:RealQuantity" ref="SC_EP_4_FLUX"/>
+            <INSTANCE dmrole="mango:Brightness.error" dmtype="mango:error.PErrorSym1D">
+              <ATTRIBUTE dmrole="mango:error.PErrorSym1D.sigma" dmtype="ivoa:RealQuantity" ref="SC_EP_4_FLUX_ERR"/>
             </INSTANCE>
-            <REFERENCE dmref="CoordSystem_XMM_EB4_id" dmrole="mango:PhotometricProperty.photCal"/>
+            <REFERENCE dmref="CoordSystem_XMM_EB4_id" dmrole="mango:Brightness.photCal"/>
           </INSTANCE>
-          <INSTANCE dmrole="" dmtype="mango:PhotometricProperty">
-            <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" ref="SC_EP_5_FLUX"/>
-            <INSTANCE dmrole="mango:PhotometricProperty.error" dmtype="mango:ErrorTypes.PropertyError1D">
-              <ATTRIBUTE dmrole="mango:ErrorTypes.PropertyError1D.sigma" dmtype="ivoa:real" ref="SC_EP_5_FLUX_ERR"/>
+          <INSTANCE dmrole="" dmtype="mango:Brightness">
+            <ATTRIBUTE dmrole="mango:Brightness.value" dmtype="ivoa:RealQuantity" ref="SC_EP_5_FLUX"/>
+            <INSTANCE dmrole="mango:Brightness.error" dmtype="mango:error.PErrorSym1D">
+              <ATTRIBUTE dmrole="mango:error.PErrorSym1D.sigma" dmtype="ivoa:RealQuantity" ref="SC_EP_5_FLUX_ERR"/>
             </INSTANCE>
-            <REFERENCE dmref="CoordSystem_XMM_EB5_id" dmrole="mango:PhotometricProperty.photCal"/>
+            <REFERENCE dmref="CoordSystem_XMM_EB5_id" dmrole="mango:Brightness.photCal"/>
           </INSTANCE>
-          <INSTANCE dmrole="" dmtype="mango:PhotometricProperty">
-            <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" ref="SC_EP_8_FLUX"/>
-            <INSTANCE dmrole="mango:PhotometricProperty.error" dmtype="mango:ErrorTypes.PropertyError1D">
-              <ATTRIBUTE dmrole="mango:ErrorTypes.PropertyError1D.sigma" dmtype="ivoa:real" ref="SC_EP_8_FLUX_ERR"/>
+          <INSTANCE dmrole="" dmtype="mango:Brightness">
+            <ATTRIBUTE dmrole="mango:Brightness.value" dmtype="ivoa:RealQuantity" ref="SC_EP_8_FLUX"/>
+            <INSTANCE dmrole="mango:Brightness.error" dmtype="mango:error.PErrorSym1D">
+              <ATTRIBUTE dmrole="mango:error.PErrorSym1D.sigma" dmtype="ivoa:RealQuantity" ref="SC_EP_8_FLUX_ERR"/>
             </INSTANCE>
-            <REFERENCE dmref="CoordSystem_XMM_EB8_id" dmrole="mango:PhotometricProperty.photCal"/>
+            <REFERENCE dmref="CoordSystem_XMM_EB8_id" dmrole="mango:Brightness.photCal"/>
           </INSTANCE>
         </COLLECTION>
       </INSTANCE>
