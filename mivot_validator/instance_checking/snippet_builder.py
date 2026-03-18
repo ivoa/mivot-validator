@@ -94,7 +94,7 @@ class Builder:
 
     def _print_(self, message):
         if self.verbose:
-            self._print_(message)
+            print(message)
 
     def build(self):
         """
@@ -210,10 +210,10 @@ class Builder:
                 f"   Reference {vodmlid} skipped to break a model loop (already processed)"
             )
             already_here = True
-
             #return
-        self._print_(f"   Reference {vodmlid} processed for the fist time")
-        self.resolved_references.append(vodmlid)
+        else:
+            self._print_(f"   Reference {vodmlid} processed for the fist time")
+            self.resolved_references.append(vodmlid)
 
         Builder.RECORD_ON = True
         if max_occurs != "1":
@@ -234,6 +234,15 @@ class Builder:
             )
             self.write_out("</COLLECTION>")
         else:
+            #
+            # if object type type has already be used, we put a REFERENCE to avoid recursive forever  loops
+            # REFERENCE are not checked by the validator.
+            if already_here:
+                self.write_out(
+                f'<REFERENCE dmrole="{(self.model_name + ":" + vodmlid)}" dmref="-"   />'
+                )
+                return
+
             self.get_object_by_ref(
                 reftype.replace(self.model_name + ":", ""),
                 self.model_name + ":" + vodmlid,
