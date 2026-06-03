@@ -2,7 +2,7 @@
   <COLLECTION dmrole="mango:MangoObject.propertyDock">
 
     <!-- Property enclosing a Photometric point -->
-    <INSTANCE dmtype="mango:PhotometricProperty">
+    <INSTANCE dmtype="mango:Brightness">
 
       <INSTANCE dmrole="mango:Property.semantics" dmtype="mango:VocabularyTerm">
         <ATTRIBUTE dmrole="mango:VocabularyTerm.uri" dmtype="ivoa:string" value="" />
@@ -10,8 +10,8 @@
       </INSTANCE>
       <ATTRIBUTE dmrole="mango:Property.description" dmtype="ivoa:string" value="Photometric point" />
 
-      <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
-      <REFERENCE dmrole="mango:PhotometricProperty.photCal" dmref="_ONE_GLOBALS_PHOTCALS" />
+      <ATTRIBUTE dmrole="mango:Brightness.value" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+      <REFERENCE dmrole="mango:Brightness.photCal" dmref="_ONE_GLOBALS_PHOTCALS" />
 
       <COLLECTION dmrole="mango:Property.associatedProperties">
       </COLLECTION>

@@ -246,7 +246,7 @@ class InstanceChecker:
             ):
                 raise_check_failed_exception(
                     f"Collection with dmrole={collection_role} "
-                    "has items with different dmtypes {mivot_item_type} {item_type}",
+                    f"has items with different dmtypes {mivot_item_type} {item_type}",
                     collection_etree
                 )
             item_type = mivot_item_type
@@ -329,7 +329,9 @@ class InstanceChecker:
                 # Sort of ad_hoc patch meanwhile ivoa DM is properly supported
                 if actual_type == "ivoa:RealQuantity" and vodml_type == "ivoa:Quantity":
                     return
-                if vodml_type == "ivoa:datetime" and actual_type in ["mango:year", "mango:jd", "mango:mjd", "mango:iso"]:
+                if (vodml_type == "ivoa:datetime" and 
+                   actual_type in ["mango:Decimalyear", "mango:JulianEpoch", "mango:BesselianEpoch",
+                                   "mango:jd", "mango:mjd", "mango:iso"]):
                     return
                 if (
                     vodml_type in InstanceChecker.inheritence_tree

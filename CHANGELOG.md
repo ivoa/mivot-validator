@@ -10,7 +10,9 @@
   to process `mango:ObsDate` which can have different representations
 - The test suite has been adapted to the MANGO model as it is in RFC
 
-
 0.7:
 - Replace INSTANCE with REFERENCE when a model loop is detected. REFERENCE are not validated
 - Update tests data sets with MANGO 1.0
+
+0.8:
+- Update code for REC MANGO 1.0

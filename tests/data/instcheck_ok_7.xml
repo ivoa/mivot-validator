@@ -1,7 +1,7 @@
-<INSTANCE dmrole="" dmtype="mango:PhotometricProperty">
+<INSTANCE dmrole="" dmtype="mango:Brightness">
    <!-- 
           TODO : Missing description : please, update your UML model asap.
         " -->
-   <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
-   <INSTANCE dmrole="mango:PhotometricProperty.photCal" dmtype="Phot:PhotCal"/>
+   <ATTRIBUTE dmrole="mango:Brightness.value" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   <INSTANCE dmrole="mango:Brightness.photCal" dmtype="Phot:PhotCal"/>
 </INSTANCE>

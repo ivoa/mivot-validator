@@ -238,7 +238,7 @@ ivo://esavo/gaia/tap).</INFO>
             <COLLECTION dmrole="mango:MangoObject.propertyDock">
             
               <!-- 1st property MAG G -->
-              <INSTANCE dmtype="mango:PhotometricProperty">
+              <INSTANCE dmtype="mango:Brightness">
                 <!-- All MANGO properties are made of a block allowing to refine the property semantic, a measure and a set of associated 
                   properties -->
                 <INSTANCE dmrole="mango:Property.semantics" dmtype="mango:VocabularyTerm">
@@ -247,16 +247,16 @@ ivo://esavo/gaia/tap).</INFO>
                 </INSTANCE>
                 <ATTRIBUTE dmrole="mango:Property.description" dmtype="ivoa:string" value="G Band magnitude" />
                   <!-- There is non class in the Coordinate model for photometric measures, Mango defines it -->
-                  <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" unit="mag"
+                  <ATTRIBUTE dmrole="mango:Brightness.value" dmtype="ivoa:RealQuantity" unit="mag"
                     ref="phot_g_mean_mag" />
                   <!-- The reference just tells that the INSTANCE must be searched in the GLOABLS The REFERENCE tag has nothing to 
                     do with UML references -->
-                  <REFERENCE dmref="_G_PHOTCAL" dmrole="mango:PhotometricProperty.photCal" />
+                  <REFERENCE dmref="_G_PHOTCAL" dmrole="mango:Brightness.photCal" />
 
               </INSTANCE>
 
               <!-- 2nd property MAG Gbp -->
-              <INSTANCE dmtype="mango:PhotometricProperty">
+              <INSTANCE dmtype="mango:Brightness">
                 <!-- All MANGO properties are made of a block allowing to refine the property semantic, a measure and a set of associated 
                   properties -->
                 <INSTANCE dmrole="mango:Property.semantics" dmtype="mango:VocabularyTerm">
@@ -265,16 +265,16 @@ ivo://esavo/gaia/tap).</INFO>
                 </INSTANCE>
                 <ATTRIBUTE dmrole="mango:Property.description" dmtype="ivoa:string" value="G Band magnitude" />
                   <!-- There is non class in the Coordinate model for photometric measures, Mango defines it -->
-                  <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" unit="mag"
+                  <ATTRIBUTE dmrole="mango:Brightness.value" dmtype="ivoa:RealQuantity" unit="mag"
                     ref="phot_bp_mean_mag" />
                   <!-- The reference just tells that the INSTANCE must be searched in the GLOABLS The REFERENCE tag has nothing to 
                     do with UML references -->
-                  <REFERENCE dmref="_Gbp_PHOTCAL" dmrole="mango:PhotometricProperty.photCal" />
+                  <REFERENCE dmref="_Gbp_PHOTCAL" dmrole="mango:Brightness.photCal" />
               </INSTANCE>
 
 
               <!-- 3rd property MAG Grp -->
-              <INSTANCE dmtype="mango:PhotometricProperty">
+              <INSTANCE dmtype="mango:Brightness">
                 <!-- All MANGO properties are made of a block allowing to refine the property semantic, a measure and a set of associated 
                   properties -->
                 <INSTANCE dmrole="mango:Property.semantics" dmtype="mango:VocabularyTerm">
@@ -283,11 +283,11 @@ ivo://esavo/gaia/tap).</INFO>
                 </INSTANCE>
                 <ATTRIBUTE dmrole="mango:Property.description" dmtype="ivoa:string" value="G Band magnitude" />
                   <!-- There is non class in the Coordinate model for photometric measures, Mango defines it -->
-                  <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" unit="mag"
+                  <ATTRIBUTE dmrole="mango:Brightness.value" dmtype="ivoa:RealQuantity" unit="mag"
                     ref="phot_rp_mean_mag" />
                   <!-- The reference just tells that the INSTANCE must be searched in the GLOABLS The REFERENCE tag has nothing to 
                     do with UML references -->
-                  <REFERENCE dmref="_Grp_PHOTCAL" dmrole="mango:PhotometricProperty.photCal" />
+                  <REFERENCE dmref="_Grp_PHOTCAL" dmrole="mango:Brightness.photCal" />
               </INSTANCE>
             </COLLECTION>
           </INSTANCE>
